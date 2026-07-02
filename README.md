@@ -1,19 +1,20 @@
-# July 1 Superbase
+# Lunde Flooring
 
-Active working version of the Lunde Flooring site branched from the completed July 1 Node.js build.
+Lunde Flooring site — Node.js app with Supabase as the persistent data store.
 
-This version is prepared to use Supabase project `celysrqrylcobfhiualu` as the persistent data store.
+Repository: https://github.com/dirtcollins/Lunde-Flooring
+
+Uses Supabase project `celysrqrylcobfhiualu`.
 
 ## What is included
 
 - Node app server: `server.js`
 - Public site pages and scripts: `*.html`, `*.js`, `*.css`
-- Product/site data: `data.js` and `api/data/`
+- Product/site data: `data.js` (local fallback store: `api/data/`, not committed)
 - Site media: `media/`
-- Dependency manifest and lockfile: `package.json`, `pnpm-lock.yaml`
-- Installed dependency folder: `node_modules/`
+- Dependency manifest and lockfile: `package.json`, `pnpm-lock.yaml` (run `pnpm install` after cloning)
 - Supabase database migration: `supabase/migrations/202607010001_create_app_stores.sql`
-- Environment template: `.env.example`
+- Environment template: `.env.example` (copy to `.env`; never commit `.env`)
 
 ## Supabase Setup
 
@@ -44,4 +45,20 @@ Then open:
 http://localhost:3003/
 ```
 
+## Verify
+
+With the local server running:
+
+```sh
+npm run check
+```
+
+To verify a deployed site:
+
+```sh
+BASE_URL=https://lundeflooring.com npm run check
+```
+
 For production, replace `AUTH_SECRET` with a strong unique value and set any payment, email, admin, or site URL environment variables needed by the deployment host.
+
+See `GO_LIVE.md` for the production environment, Stripe webhook, and hosting checklist.
