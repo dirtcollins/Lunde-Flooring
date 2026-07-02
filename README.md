@@ -45,4 +45,20 @@ Then open:
 http://localhost:3003/
 ```
 
+## Verify
+
+With the local server running:
+
+```sh
+npm run check
+```
+
+To verify a deployed site:
+
+```sh
+BASE_URL=https://lundeflooring.com npm run check
+```
+
 For production, replace `AUTH_SECRET` with a strong unique value and set any payment, email, admin, or site URL environment variables needed by the deployment host.
+
+See `GO_LIVE.md` for the production environment, Stripe webhook, and hosting checklist.

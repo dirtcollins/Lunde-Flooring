@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "check": "node scripts/verify-local.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3"

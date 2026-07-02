@@ -26,19 +26,24 @@ https://github.com/dirtcollins/Lunde-Flooring
 - Local page smoke check passed for the public pages.
 - JavaScript syntax check passed.
 - Product image references checked successfully.
+- Repeatable verification script added: `npm run check`.
+- `GO_LIVE.md` added with production environment, Stripe webhook, and Hostinger notes.
 
 ## Still Left
 
 ### 1. Connect Hostinger to GitHub
 
-- Log in to Hostinger.
-- Open:
+Current Hostinger finding: `lundeflooring.com` is still a manually uploaded ZIP deployment, `http://lundeflooring.com` returns a Hostinger parked-domain page, and HTTPS fails before serving a certificate. Hostinger also shows all `5 / 5` Node.js app slots in use.
+
+When Hostinger is working again, either free one Node.js app slot or replace the current ZIP-backed app, then create/connect the Node.js app from GitHub.
+
+Open:
 
 ```text
 https://hpanel.hostinger.com/websites/lundeflooring.com/deployments/settings
 ```
 
-- Connect the deployment source to GitHub.
+- Connect the deployment source to GitHub if Hostinger exposes that option. If it does not, create a new Node.js app from GitHub and move `lundeflooring.com` to that app.
 - Select repository:
 
 ```text
@@ -185,4 +190,3 @@ Missing locally:
 - `STRIPE_WEBHOOK_SECRET`
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD`
-
