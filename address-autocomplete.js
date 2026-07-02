@@ -101,8 +101,23 @@
         active = -1;
       }
 
+      /* OSM frequently knows the street but not the individual house number.
+         When the chosen suggestion has no leading number and the user typed
+         one ("11933 Forsyth Court…"), keep the typed number in the result. */
+      function withTypedNumber(parts) {
+        if (!parts || /^\d/.test(parts.line1 || "")) return parts;
+        var m = String(input.value || "").match(/^\s*(\d+[a-zA-Z]?(?:[\/-]\d+[a-zA-Z]?)?)\s+\S/);
+        if (!m) return parts;
+        var line1 = (m[1] + " " + (parts.line1 || "")).trim();
+        var full = line1;
+        if (parts.city) full += ", " + parts.city;
+        if (parts.state) full += ", " + parts.state;
+        if (parts.zip) full += " " + parts.zip;
+        return { line1: line1, city: parts.city, state: parts.state, zip: parts.zip, full: full };
+      }
+
       function select(i) {
-        var parts = items[i];
+        var parts = withTypedNumber(items[i]);
         if (!parts) return;
         close();
         if (typeof opts.onSelect === "function") {
@@ -131,7 +146,8 @@
           row.className = "laa-item";
           var a = document.createElement("span");
           a.className = "laa-line1";
-          a.textContent = parts.line1 || parts.full;
+          var shown = withTypedNumber(parts);
+          a.textContent = shown.line1 || shown.full;
           var b = document.createElement("span");
           b.className = "laa-line2";
           b.textContent = [parts.city, parts.state].filter(Boolean).join(", ") + (parts.zip ? " " + parts.zip : "");
