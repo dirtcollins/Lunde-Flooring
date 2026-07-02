@@ -982,6 +982,13 @@ async function handleCustomerAccounts(req, res, method, parts, input) {
     if (patch.company !== undefined) account.company = clean(patch.company, 180);
     if (patch.phone !== undefined) account.phone = clean(patch.phone, 80);
     if (Array.isArray(patch.addresses)) account.addresses = patch.addresses.slice(0, 20).map(normalizeAddress);
+    if (patch.notifications && typeof patch.notifications === "object") {
+      const prefs = {};
+      for (const key of ["samplesFollowUp", "newCollections", "promotions"]) {
+        if (patch.notifications[key] !== undefined) prefs[key] = Boolean(patch.notifications[key]);
+      }
+      account.notifications = { ...(account.notifications || {}), ...prefs };
+    }
     accounts[index] = account;
     writeStore("accounts", accounts);
     upsertById("customers", publicCustomer(account));

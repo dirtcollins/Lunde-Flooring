@@ -828,6 +828,22 @@
     return next.includes(id);
   }
 
+  /* ---------- recently viewed (device-local browsing history) ---------- */
+
+  const RECENT_KEY = "lunde_recently_viewed_v1";
+  const RECENT_MAX = 12;
+
+  function recentlyViewed() {
+    return readJson(RECENT_KEY, []).map((id) => productById(id)).filter(Boolean);
+  }
+  function trackRecentlyViewed(id) {
+    if (!id || !productById(id)) return;
+    const list = readJson(RECENT_KEY, []).filter((x) => x !== id);
+    list.unshift(id);
+    writeJson(RECENT_KEY, list.slice(0, RECENT_MAX));
+  }
+  function clearRecentlyViewed() { writeJson(RECENT_KEY, []); }
+
   /* ---------- inventory ---------- */
 
   const INVENTORY_KEY = "lunde_inventory_v2";
@@ -1335,6 +1351,7 @@
     resendVerificationEmail, verifyCustomerEmail, requestPasswordReset, resetCustomerPassword, updateCustomerPassword,
     STATUSES, STATUS_LABELS, FREIGHT_FLAT, TAX_RATE, parseDims,
     favorites, isFavorite, toggleFavorite,
+    recentlyViewed, trackRecentlyViewed, clearRecentlyViewed,
     inventory, setStock, decrementStock, stockInfo,
     feedbackItems, refreshFeedback, feedbackServerOnline, addFeedback, updateFeedback, deleteFeedback, downloadFeedback,
     apiIsOnline, syncFromServer, pullOrders, pullInventory, pullCustomers, pullProducts, staffLogin, staffMe, staffLogout, staffRequestPasswordReset, staffResetPassword, seedDemoData,

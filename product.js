@@ -15,6 +15,7 @@
     return;
   }
   document.title = product.title + " | LVP Flooring in Bakersfield | Lunde Flooring Co.";
+  if (L.trackRecentlyViewed) L.trackRecentlyViewed(product.id);
 
   var dims = L.parseDims(product);
   var stock = L.stockInfo(product.id);

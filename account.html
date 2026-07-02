@@ -4,78 +4,162 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Account — Lunde Flooring Co.</title>
-    <meta name="description" content="Manage your Lunde Flooring account, order history, saved addresses, favorites, and password.">
+    <meta name="description" content="Manage your Lunde Flooring account, order history, quotes, saved addresses, favorites, and security settings.">
     <link rel="icon" href="./favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./v6.css">
-      <meta name="robots" content="noindex, follow">
+    <meta name="robots" content="noindex, follow">
   </head>
   <body data-nav="account">
     <main>
       <div class="v6-page">
         <div id="placedBanner"></div>
-        <div class="v6-page-head"><p class="eyebrow">My account</p><h1 class="display">Welcome back.</h1></div>
-        <nav class="acct-tabs" aria-label="Account sections">
-          <button class="acct-tab" type="button" data-account-tab="orders">Orders <span id="ordersTabCount"></span></button>
-          <button class="acct-tab" type="button" data-account-tab="favorites">Favorites <span id="favoritesTabCount"></span></button>
-          <button class="acct-tab" type="button" data-account-tab="quotes">Quotes <span id="quotesTabCount"></span></button>
-          <button class="acct-tab" type="button" data-account-tab="addresses">Addresses <span id="addressesTabCount"></span></button>
-          <button class="acct-tab" type="button" data-account-tab="settings">Settings</button>
-        </nav>
 
-        <section class="acct-panel" data-account-panel="orders">
-          <div class="acct-panel-head"><h2>Your orders</h2><span id="orderCount"></span></div>
-          <div class="acct-orders" id="ordersList"></div>
-        </section>
-
-        <section class="acct-panel" data-account-panel="favorites" hidden>
-          <div class="acct-panel-head"><h2>Saved floors</h2><span id="favCount"></span></div>
-          <div class="acct-favs" id="favGrid"></div>
-        </section>
-
-        <section class="acct-panel" data-account-panel="quotes" hidden>
-          <div class="acct-panel-head"><h2>Saved quotes</h2><span id="quoteCount"></span></div>
-          <div id="quotesList"></div>
-        </section>
-
-        <section class="acct-panel" data-account-panel="addresses" hidden>
-          <div class="acct-panel-head"><h2>Shipping addresses</h2><button class="btn ghost" type="button" id="addAddressBtn" hidden>Add address</button></div>
-          <div class="acct-addr-grid" id="myAddresses"></div>
-        </section>
-
-        <section class="acct-panel" data-account-panel="settings" hidden>
-          <div class="acct-panel-head"><h2>Account &amp; details</h2></div>
-          <div class="acct-settings">
-            <div id="authBlock"></div>
-            <form class="v6-form" id="profileForm">
-              <fieldset class="v6-fieldset">
-                <h3>Saved details</h3>
-                <div class="v6-field-row">
-                  <label class="v6-field"><span>Full name</span><input name="name"></label>
-                  <label class="v6-field"><span>Email</span><input name="email" type="email" readonly></label>
-                </div>
-                <div class="v6-field-row">
-                  <label class="v6-field"><span>Phone</span><input name="phone"></label>
-                  <label class="v6-field"><span>Company</span><input name="company"></label>
-                </div>
-                <button class="btn" type="submit" style="justify-self:start">Save details</button>
-              </fieldset>
-            </form>
-            <form class="v6-form" id="passwordForm">
-              <fieldset class="v6-fieldset">
-                <h3>Password</h3>
-                <label class="v6-field"><span>Current password</span><input name="currentPassword" type="password" autocomplete="current-password" required></label>
-                <div class="v6-field-row">
-                  <label class="v6-field"><span>New password</span><input name="newPassword" type="password" autocomplete="new-password" minlength="10" required></label>
-                  <label class="v6-field"><span>Confirm new password</span><input name="confirmPassword" type="password" autocomplete="new-password" minlength="10" required></label>
-                </div>
-                <p class="v6-promo-msg" id="passwordStatus"></p>
-                <button class="btn" type="submit" style="justify-self:start">Update password</button>
-              </fieldset>
-            </form>
+        <header class="acct-hero">
+          <div class="acct-hero-id">
+            <span class="acct-avatar" id="acctAvatar" aria-hidden="true"></span>
+            <div class="acct-hello">
+              <span class="eyebrow">My account</span>
+              <h1 class="display" id="acctGreeting">Welcome back.</h1>
+              <p id="acctMemberSince"></p>
+            </div>
           </div>
-        </section>
+          <div class="acct-hero-cta">
+            <a class="btn ghost" href="./catalog.html">Shop floors</a>
+            <a class="btn" href="./samples.html">Order free samples</a>
+          </div>
+        </header>
+
+        <div class="acct-layout">
+          <nav class="acct-nav" id="acctNav" aria-label="Account sections"></nav>
+
+          <div class="acct-pane">
+            <!-- OVERVIEW -->
+            <section class="acct-panel" data-account-panel="overview" hidden>
+              <div id="overviewMount"></div>
+            </section>
+
+            <!-- ORDERS -->
+            <section class="acct-panel" data-account-panel="orders" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Orders</h2><p id="ordersSub">Every order you’ve placed with us, with live delivery status.</p></div>
+              </div>
+              <div class="acct-orders" id="ordersList" aria-live="polite"></div>
+            </section>
+
+            <!-- QUOTES -->
+            <section class="acct-panel" data-account-panel="quotes" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Saved quotes</h2><p>Price a room, save it, and come back when you’re ready to order.</p></div>
+                <a class="btn ghost" href="./catalog.html">Build a new quote</a>
+              </div>
+              <div class="acct-quotes" id="quotesList"></div>
+            </section>
+
+            <!-- FAVORITES -->
+            <section class="acct-panel" data-account-panel="favorites" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Favorites</h2><p id="favSub">Floors you’ve saved while browsing.</p></div>
+              </div>
+              <div class="acct-favs" id="favGrid"></div>
+            </section>
+
+            <!-- RECENTLY VIEWED -->
+            <section class="acct-panel" data-account-panel="recent" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Recently viewed</h2><p>Pick up where you left off.</p></div>
+                <button class="acct-btn-quiet" type="button" id="clearRecentBtn" hidden>Clear history</button>
+              </div>
+              <div class="acct-favs" id="recentGrid"></div>
+            </section>
+
+            <!-- ADDRESSES -->
+            <section class="acct-panel" data-account-panel="addresses" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Addresses</h2><p>Saved delivery addresses make checkout one step shorter.</p></div>
+                <button class="btn ghost" type="button" id="addAddressBtn">Add address</button>
+              </div>
+              <div class="acct-addr-grid" id="myAddresses"></div>
+            </section>
+
+            <!-- PAYMENT METHODS -->
+            <section class="acct-panel" data-account-panel="payments" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Payment methods</h2><p>Cards you’ve used on past orders. Payments are processed securely by Stripe.</p></div>
+              </div>
+              <div class="acct-pay-grid" id="payGrid"></div>
+              <div class="acct-pay-note">
+                <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 6.5-7 9-4-2.5-7-5-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
+                <p><b>Your card details never touch our servers.</b> Every payment is handled end-to-end by Stripe, a certified PCI Service Provider Level 1 — the highest level of payment security. We only ever see the last four digits.</p>
+              </div>
+            </section>
+
+            <!-- PERSONAL INFO -->
+            <section class="acct-panel" data-account-panel="profile" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Personal information</h2><p>Used for order confirmations, delivery contact, and receipts.</p></div>
+              </div>
+              <div class="acct-settings">
+                <form class="acct-form-card v6-form" id="profileForm" novalidate>
+                  <div class="v6-fieldset" style="gap:16px">
+                    <div class="v6-field-row">
+                      <label class="v6-field"><span>Full name</span><input name="name" autocomplete="name" placeholder="Your name"></label>
+                      <label class="v6-field"><span>Email <em id="emailVerifiedChip"></em></span><input name="email" type="email" readonly></label>
+                    </div>
+                    <div class="v6-field-row">
+                      <label class="v6-field"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" placeholder="(661) 555-0100"></label>
+                      <label class="v6-field"><span>Company <small style="text-transform:none;letter-spacing:0;color:var(--muted);font-weight:500">(optional)</small></span><input name="company" autocomplete="organization" placeholder="Business or trade account"></label>
+                    </div>
+                    <p class="acct-form-msg" id="profileStatus" role="status"></p>
+                    <button class="btn" type="submit" id="profileSaveBtn">Save changes</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+
+            <!-- SECURITY -->
+            <section class="acct-panel" data-account-panel="security" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Password &amp; security</h2><p>Keep your account protected.</p></div>
+              </div>
+              <div class="acct-settings">
+                <form class="acct-form-card v6-form" id="passwordForm" novalidate>
+                  <div class="v6-fieldset" style="gap:16px">
+                    <h3 style="font-size:19px;border:0;padding:0">Change password</h3>
+                    <label class="v6-field"><span>Current password</span>
+                      <span class="acct-pw-wrap"><input name="currentPassword" type="password" autocomplete="current-password" required><button class="acct-pw-eye" type="button" data-eye>Show</button></span>
+                    </label>
+                    <div class="v6-field-row">
+                      <label class="v6-field"><span>New password</span>
+                        <span class="acct-pw-wrap"><input name="newPassword" type="password" autocomplete="new-password" minlength="10" required><button class="acct-pw-eye" type="button" data-eye>Show</button></span>
+                        <span class="acct-meter" id="pwMeter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                        <span class="acct-meter-lab" id="pwMeterLab">At least 10 characters with uppercase, lowercase, and a number.</span>
+                      </label>
+                      <label class="v6-field"><span>Confirm new password</span>
+                        <span class="acct-pw-wrap"><input name="confirmPassword" type="password" autocomplete="new-password" minlength="10" required><button class="acct-pw-eye" type="button" data-eye>Show</button></span>
+                      </label>
+                    </div>
+                    <p class="acct-form-msg" id="passwordStatus" role="status"></p>
+                    <button class="btn" type="submit" id="passwordSaveBtn">Update password</button>
+                  </div>
+                </form>
+                <div class="acct-rows" id="securityRows"></div>
+              </div>
+            </section>
+
+            <!-- NOTIFICATIONS -->
+            <section class="acct-panel" data-account-panel="notifications" hidden>
+              <div class="acct-pane-head">
+                <div><h2>Notifications</h2><p>Choose what we email you. Order and delivery updates are always on.</p></div>
+              </div>
+              <div class="acct-settings">
+                <div class="acct-rows" id="notifRows"></div>
+                <p class="acct-form-msg" id="notifStatus" role="status"></p>
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
     </main>
     <script defer src="./chrome.js"></script>
