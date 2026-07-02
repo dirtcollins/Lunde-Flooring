@@ -119,6 +119,16 @@
     function v(id) { var el = document.getElementById(prefix + id); return el ? el.value.trim() : ""; }
     return { label: v('Label'), line1: v('Line1'), city: v('City'), state: v('State'), zip: v('Zip') };
   }
+  /* address autocomplete on a rendered addrForm — call right after it hits the DOM */
+  function attachAddrAutocomplete(prefix) {
+    var street = document.getElementById(prefix + "Line1");
+    if (!street || !window.lundeAddressAutocomplete) return;
+    window.lundeAddressAutocomplete(street, { onSelect: function (parts) {
+      street.value = parts.line1;
+      function fill(id, val) { var el = document.getElementById(prefix + id); if (el && val) el.value = val; }
+      fill("City", parts.city); fill("State", parts.state); fill("Zip", parts.zip);
+    } });
+  }
 
   function tabAddresses(c) {
     var cards = (c.addresses || []).map(function (a) {
@@ -254,7 +264,9 @@
         '<div><p class="eyebrow">' + (c.synthesized ? "Guest customer" : "Account customer") + '</p>' +
         '<h1>' + esc(c.name || c.email) + '</h1>' +
         '<p>' + esc(c.email) + (c.phone ? ' · ' + esc(c.phone) : '') + (c.company ? ' · ' + esc(c.company) : '') + '</p></div>' +
-      '</div></div>' +
+      '</div>' +
+      (c.id ? '<a class="btn" href="./quote-builder.html?customer=' + encodeURIComponent(c.id) + '">New quote</a>' : '') +
+      '</div>' +
       '<div class="chips" role="tablist">' + chips + '</div>' +
       '<div id="cpBody">' + bodies[tab](c) + '</div>';
 
@@ -290,6 +302,7 @@
       L.addCustomerAddress(cid(c), a);
       render();
     });
+    attachAddrAutocomplete("cpNew");
     mount.querySelectorAll("[data-addr-default]").forEach(function (b) {
       b.addEventListener("click", function () { L.setDefaultAddress(cid(c), b.getAttribute("data-addr-default")); render(); });
     });
@@ -306,6 +319,7 @@
         if (slot.childElementCount) { slot.innerHTML = ""; return; }
         var a = (c.addresses || []).find(function (x) { return x.id === id; }) || {};
         slot.innerHTML = addrForm("cpEd", a) + '<div class="cp-actions" style="margin-top:10px"><button class="btn" type="button" data-addr-save="' + esc(id) + '" style="min-height:38px">Save</button></div>';
+        attachAddrAutocomplete("cpEd");
         slot.querySelector("[data-addr-save]").addEventListener("click", function () {
           L.updateCustomerAddress(cid(c), id, readAddrForm("cpEd")); render();
         });

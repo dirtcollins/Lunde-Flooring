@@ -5,8 +5,12 @@
   var L = window.lunde, money = L.money;
   var mount = document.getElementById("setMount");
   var session = window.lundeSession || {};
-  var PROMOS = L.PROMO_CODES || {};
   var integrations = null, emailCfg = null;
+
+  function promoCodes() {
+    var s = L.siteSettings();
+    return (s.promoCodes && typeof s.promoCodes === "object") ? s.promoCodes : (L.PROMO_CODES || {});
+  }
 
   function esc(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
   function field(label, inner) { return '<label class="v6-field"><span>' + label + '</span>' + inner + '</label>'; }
@@ -14,11 +18,23 @@
     return '<span class="status-badge" data-status="' + (ok ? "delivered" : "cancelled") + '"><i></i>' + (ok ? okText : badText) + '</span>';
   }
 
-  var promoRows = Object.keys(PROMOS).map(function (k) {
-    var pr = PROMOS[k];
-    var val = pr.type === "percent" ? Math.round(pr.value * 100) + "% off" : money(pr.value) + " off";
-    return '<div class="row" style="grid-template-columns:1fr auto auto;gap:14px"><span><span class="row-title">' + pr.code + '</span><span class="row-sub">Discount code</span></span><span class="status-badge" data-status="delivered"><i></i>Active</span><span class="row-strong">' + val + '</span></div>';
-  }).join("");
+  function promoPanel() {
+    var codes = promoCodes();
+    var keys = Object.keys(codes);
+    var rows = keys.map(function (k) {
+      var pr = codes[k];
+      var val = pr.type === "percent" ? Math.round(pr.value * 100) + "% off" : money(pr.value) + " off";
+      return '<div class="row" style="grid-template-columns:1fr auto auto;gap:14px"><span><span class="row-title">' + esc(pr.code) + '</span><span class="row-sub">' + val + '</span></span>' +
+        '<span class="status-badge" data-status="delivered"><i></i>Active</span>' +
+        '<button class="chip" type="button" data-promo-del="' + esc(k) + '" style="height:34px;padding:0 12px">Delete</button></div>';
+    }).join("") || '<div class="panel-pad"><p class="row-sub">No promo codes — add one below.</p></div>';
+    return '<div class="panel"><div class="panel-head"><h2>Promo codes</h2><span class="cp-saved" id="savedPromos" hidden>Saved</span></div><div class="rowlist">' + rows + '</div>' +
+      '<div class="panel-pad v6-form" style="border-top:1px solid var(--line)"><div class="v6-field-row">' +
+        field('Code', '<input id="promoCode" placeholder="e.g. SPRING15" style="text-transform:uppercase">') +
+        field('Type', '<select id="promoType"><option value="percent">% off subtotal</option><option value="fixed">$ off subtotal</option></select>') +
+        field('Amount', '<input id="promoValue" type="number" min="0" step="1" placeholder="15">') +
+      '</div><div><button class="btn" type="button" id="promoAdd" style="min-height:42px">Add code</button></div></div></div>';
+  }
 
   function render() {
     var s = L.siteSettings();
@@ -57,7 +73,7 @@
           '<div><button class="btn" type="button" id="saveBiz" style="min-height:42px">Save business info</button></div>' +
         '</div></div>' +
 
-        '<div class="panel"><div class="panel-head"><h2>Promo codes</h2></div><div class="rowlist">' + promoRows + '</div></div>' +
+        promoPanel() +
 
       '</div><div style="display:grid;gap:18px">' +
 
@@ -71,7 +87,16 @@
         '<div class="panel"><div class="panel-head"><h2>Integrations</h2></div><div class="rowlist">' + integrationRows + '</div></div>' +
 
         '<div class="panel"><div class="panel-head"><h2>Your account</h2></div><div class="panel-pad">' +
-          '<div class="app-user" style="padding:0 0 14px"><span class="av" style="background:var(--accent)">' + (session.initials || "U") + '</span><span class="app-user-info"><b style="color:var(--ink)">' + esc(session.name || "Staff") + '</b><span style="color:var(--muted)">' + esc(session.email || "") + ' · ' + esc(session.role || "Staff") + '</span></span></div>' +
+          '<div class="app-user" style="padding:0 0 14px">' +
+            (session.avatar
+              ? '<span class="av" style="background-color:var(--stone);background-image:url(' + esc(session.avatar) + ');background-size:cover;background-position:center"></span>'
+              : '<span class="av" style="background:var(--accent)">' + (session.initials || "U") + '</span>') +
+            '<span class="app-user-info"><b style="color:var(--ink)">' + esc(session.name || "Staff") + '</b><span style="color:var(--muted)">' + esc(session.email || "") + ' · ' + esc(session.role || "Staff") + '</span></span></div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;padding:0 0 14px">' +
+            '<button class="btn ghost" type="button" id="setAvUpload" style="min-height:36px;padding:6px 12px">Upload photo</button>' +
+            '<button class="btn ghost" type="button" id="setAvRemove" style="min-height:36px;padding:6px 12px"' + (session.avatar ? '' : ' disabled') + '>Remove photo</button>' +
+            '<input type="file" id="setAvFile" accept="image/png,image/jpeg,image/webp" style="display:none">' +
+          '</div>' +
           '<button class="btn ghost" type="button" id="setSignout">Sign out</button></div></div>' +
 
         '<div class="panel"><div class="panel-head"><h2>Data</h2></div><div class="panel-pad"><p class="row-sub" style="margin-bottom:14px">Reset demo data to its original seeded state, or reseed if empty.</p>' +
@@ -89,7 +114,81 @@
     else if (L.showToast) L.showToast((r && r.error) || "Could not save settings");
   }
 
+  /* Center-crop + downscale a picked image to a 128x128 JPEG data URL. */
+  function downscaleAvatar(file, cb) {
+    var url;
+    try { url = URL.createObjectURL(file); } catch (e) { cb(""); return; }
+    var img = new Image();
+    img.onload = function () {
+      URL.revokeObjectURL(url);
+      try {
+        var size = 128;
+        var c = document.createElement("canvas");
+        c.width = size; c.height = size;
+        var ctx = c.getContext("2d");
+        var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+        var sq = Math.min(w, h);
+        if (!sq) { cb(""); return; }
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, size, size);
+        ctx.drawImage(img, (w - sq) / 2, (h - sq) / 2, sq, sq, 0, 0, size, size);
+        var out = c.toDataURL("image/jpeg", 0.85);
+        cb(out && out.indexOf("data:image/jpeg") === 0 ? out : "");
+      } catch (e2) { cb(""); }
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); cb(""); };
+    img.src = url;
+  }
+
+  /* Save the signed-in user's avatar ("" removes), then sync the local
+     session + sidebar so the change shows immediately. */
+  function saveAvatar(val) {
+    if (!session.id) { if (L.showToast) L.showToast("No signed-in account found"); return; }
+    L.adminUserUpdate(session.id, { avatar: val }).then(function (res) {
+      if (res && res.ok) {
+        session.avatar = val;
+        try {
+          var raw = JSON.parse(localStorage.getItem("lunde_staff_session_v1") || "null");
+          if (raw) { raw.avatar = val; localStorage.setItem("lunde_staff_session_v1", JSON.stringify(raw)); }
+        } catch (e) {}
+        var sideAv = document.querySelector(".app-side-foot .av");
+        if (sideAv) {
+          if (val) {
+            sideAv.style.backgroundImage = "url(" + val + ")";
+            sideAv.style.backgroundSize = "cover";
+            sideAv.style.backgroundPosition = "center";
+            sideAv.textContent = "";
+          } else {
+            sideAv.style.backgroundImage = "";
+            sideAv.textContent = session.initials || (session.name || "U").split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
+          }
+        }
+        if (L.showToast) L.showToast(val ? "Profile photo updated" : "Profile photo removed");
+        render();
+      } else if (L.showToast) {
+        L.showToast((res && res.error) || "Could not save photo");
+      }
+    });
+  }
+
   function bind() {
+    var avUpload = document.getElementById("setAvUpload");
+    var avFile = document.getElementById("setAvFile");
+    var avRemove = document.getElementById("setAvRemove");
+    if (avUpload && avFile) {
+      avUpload.addEventListener("click", function () { avFile.click(); });
+      avFile.addEventListener("change", function () {
+        var f = avFile.files && avFile.files[0];
+        avFile.value = "";
+        if (!f) return;
+        downscaleAvatar(f, function (dataUrl) {
+          if (!dataUrl) { if (L.showToast) L.showToast("Could not read that image"); return; }
+          saveAvatar(dataUrl);
+        });
+      });
+    }
+    if (avRemove) avRemove.addEventListener("click", function () { saveAvatar(""); });
+
     document.getElementById("savePricing").addEventListener("click", function () {
       save({
         freightFlat: Number(document.getElementById("setFreight").value),
@@ -113,6 +212,29 @@
         emailDeliveryNotice: document.getElementById("setEmailDelivered").checked,
         emailReplyTo: document.getElementById("setReplyTo").value
       }, "savedEmail");
+    });
+    document.getElementById("promoAdd").addEventListener("click", function () {
+      var code = document.getElementById("promoCode").value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+      var type = document.getElementById("promoType").value;
+      var raw = Number(document.getElementById("promoValue").value);
+      if (!code) { if (L.showToast) L.showToast("Enter a code name"); return; }
+      if (!isFinite(raw) || raw <= 0) { if (L.showToast) L.showToast("Enter a discount amount"); return; }
+      if (type === "percent" && raw > 90) { if (L.showToast) L.showToast("Percent discounts max out at 90%"); return; }
+      var next = {};
+      var cur = promoCodes();
+      Object.keys(cur).forEach(function (k) { next[k] = cur[k]; });
+      next[code] = { code: code, label: code, type: type, value: type === "percent" ? raw / 100 : raw };
+      save({ promoCodes: next }, "savedPromos").then(render);
+    });
+    mount.querySelectorAll("[data-promo-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var k = b.getAttribute("data-promo-del");
+        if (!confirm("Delete promo code " + k + "? Customers can no longer apply it.")) return;
+        var next = {};
+        var cur = promoCodes();
+        Object.keys(cur).forEach(function (key) { if (key !== k) next[key] = cur[key]; });
+        save({ promoCodes: next }, "savedPromos").then(render);
+      });
     });
     document.getElementById("setSignout").addEventListener("click", function () {
       localStorage.removeItem("lunde_staff_session_v1"); localStorage.setItem("lunde_staff_logged_out_v1", "1"); location.href = "./login.html";

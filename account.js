@@ -117,10 +117,22 @@
   }
 
   /* ---------- hero ---------- */
+  function applyAvatar(el, c) {
+    if (!el) return;
+    if (c && c.avatar) {
+      el.textContent = "";
+      el.style.backgroundImage = 'url("' + c.avatar + '")';
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+    } else {
+      el.style.backgroundImage = "";
+      el.textContent = initialsOf(c && c.name, c && c.email);
+    }
+  }
   function renderHero() {
     var c = currentCustomer(); if (!c) return;
     var name = firstName(c.name);
-    document.getElementById("acctAvatar").textContent = initialsOf(c.name, c.email);
+    applyAvatar(document.getElementById("acctAvatar"), c);
     document.getElementById("acctGreeting").textContent = name ? "Welcome back, " + name + "." : "Welcome back.";
     document.getElementById("acctMemberSince").textContent = c.createdAt ? "Member since " + fmtMonthYear(c.createdAt) + " · " + c.email : c.email || "";
   }
@@ -381,6 +393,16 @@
       '<label class="v6-opt" style="margin-top:2px"><input type="checkbox" name="isDefault"' + (existing && existing.isDefault ? " checked" : "") + '><span class="v6-opt-t"><strong>Set as default delivery address</strong><span>Used automatically at checkout</span></span></label>' +
       '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px"><button class="btn ghost" type="button" data-x>Cancel</button><button class="btn" type="submit">' + (existing ? "Save changes" : "Add address") + '</button></div></form>';
     d.querySelectorAll("[data-x]").forEach(function (b) { b.addEventListener("click", function () { d.close(); }); });
+    /* address autocomplete on the street field — fills city/state/zip on select */
+    if (window.lundeAddressAutocomplete) {
+      var laaForm = d.querySelector("form");
+      window.lundeAddressAutocomplete(laaForm.elements.line1, { onSelect: function (parts) {
+        laaForm.elements.line1.value = parts.line1;
+        if (parts.city) laaForm.elements.city.value = parts.city;
+        if (parts.state) laaForm.elements.state.value = parts.state;
+        if (parts.zip) laaForm.elements.zip.value = parts.zip;
+      } });
+    }
     d.querySelector("form").addEventListener("submit", function (e) {
       e.preventDefault(); var fd = new FormData(e.target);
       var addr = { label: fd.get("label"), line1: fd.get("line1"), city: fd.get("city"), state: fd.get("state"), zip: fd.get("zip"), isDefault: e.target.elements.isDefault.checked };
@@ -427,10 +449,56 @@
     var c = currentCustomer();
     var profile = {};
     if (L.customerDetails) { var d = L.customerDetails(c); for (var k in d) if (d[k]) profile[k] = d[k]; }
-    profileForm.querySelectorAll("input").forEach(function (i) { i.value = profile[i.name] || ""; });
+    profileForm.querySelectorAll("input").forEach(function (i) { if (i.type !== "file") i.value = profile[i.name] || ""; });
     var chip = document.getElementById("emailVerifiedChip");
     chip.innerHTML = c && c.emailVerified ? '<span class="acct-chip">✓ Verified</span>' : "";
+    applyAvatar(document.getElementById("profileAvatarPreview"), c);
+    var rm = document.getElementById("avatarRemove");
+    if (rm) rm.hidden = !(c && c.avatar);
   }
+
+  /* ---------- profile photo (avatar) ---------- */
+  function fileToAvatar(file) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function () {
+        try {
+          var S = 128, canvas = document.createElement("canvas");
+          canvas.width = S; canvas.height = S;
+          var ctx = canvas.getContext("2d");
+          var side = Math.min(img.width, img.height);
+          ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, S, S);
+          URL.revokeObjectURL(url);
+          resolve(canvas.toDataURL("image/jpeg", 0.85));
+        } catch (err) { URL.revokeObjectURL(url); reject(err); }
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("That file doesn't look like an image.")); };
+      img.src = url;
+    });
+  }
+  async function saveAvatar(avatar) {
+    var status = document.getElementById("profileStatus");
+    if (L.updateCurrentCustomer) L.updateCurrentCustomer({ avatar: avatar });
+    var r = L.saveAccountProfile && currentCustomer() ? await L.saveAccountProfile({ avatar: avatar }) : { ok: true };
+    status.textContent = r && r.ok ? (avatar ? "Photo updated." : "Photo removed.") : ((r && r.error) || "Saved on this device only — we couldn’t reach the server.");
+    status.dataset.state = r && r.ok ? "success" : "error";
+    renderHero(); loadProfile();
+  }
+  var avatarFile = document.getElementById("avatarFile");
+  if (avatarFile) avatarFile.addEventListener("change", async function () {
+    var file = avatarFile.files && avatarFile.files[0];
+    avatarFile.value = "";
+    if (!file) return;
+    try { await saveAvatar(await fileToAvatar(file)); }
+    catch (err) {
+      var status = document.getElementById("profileStatus");
+      status.textContent = err && err.message || "Could not read that image.";
+      status.dataset.state = "error";
+    }
+  });
+  var avatarRemove = document.getElementById("avatarRemove");
+  if (avatarRemove) avatarRemove.addEventListener("click", function () { saveAvatar(""); });
   profileForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     var btn = document.getElementById("profileSaveBtn");

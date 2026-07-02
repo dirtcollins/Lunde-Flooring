@@ -1,6 +1,9 @@
 /* ============================================================
    LUNDE V6 — staff console styles (pairs with v6.css tokens)
    ============================================================ */
+/* Anti-flicker: raw page content stays hidden until app-shell.js moves it
+   into the .app layout — otherwise every navigation flashes unshelled HTML. */
+body[data-staff] > main { display: none; }
 .app { display: grid; grid-template-columns: 258px minmax(0, 1fr); min-height: 100vh; }
 .app-scrim { display: none; }
 
@@ -177,7 +180,12 @@ a.tbl-row:hover { background: var(--paper); }
   .app-burger { display: inline-grid; place-items: center; width: 40px; height: 40px; color: var(--ink); }
   .app-burger svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 }
-@media (max-width: 560px) { .kpis { grid-template-columns: 1fr; } .app-search { display: none; } }
+/* Phones: keep page-level search usable — full width instead of hidden.
+   (!important beats the inline max-width some pages set on .app-search.) */
+@media (max-width: 560px) {
+  .kpis { grid-template-columns: 1fr; }
+  .app-search { flex: 1 1 100%; width: 100%; max-width: none !important; }
+}
 
 /* app-style bottom tab bar for phones (mirrors the storefront .v6-tabbar) */
 .app-tabbar { display: none; }
@@ -202,3 +210,49 @@ a.tbl-row:hover { background: var(--paper); }
   .app-tabbar a[aria-current="page"], .app-tabbar button.on { color: var(--ink); }
   .app-tabbar a[aria-current="page"] svg, .app-tabbar button.on svg { color: var(--accent); }
 }
+
+/* ============================================================
+   nav count badges (shell renders these on Orders / Messages)
+   ============================================================ */
+.nav-badge { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent); color: var(--on-dark); font-size: 10.5px; font-weight: 700; line-height: 18px; text-align: center; font-variant-numeric: tabular-nums; letter-spacing: 0; flex: none; }
+.nav-badge[hidden] { display: none; }
+.app-nav .nav-badge { margin-left: auto; }
+.app-tabbar a { position: relative; }
+.app-tabbar .nav-badge { position: absolute; top: 1px; left: calc(50% + 6px); }
+
+/* ============================================================
+   global search (shell) — .gs- prefix, square corners
+   ============================================================ */
+.gs-open { display: inline-flex; align-items: center; gap: 9px; width: 250px; height: 40px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 0; background: var(--panel); color: var(--muted); font: inherit; font-size: 13.5px; cursor: pointer; transition: border-color .15s, color .15s; }
+.gs-open:hover, .gs-open:focus-visible { border-color: var(--ink); color: var(--ink); }
+.gs-open svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; flex: none; }
+.gs-open-label { flex: 1; text-align: left; }
+.gs-open-kbd { font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; line-height: 1; color: var(--muted); border: 1px solid var(--line-2); padding: 4px 5px; white-space: nowrap; }
+@media (max-width: 560px) {
+  /* phones: the topbar trigger collapses to an icon button */
+  .gs-open { width: 40px; padding: 0; justify-content: center; border: 0; background: none; color: var(--ink); }
+  .gs-open svg { width: 20px; height: 20px; }
+  .gs-open-label, .gs-open-kbd { display: none; }
+  /* make room for the search icon: drop the date text, keep "View store" */
+  .app-top span.app-top-date { display: none; }
+}
+
+body.gs-lock { overflow: hidden; }
+.gs-overlay { position: fixed; inset: 0; z-index: 80; background: rgba(20,18,15,0.45); display: flex; justify-content: center; align-items: flex-start; padding: clamp(14px, 9vh, 96px) 14px 14px; }
+.gs-overlay[hidden] { display: none; }
+.gs-box { width: 100%; max-width: 620px; max-height: min(68vh, 560px); display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line-2); border-radius: 0; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5); }
+.gs-field { display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid var(--line); flex: none; }
+.gs-field svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; color: var(--muted); flex: none; }
+.gs-input { flex: 1; min-width: 0; height: 54px; border: 0; border-radius: 0; background: none; outline: none; font: inherit; font-size: 15.5px; color: var(--ink); }
+.gs-input::placeholder { color: var(--muted); }
+.gs-close { flex: none; font: inherit; font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid var(--line-2); border-radius: 0; padding: 5px 7px; cursor: pointer; }
+.gs-close:hover { color: var(--ink); border-color: var(--ink); }
+.gs-results { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.gs-group { padding-bottom: 6px; border-top: 1px solid var(--line); }
+.gs-group:first-child { border-top: 0; }
+.gs-group-title { padding: 10px 16px 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.gs-item { display: flex; align-items: baseline; gap: 10px; padding: 9px 16px; color: inherit; }
+.gs-item-title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none; max-width: 60%; }
+.gs-item-sub { font-size: 12.5px; color: var(--muted); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gs-item.on, .gs-item:hover { background: var(--paper-2); box-shadow: inset 2px 0 0 var(--accent); }
+.gs-empty { padding: 28px 16px; text-align: center; font-size: 13.5px; color: var(--muted); }

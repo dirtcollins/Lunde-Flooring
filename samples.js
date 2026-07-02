@@ -138,6 +138,16 @@
     }
   });
 
+  /* address autocomplete on the street field — fills city/state/zip on select */
+  if (window.lundeAddressAutocomplete && form.elements.line1) {
+    window.lundeAddressAutocomplete(form.elements.line1, { onSelect: function (parts) {
+      form.elements.line1.value = parts.line1;
+      if (parts.city) form.elements.city.value = parts.city;
+      if (parts.state) form.elements.state.value = parts.state;
+      if (parts.zip) form.elements.zip.value = parts.zip;
+    } });
+  }
+
   grid.innerHTML = products().map(card).join("");
   render();
 })();

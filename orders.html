@@ -7,11 +7,37 @@
     <link rel="icon" href="./favicon.ico">
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./console.css">
+    <style>
+      .orders-search { max-width: 320px; }
+      .ord-del { display: inline-flex; align-items: center; gap: 5px; }
+      .ord-del svg { flex: none; }
+      /* Phone: collapse each order row to a two-line card and keep the search visible. */
+      @media (max-width: 700px) {
+        #orderTable .tbl-head { display: none; }
+        #orderTable .ord-row {
+          grid-template-columns: 44px minmax(0, 1fr) auto !important;
+          grid-template-areas: "thumb main status" "thumb main total";
+          row-gap: 4px;
+          align-items: start;
+          padding: 14px 16px;
+        }
+        #orderTable .oc-thumb { grid-area: thumb; }
+        #orderTable .oc-main { grid-area: main; min-width: 0; }
+        #orderTable .oc-main b, #orderTable .oc-main .row-sub { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #orderTable .oc-items, #orderTable .oc-date { display: none; }
+        #orderTable .oc-status { grid-area: status; justify-self: end; }
+        #orderTable .oc-total { grid-area: total; justify-self: end; }
+      }
+      /* console.css hides .app-search under 560px — the orders search stays, full width. */
+      @media (max-width: 560px) {
+        .app-head .orders-search { display: flex !important; flex-basis: 100%; max-width: none; width: 100%; }
+      }
+    </style>
   </head>
   <body data-staff="orders">
     <main>
       <div class="app-head"><div><p class="eyebrow">Fulfillment</p><h1>Orders</h1></div>
-        <div class="app-search" style="max-width:320px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg><input id="orderSearch" type="search" placeholder="Search orders, customers…" aria-label="Search orders"></div>
+        <div class="app-search orders-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg><input id="orderSearch" type="search" placeholder="Search orders, customers, products…" aria-label="Search orders"></div>
       </div>
       <div class="chips" id="orderChips"></div>
       <div class="panel"><div id="orderTable"></div></div>

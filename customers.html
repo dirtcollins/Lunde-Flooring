@@ -7,11 +7,38 @@
     <link rel="icon" href="./favicon.ico">
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./console.css">
+    <style>
+      /* new-customer form */
+      .nc-form { display: grid; gap: 14px; }
+      .nc-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .nc-field { display: grid; gap: 6px; }
+      .nc-field > span { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .nc-field input { height: 42px; border: 1px solid var(--line-2); border-radius: var(--radius); padding: 0 12px; font: inherit; background: var(--panel); outline: none; width: 100%; }
+      .nc-field input:focus { border-color: var(--ink); }
+      @media (max-width: 720px) { .nc-grid2 { grid-template-columns: 1fr; } }
+    </style>
   </head>
   <body data-staff="customers">
     <main>
       <div class="app-head"><div><p class="eyebrow">People</p><h1>Customers</h1></div>
-        <div class="app-search" style="max-width:320px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg><input id="custSearch" type="search" placeholder="Search customers…" aria-label="Search"></div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="app-search" style="max-width:320px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg><input id="custSearch" type="search" placeholder="Search customers…" aria-label="Search"></div>
+          <button class="btn" type="button" id="custNewToggle">New customer</button>
+        </div>
+      </div>
+      <div class="panel" id="custNewPanel" hidden style="margin-bottom:clamp(22px,2.6vw,34px)">
+        <div class="panel-head"><h2>New customer</h2></div>
+        <div class="panel-pad nc-form">
+          <div class="nc-grid2">
+            <label class="nc-field"><span>Full name (required)</span><input id="ncName" placeholder="e.g. Dana Larsen"></label>
+            <label class="nc-field"><span>Company</span><input id="ncCompany" placeholder="Optional"></label>
+          </div>
+          <div class="nc-grid2">
+            <label class="nc-field"><span>Phone</span><input id="ncPhone" type="tel" placeholder="Optional"></label>
+            <label class="nc-field"><span>Email</span><input id="ncEmail" type="email" placeholder="Optional"></label>
+          </div>
+          <div style="display:flex;gap:10px"><button class="btn" type="button" id="ncSave">Create customer</button><button class="btn ghost" type="button" id="ncCancel">Cancel</button></div>
+        </div>
       </div>
       <div class="kpis" id="custKpis"></div>
       <div class="panel"><div id="custTable"></div></div>

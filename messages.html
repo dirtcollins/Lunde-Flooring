@@ -7,17 +7,66 @@
     <link rel="icon" href="./favicon.ico">
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./console.css">
+    <style>
+      /* Messages page — scoped helpers (kept out of console.css) */
+      .msg-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+      #msgTopics[hidden] { display: none; } /* .chips sets display:flex, which would defeat [hidden] */
+      #msgChips { margin-bottom: 0; }
+      #msgTopics { margin-bottom: 20px; }
+      #msgChips:has(+ #msgTopics[hidden]) { margin-bottom: 20px; }
+      .msg-search { flex: 1 1 220px; min-width: 0; height: 40px; border: 1px solid var(--line-2); background: var(--panel); padding: 0 12px; font: inherit; font-size: 14px; outline: none; }
+      .msg-search:focus { border-color: var(--ink); }
+      .msg-topic { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line-2); padding: 3px 8px; color: var(--muted); margin: 0 8px 6px 0; vertical-align: 2px; white-space: nowrap; }
+      .msg-body { font-size: 15px; line-height: 1.5; margin: 4px 0 6px; white-space: pre-line; overflow-wrap: anywhere; }
+      .msg-meta { font-size: 13px; }
+      .msg-meta a { text-decoration: underline; text-underline-offset: 2px; }
+      .msg-hint { display: block; margin-top: 4px; font-size: 12.5px; color: var(--muted); }
+      .msg-photos { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+      .msg-photo { width: 64px; height: 64px; padding: 0; border: 1px solid var(--line); background: var(--canvas); cursor: zoom-in; overflow: hidden; }
+      .msg-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .msg-replies { margin: 10px 0 2px; display: grid; gap: 8px; }
+      .msg-reply { border-left: 2px solid var(--line-2); padding: 2px 0 2px 10px; }
+      .msg-reply p { font-size: 13.5px; line-height: 1.5; margin: 2px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+      .msg-replybox { margin-top: 10px; display: grid; gap: 8px; }
+      .msg-replybox textarea { width: 100%; border: 1px solid var(--line-2); padding: 10px 12px; font: inherit; font-size: 14px; background: var(--panel); resize: vertical; outline: none; }
+      .msg-replybox textarea:focus { border-color: var(--ink); }
+      .msg-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+      @media (max-width: 640px) {
+        .msg-row { grid-template-columns: 1fr !important; }
+        .msg-actions { justify-content: flex-start; }
+      }
+      /* add-message modal */
+      .msg-modal { position: fixed; inset: 0; z-index: 80; }
+      .msg-modal[hidden] { display: none; }
+      .msg-modal-scrim { position: absolute; inset: 0; background: rgba(20,18,15,.5); }
+      .msg-modal-panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(560px, calc(100vw - 32px)); background: var(--paper); border: 1px solid var(--line); box-shadow: 0 40px 90px -30px rgba(0,0,0,.5); }
+      .msg-modal-panel .panel-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; }
+      .msg-x { background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--muted); padding: 4px 8px; }
+      .msg-x:hover { color: var(--ink); }
+      @media (max-width: 640px) { .msg-modal-panel { left: 0; top: auto; bottom: 0; transform: none; width: 100%; } }
+    </style>
   </head>
   <body data-staff="messages">
     <main>
       <div class="app-head"><div><p class="eyebrow">Inbox</p><h1>Messages</h1><p>Customer feedback from the storefront, plus notes your team logs here.</p></div>
         <button class="btn" type="button" id="msgAddToggle">Add message</button></div>
-      <div class="panel" id="msgComposer" hidden style="margin-bottom:18px"><div class="panel-head"><h2>Log a message</h2></div><div class="panel-pad" style="display:grid;gap:12px">
-        <textarea id="msgText" rows="3" placeholder="e.g. Phone call — Maria asked to move Friday's delivery to the afternoon…" style="width:100%;border:1px solid var(--line-2);padding:12px;font:inherit;font-size:14px;outline:none;background:var(--panel);resize:vertical"></textarea>
-        <input id="msgWho" placeholder="Who is it about / from? (optional — name, phone, or email)" style="height:42px;border:1px solid var(--line-2);padding:0 12px;font:inherit;outline:none;background:var(--panel)">
-        <div style="display:flex;gap:10px"><button class="btn" type="button" id="msgSave" style="min-height:42px">Add to inbox</button><button class="btn ghost" type="button" id="msgCancel" style="min-height:42px">Cancel</button></div>
-      </div></div>
+      <div class="msg-modal" id="msgComposer" hidden>
+        <div class="msg-modal-scrim" id="msgComposerScrim"></div>
+        <div class="msg-modal-panel" role="dialog" aria-modal="true" aria-label="Log a message">
+          <div class="panel-head"><h2>Log a message</h2><button class="msg-x" type="button" id="msgComposerX" aria-label="Close">×</button></div>
+          <div class="panel-pad" style="display:grid;gap:12px">
+            <textarea id="msgText" rows="4" placeholder="e.g. Phone call — Maria asked to move Friday's delivery to the afternoon…" style="width:100%;border:1px solid var(--line-2);padding:12px;font:inherit;font-size:14px;outline:none;background:var(--panel);resize:vertical"></textarea>
+            <input id="msgWho" placeholder="Who is it about / from? (optional — name, phone, or email)" style="height:42px;border:1px solid var(--line-2);padding:0 12px;font:inherit;outline:none;background:var(--panel)">
+            <div style="display:flex;gap:10px"><button class="btn" type="button" id="msgSave" style="min-height:42px">Add to inbox</button><button class="btn ghost" type="button" id="msgCancel" style="min-height:42px">Cancel</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-toolbar">
+        <input class="msg-search" id="msgSearch" type="search" placeholder="Search name, email, or message…" aria-label="Search messages">
+        <button class="btn ghost" type="button" id="msgRefresh" style="min-height:40px">Refresh</button>
+      </div>
       <div class="chips" id="msgChips"></div>
+      <div class="chips" id="msgTopics" hidden style="margin-top:8px"></div>
       <div class="panel"><div id="msgList"></div></div>
     </main>
     <script defer src="./data.js"></script>

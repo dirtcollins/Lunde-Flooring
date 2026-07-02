@@ -9,6 +9,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./console.css">
+    <style>
+      .dash-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .att-tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; white-space: nowrap; justify-self: end; }
+      .att-tag[data-kind="pastdue"] { background: #f6e2dd; color: #a03d2e; }
+      .att-tag[data-kind="stuck"] { background: #f7eede; color: #9a6a1a; }
+      .att-tag[data-kind="quote"] { background: #ece8f4; color: #5b4b9a; }
+      .att-tag[data-kind="stock"] { background: #e6edf6; color: #2a5599; }
+      .att-count { font-size: 12px; font-weight: 700; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: inline-grid; place-items: center; background: #f6e2dd; color: #a03d2e; margin-left: 8px; vertical-align: 2px; }
+      .kpi-delta { font-size: 13px; font-weight: 700; }
+      .kpi-delta[data-dir="up"] { color: #3c6b40; }
+      .kpi-delta[data-dir="down"] { color: #a03d2e; }
+      .dash-allclear { text-align: center; padding: 34px 20px; color: var(--muted); }
+      .dash-allclear b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 21px; color: var(--ink); margin-bottom: 4px; }
+      @media (max-width: 560px) { .att-tag { display: none; } }
+    </style>
   </head>
   <body data-staff="dashboard">
     <main><div id="dash"></div></main>

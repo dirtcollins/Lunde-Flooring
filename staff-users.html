@@ -7,6 +7,20 @@
     <link rel="icon" href="./favicon.ico">
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./console.css">
+    <style>
+      /* Staff account modal (add / edit) — square-cornered console dialog */
+      .su-scrim { position: fixed; inset: 0; z-index: 320; background: rgba(20, 18, 15, .45); display: flex; align-items: flex-start; justify-content: center; padding: 7vh 16px 24px; overflow-y: auto; }
+      .su-modal { background: var(--panel); border: 1px solid var(--line-2); border-radius: 0; width: 100%; max-width: 560px; box-shadow: 0 24px 60px rgba(5, 7, 8, .25); }
+      .su-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+      .su-modal-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+      .su-x { appearance: none; border: 1px solid var(--line); border-radius: 0; background: transparent; width: 34px; height: 34px; display: grid; place-items: center; cursor: pointer; font-size: 18px; line-height: 1; color: var(--muted); flex: none; }
+      .su-x:hover { color: var(--ink); border-color: var(--ink); }
+      .su-modal-body { padding: 18px 20px 20px; }
+      .su-ava { display: flex; gap: 14px; align-items: center; padding: 0 0 16px; }
+      .su-ava .av { width: 56px; height: 56px; border-radius: 999px; flex: none; display: grid; place-items: center; font-size: 17px; font-weight: 700; background: var(--accent); color: var(--on-dark); background-size: cover; background-position: center; border: 1px solid var(--line); }
+      .su-ava-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+      body.su-modal-open { overflow: hidden; }
+    </style>
   </head>
   <body data-staff="staff-users">
     <main><div id="staffMount"></div></main>

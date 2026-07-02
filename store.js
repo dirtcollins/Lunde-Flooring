@@ -135,7 +135,12 @@
   }
   function validatePromo(code) {
     const normalized = String(code || "").trim().toUpperCase();
-    return normalized ? PROMO_CODES[normalized] || null : null;
+    if (!normalized) return null;
+    // Staff-managed codes from Settings win; the constants are only a fallback
+    // for a cold cache that has never reached the server.
+    const managed = readJson("lunde_settings_v1", {}).promoCodes;
+    const codes = managed && typeof managed === "object" ? managed : PROMO_CODES;
+    return codes[normalized] || null;
   }
 
   /* ---------- customer profile (staff) ---------- */
@@ -185,7 +190,22 @@
   function updateCustomerProfile(id, patch) {
     const list = customers();
     let rec = list.find((c) => c.id === id);
-    if (!rec) { rec = { id: id || ("CUST-" + Date.now().toString(36).toUpperCase()), createdAt: Date.now() }; list.unshift(rec); }
+    if (!rec) {
+      rec = { id: id || ("CUST-" + Date.now().toString(36).toUpperCase()), createdAt: Date.now() };
+      // Creating a record for a guest (keyed by email): seed contact details
+      // from their order so notes/terms edits don't orphan the profile.
+      const em = String(id || "").toLowerCase();
+      if (em.includes("@")) {
+        const ord = orders().find((o) => String(o.customer && o.customer.email || "").toLowerCase() === em);
+        rec.email = em;
+        if (ord && ord.customer) {
+          rec.name = ord.customer.name || "";
+          rec.company = ord.customer.company || "";
+          rec.phone = ord.customer.phone || "";
+        }
+      }
+      list.unshift(rec);
+    }
     const merged = { ...rec, ...patch };
     if (patch.profile) merged.profile = { ...(rec.profile || {}), ...patch.profile };
     if (patch.billing) merged.billing = { ...(rec.billing || {}), ...patch.billing };
@@ -425,6 +445,23 @@
     push(`${QUOTES_ENDPOINT}/${encodeURIComponent(id)}`, "DELETE");
     return true;
   }
+  /* Email the quote to its customer (server sends via Resend, marks it sent). */
+  async function sendQuoteToCustomer(id) {
+    const data = await api(`${QUOTES_ENDPOINT}/${encodeURIComponent(id)}/send`, { method: "POST" });
+    if (data && data.ok && Array.isArray(data.items)) saveQuotes(data.items);
+    return data || { ok: false, error: "Could not reach the server." };
+  }
+  /* Reply to an inbox message by email (server sends + logs the reply). */
+  async function replyToFeedback(id, message) {
+    const data = await api(`${FEEDBACK_ENDPOINT}/${encodeURIComponent(id)}/reply`, { method: "POST", body: { message } });
+    if (data && data.ok && Array.isArray(data.items)) saveFeedbackItems(data.items);
+    return data || { ok: false, error: "Could not reach the server." };
+  }
+  /* Re-send the customer's receipt email for an order. */
+  async function resendOrderReceipt(id) {
+    const data = await api(`${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/receipt-email`, { method: "POST" });
+    return data || { ok: false, error: "Could not reach the server." };
+  }
   /* Merge a quote's lines into the live cart. Pricing re-derives from the
      current catalog (carton math is always recomputed), so quotes never
      carry stale prices into checkout. */
@@ -565,8 +602,27 @@
     return data;
   }
   async function syncFromServer() {
-    await Promise.all([pullOrders(), pullInventory(), pullCustomers(), pullProducts(), pullNotes(), pullQuotes(), pullSettings()]);
+    await Promise.all([pullOrders(), pullInventory(), pullCustomers(), pullProducts(), pullNotes(), pullQuotes(), pullSettings(), refreshFeedback()]);
+    // Console pages listen for this to re-render with fresh data.
+    try { document.dispatchEvent(new CustomEvent("lunde:synced", { detail: { online: apiOnline === true } })); } catch {}
     return apiOnline === true;
+  }
+
+  /* Staff console freshness: the console used to render only this device's
+     localStorage cache — real customer orders never appeared until a manual
+     refresh. Pull everything on load and whenever the tab regains focus. */
+  function staffAutoSync() {
+    let hasStaffSession = false;
+    try { hasStaffSession = Boolean(localStorage.getItem("lunde_staff_session_v1")); } catch {}
+    if (!hasStaffSession) return;
+    syncFromServer().catch(() => {});
+    let lastSync = Date.now();
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && Date.now() - lastSync > 30 * 1000) {
+        lastSync = Date.now();
+        syncFromServer().catch(() => {});
+      }
+    });
   }
 
   /* staff auth (demo) */
@@ -608,7 +664,7 @@
     activeCustomer = { ...acc };
     const list = customers();
     const existing = list.find((c) => c.id === acc.id);
-    const display = { id: acc.id, createdAt: acc.createdAt || Date.now(), name: acc.name || "", company: acc.company || "", email: acc.email || "", phone: acc.phone || "", addresses: Array.isArray(acc.addresses) ? acc.addresses : [], favorites: Array.isArray(acc.favorites) ? acc.favorites : [] };
+    const display = { id: acc.id, createdAt: acc.createdAt || Date.now(), name: acc.name || "", company: acc.company || "", email: acc.email || "", phone: acc.phone || "", addresses: Array.isArray(acc.addresses) ? acc.addresses : [], favorites: Array.isArray(acc.favorites) ? acc.favorites : [], avatar: acc.avatar || "" };
     // Server account is the source of truth for a signed-in customer's favorites.
     if (Array.isArray(acc.favorites)) writeJson(FAVORITES_KEY, acc.favorites);
     if (existing) {
@@ -1378,6 +1434,7 @@
     teamNotes, addTeamNote, pullNotes,
     orders, orderById, saveOrder, updateOrder, newOrderId, coerceStaffNotes,
     quotes, quoteById, saveQuoteFromCart, updateQuote, duplicateQuote, deleteQuote, quoteToCart, pullQuotes, reorderToCart,
+    sendQuoteToCustomer, replyToFeedback, resendOrderReceipt,
     signInCustomerRemote, hydrateCustomerSession, accountOrders, saveAccountProfile,
     resendVerificationEmail, verifyCustomerEmail, requestPasswordReset, resetCustomerPassword, updateCustomerPassword,
     STATUSES, STATUS_LABELS, FREIGHT_FLAT, TAX_RATE, parseDims,
@@ -1400,4 +1457,5 @@
   renderHeaderCount();
   hydrateCustomerSession();
   pullSettings().catch(() => {}); // keep cached pricing/settings fresh on every page
+  staffAutoSync(); // console pages: pull fresh data on load + tab focus
 })();

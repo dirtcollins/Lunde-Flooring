@@ -174,6 +174,16 @@
     }
   });
 
+  /* address autocomplete on the delivery street field (fills city/state/zip too) */
+  if (window.lundeAddressAutocomplete && form.elements.address) {
+    window.lundeAddressAutocomplete(form.elements.address, { onSelect: function (parts) {
+      form.elements.address.value = parts.line1;
+      if (parts.city) form.elements.city.value = parts.city;
+      if (parts.state) form.elements.state.value = parts.state;
+      if (parts.zip) form.elements.zip.value = parts.zip;
+    } });
+  }
+
   toggleAddress();
   prefill();
   renderLines();

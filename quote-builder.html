@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quote Builder — Lunde Staff</title>
+    <link rel="icon" href="./favicon.ico">
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./console.css">
+    <style>
+      /* ============================================================
+         Quote builder — dedicated page. qp- prefix, page-scoped.
+         ============================================================ */
+      .qp-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+      .qp-summary { position: sticky; top: 90px; }
+      @media (max-width: 1080px) { .qp-layout { grid-template-columns: 1fr; } .qp-summary { position: static; } }
+
+      .qp-field { display: grid; gap: 6px; }
+      .qp-field > span { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+      .qp-field input, .qp-field select, .qp-field textarea { height: 44px; border: 1px solid var(--line-2); border-radius: var(--radius); padding: 0 12px; font: inherit; background: var(--panel); outline: none; width: 100%; }
+      .qp-field textarea { height: auto; min-height: 84px; padding: 10px 12px; resize: vertical; }
+      .qp-field input:focus, .qp-field select:focus, .qp-field textarea:focus { border-color: var(--ink); }
+      .qp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      @media (max-width: 640px) { .qp-grid2 { grid-template-columns: 1fr; } }
+
+      /* customer picker */
+      .qp-cust-search { position: relative; }
+      .qp-cust-results { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 20; background: var(--panel); border: 1px solid var(--line-2); box-shadow: 0 18px 40px -18px rgba(32,30,26,.35); max-height: 300px; overflow: auto; }
+      .qp-cust-results button { display: flex; width: 100%; text-align: left; gap: 12px; align-items: center; padding: 11px 14px; background: none; border: 0; border-top: 1px solid var(--line); font: inherit; cursor: pointer; }
+      .qp-cust-results button:first-child { border-top: 0; }
+      .qp-cust-results button:hover, .qp-cust-results button.hot { background: var(--paper); }
+      .qp-av { width: 36px; height: 36px; border-radius: 999px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none; background-size: cover; background-position: center; }
+      .qp-cust-card { display: flex; gap: 14px; align-items: center; border: 1px solid var(--line); background: var(--paper-2); padding: 14px 16px; }
+      .qp-cust-card .info { min-width: 0; flex: 1; }
+      .qp-cust-card .info b { display: block; font-size: 15px; }
+      .qp-cust-card .info span { font-size: 12.5px; color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; }
+      .qp-link { background: none; border: 0; padding: 0; font: inherit; font-size: 12.5px; font-weight: 600; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+      .qp-link:hover { color: var(--ink); }
+
+      /* floor lines */
+      .qp-line { display: grid; grid-template-columns: 64px minmax(0,1fr) 130px 150px auto; gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
+      .qp-line:first-child { border-top: 0; }
+      .qp-line .th { width: 64px; height: 64px; background-size: cover; background-position: center; background-color: var(--paper-2); border: 1px solid var(--line); }
+      .qp-line .nm { font-weight: 600; font-size: 14.5px; line-height: 1.25; }
+      .qp-line .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+      .qp-line .sqft input { text-align: right; }
+      .qp-line .calc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+      .qp-line .calc b { display: block; font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; }
+      .qp-waste { background: none; border: 0; padding: 0; font: inherit; font-size: 11.5px; font-weight: 600; color: var(--accent); cursor: pointer; }
+      .qp-line .rm { background: none; border: 0; font: inherit; font-size: 12.5px; font-weight: 600; color: var(--muted); cursor: pointer; padding: 4px; }
+      .qp-line .rm:hover { color: var(--sale); }
+      @media (max-width: 720px) {
+        .qp-line { grid-template-columns: 56px minmax(0,1fr) auto; grid-template-rows: auto auto; }
+        .qp-line .th { grid-row: 1 / 3; width: 56px; height: 56px; }
+        .qp-line .sqft { grid-column: 2; grid-row: 2; max-width: 140px; }
+        .qp-line .calc { grid-column: 3; grid-row: 2; text-align: right; }
+      }
+
+      /* floor picker overlay */
+      .qp-picker { position: fixed; inset: 0; z-index: 80; display: none; }
+      .qp-picker.open { display: block; }
+      .qp-picker-scrim { position: absolute; inset: 0; background: rgba(20,18,15,.5); }
+      .qp-picker-panel { position: absolute; inset: 5% 6%; background: var(--paper); border: 1px solid var(--line); display: flex; flex-direction: column; box-shadow: 0 40px 90px -30px rgba(0,0,0,.5); }
+      @media (max-width: 720px) { .qp-picker-panel { inset: 0; } }
+      .qp-picker-head { display: flex; gap: 12px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+      .qp-picker-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; flex: none; }
+      .qp-picker-head input { flex: 1; height: 42px; border: 1px solid var(--line-2); background: var(--panel); padding: 0 12px; font: inherit; outline: none; min-width: 0; }
+      .qp-picker-head input:focus { border-color: var(--ink); }
+      .qp-picker-close { background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--muted); padding: 4px 8px; }
+      .qp-picker-close:hover { color: var(--ink); }
+      .qp-picker-grid { flex: 1; overflow: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; padding: 20px; align-content: start; }
+      .qp-card { border: 1px solid #ebe7e0; background: var(--panel); text-align: left; padding: 0; font: inherit; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, border-color .15s; position: relative; }
+      .qp-card:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -24px rgba(30,26,20,.45); }
+      .qp-card .im { display: block; aspect-ratio: 1 / 1; background-size: cover; background-position: center; background-color: #f2efe9; }
+      .qp-card .bd { padding: 10px 12px; display: grid; gap: 2px; }
+      .qp-card .t { font-size: 13.5px; font-weight: 600; line-height: 1.25; }
+      .qp-card .p { font-size: 12px; color: var(--muted); }
+      .qp-card.in { border-color: var(--accent); }
+      .qp-card.in::after { content: "✓ In quote"; position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; padding: 3px 8px; }
+
+      /* summary */
+      .qp-sumline { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 14px; }
+      .qp-sumline span:last-child { font-variant-numeric: tabular-nums; font-weight: 600; }
+      .qp-sumline.muted { color: var(--muted); font-size: 13px; }
+      .qp-sumtotal { display: flex; justify-content: space-between; border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px; font-weight: 700; font-size: 17px; }
+      .qp-mini { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+      .qp-mini:first-child { border-top: 0; }
+      .qp-mini .th { width: 34px; height: 34px; background-size: cover; background-position: center; background-color: var(--paper-2); flex: none; }
+      .qp-mini .t { flex: 1; min-width: 0; font-size: 12.5px; line-height: 1.3; }
+      .qp-mini .v { font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+      .qp-actions { display: grid; gap: 10px; margin-top: 16px; }
+      .qp-actions .btn { width: 100%; justify-content: center; }
+      .qp-empty { border: 1px dashed var(--line-2); padding: 28px 18px; text-align: center; color: var(--muted); font-size: 14px; }
+    </style>
+  </head>
+  <body data-staff="quotes">
+    <main>
+      <div id="qpMount"></div>
+      <div class="qp-picker" id="qpPicker" aria-hidden="true">
+        <div class="qp-picker-scrim" data-picker-close></div>
+        <div class="qp-picker-panel" role="dialog" aria-modal="true" aria-label="Choose floors">
+          <div class="qp-picker-head">
+            <h2>Add floors</h2>
+            <input id="qpPickerSearch" type="search" placeholder="Search floors, colors, SKUs…">
+            <button class="qp-picker-close" type="button" data-picker-close aria-label="Close">×</button>
+          </div>
+          <div class="qp-picker-grid" id="qpPickerGrid"></div>
+        </div>
+      </div>
+    </main>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./app-shell.js"></script>
+    <script defer src="./quote-builder.js"></script>
+  </body>
+</html>

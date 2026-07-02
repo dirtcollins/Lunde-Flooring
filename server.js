@@ -270,8 +270,22 @@ async function handleApi(req, res, url) {
     for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo"]) {
       if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
     }
-    for (const key of ["emailOrderConfirmation", "emailDeliveryNotice"]) {
+    for (const key of ["emailOrderConfirmation", "emailDeliveryNotice", "emailNewMessageAlert"]) {
       if (patch[key] !== undefined) cur[key] = Boolean(patch[key]);
+    }
+    if (patch.promoCodes && typeof patch.promoCodes === "object" && !Array.isArray(patch.promoCodes)) {
+      const codes = {};
+      for (const [rawKey, rawVal] of Object.entries(patch.promoCodes).slice(0, 50)) {
+        const key = clean(rawKey, 24).toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (!key || !rawVal || typeof rawVal !== "object") continue;
+        const type = rawVal.type === "fixed" ? "fixed" : "percent";
+        let value = Number(rawVal.value);
+        if (!Number.isFinite(value) || value <= 0) continue;
+        if (type === "percent") value = Math.min(value, 1);           // stored as a fraction (0.10 = 10%)
+        else value = Math.min(value, 10000);
+        codes[key] = { code: key, label: key, type, value };
+      }
+      cur.promoCodes = codes;
     }
     writeStore("settings", cur);
     return json(res, { ok: true, settings: cur });
@@ -434,15 +448,20 @@ async function handleApi(req, res, url) {
 function publicAdminUser(u) {
   return {
     id: u.id, name: u.name, initials: u.initials, email: u.email,
-    role: u.role, active: u.active !== false,
+    role: u.role, active: u.active !== false, avatar: u.avatar || "",
     createdAt: u.createdAt, updatedAt: u.updatedAt
   };
 }
 
 function handleAdminUsers(req, res, method, parts, input) {
-  if (requireOwner(req, res)) return;
-  const me = currentStaff(req);
+  const self = currentStaff(req);
   const id = clean(parts[1] || "", 100);
+  // Any signed-in staff member may update their OWN profile photo; everything
+  // else in here stays Owner-only.
+  const selfAvatarOnly = self && id === self.id && method === "PATCH" &&
+    input && typeof input === "object" && Object.keys(input).every((k) => k === "avatar");
+  if (!selfAvatarOnly && requireOwner(req, res)) return;
+  const me = self;
 
   if (method === "GET" && !id) {
     return json(res, { ok: true, users: getAdminUsers().map(publicAdminUser) });
@@ -488,6 +507,13 @@ function handleAdminUsers(req, res, method, parts, input) {
         return json(res, { ok: false, error: "An admin with that email already exists." }, 409);
       }
       next.email = email;
+    }
+    if (input.avatar !== undefined) {
+      const avatar = String(input.avatar || "");
+      // Small client-downscaled data URL only; empty string removes the photo.
+      if (avatar === "" || (/^data:image\/(png|jpeg|webp);base64,/.test(avatar) && avatar.length <= 200000)) {
+        next.avatar = avatar;
+      }
     }
     if (input.role !== undefined && ADMIN_ROLES.includes(input.role)) {
       if (target.id === me.id && input.role !== "Owner") {
@@ -845,6 +871,9 @@ async function handleOrders(req, res, method, parts, input) {
       if (input.delivery && typeof input.delivery === "object") {
         if (input.delivery.window !== undefined) merged.delivery.window = clean(input.delivery.window, 80);
         if (input.delivery.notes !== undefined) merged.delivery.notes = clean(input.delivery.notes, 1200);
+        if (input.delivery.date !== undefined) merged.delivery.date = clean(input.delivery.date, 20); // YYYY-MM-DD or ""
+        if (input.delivery.address !== undefined) merged.delivery.address = clean(input.delivery.address, 400);
+        if (input.delivery.method !== undefined && ["delivery", "pickup"].includes(input.delivery.method)) merged.delivery.method = input.delivery.method;
       }
       orders[i] = normalizeOrder(merged, orders[i]);
       updatedOrder = orders[i];
@@ -867,6 +896,25 @@ async function handleOrders(req, res, method, parts, input) {
     const email = await sendFulfillmentEmail(order, "manual", user);
     const latest = recordEmailStatus(id, { ...email, source: "manual" });
     return json(res, { ok: true, item: latest, items: readStore("orders", []), email: latest?.fulfillmentEmail || {} });
+  }
+  // Staff re-sends the customer's receipt/confirmation for an order.
+  if (parts.length === 3 && parts[2] === "receipt-email" && method === "POST") {
+    const denied = requireStaff(req, res);
+    if (denied) return;
+    const order = readStore("orders", []).find((row) => row?.id === clean(parts[1], 80));
+    if (!order) return json(res, { ok: false, error: "Order not found." }, 404);
+    const to = clean(order.customer?.email, 180);
+    if (!to) return json(res, { ok: false, error: "This order has no customer email." }, 422);
+    const base = config.siteBaseUrl || config.adminBaseUrl || "";
+    const template = buildCustomerEmail(order, base ? `${base}/account` : "");
+    const result = await sendTransactionalEmail({
+      to,
+      subject: `Your Lunde Flooring receipt — order ${order.id}`,
+      idempotencyKey: `lunde-receipt-${order.id}-${Date.now()}`,
+      ...template
+    });
+    if (result.status !== "sent") return json(res, { ok: false, error: result.error || "Could not send the receipt." }, 502);
+    return json(res, { ok: true, email: result });
   }
   return json(res, { ok: false, error: "Not found" }, 404);
 }
@@ -1087,6 +1135,13 @@ async function handleCustomerAccounts(req, res, method, parts, input) {
     if (patch.phone !== undefined) account.phone = clean(patch.phone, 80);
     if (Array.isArray(patch.addresses)) account.addresses = patch.addresses.slice(0, 20).map(normalizeAddress);
     if (Array.isArray(patch.favorites)) account.favorites = [...new Set(patch.favorites.slice(0, 200).map((v) => clean(v, 80)).filter(Boolean))];
+    if (patch.avatar !== undefined) {
+      const avatar = String(patch.avatar || "");
+      // Small client-downscaled data URL only; empty string removes the photo.
+      if (avatar === "" || (/^data:image\/(png|jpeg|webp);base64,/.test(avatar) && avatar.length <= 200000)) {
+        account.avatar = avatar;
+      }
+    }
     if (patch.notifications && typeof patch.notifications === "object") {
       const prefs = {};
       for (const key of ["samplesFollowUp", "newCollections", "promotions"]) {
@@ -1151,7 +1206,7 @@ function normalizeAddress(addr) {
   };
 }
 
-function handleListStore(req, res, method, parts, input) {
+async function handleListStore(req, res, method, parts, input) {
   const store = parts[0];
   // These shared stores hold customer PII (contact messages, quotes, internal
   // notes). Reads and mutations are staff-only. The one public path is POSTing
@@ -1162,9 +1217,59 @@ function handleListStore(req, res, method, parts, input) {
     if (denied) return;
   }
   if (method === "GET") return json(res, { ok: true, items: readStore(store, []) });
+  // Staff emails a saved quote to its customer; marks it sent with a 30-day expiry.
+  if (store === "quotes" && parts.length === 3 && parts[2] === "send" && method === "POST") {
+    const denied = requireStaff(req, res);
+    if (denied) return;
+    const staff = currentStaff(req);
+    const id = clean(parts[1], 100);
+    const quote = readStore("quotes", []).find((row) => row?.id === id);
+    if (!quote) return json(res, { ok: false, error: "Quote not found." }, 404);
+    const expiresAt = Number(quote.expiresAt) || (Number(quote.createdAt) || Date.now()) + 30 * 86400000;
+    const result = await sendQuoteEmail({ ...quote, expiresAt }, staff);
+    if (result.status !== "sent") return json(res, { ok: false, error: result.error || "Could not send the quote." }, 502);
+    const items = readStore("quotes", []).map((row) => row?.id === id
+      ? { ...row, status: row.status === "won" ? "won" : "sent", sentAt: Date.now(), expiresAt, updatedAt: Date.now() }
+      : row);
+    writeStore("quotes", items);
+    return json(res, { ok: true, items, item: items.find((row) => row?.id === id) });
+  }
+  // Staff replies to a customer message: email via Resend, log on the item.
+  if (store === "feedback" && parts.length === 3 && parts[2] === "reply" && method === "POST") {
+    const denied = requireStaff(req, res);
+    if (denied) return;
+    const staff = currentStaff(req);
+    const id = clean(parts[1], 100);
+    const item = readStore("feedback", []).find((row) => row?.id === id);
+    if (!item) return json(res, { ok: false, error: "Message not found." }, 404);
+    const to = clean(item.email, 180);
+    if (!to) return json(res, { ok: false, error: "This message has no email address to reply to." }, 422);
+    const body = clean(input.message, 4000);
+    if (!body) return json(res, { ok: false, error: "Write a reply first." }, 422);
+    const settings = getSettings();
+    const html = `<p>${escapeHtml(body).replace(/\n/g, "<br>")}</p><p style="color:#888;font-size:13px">— ${escapeHtml(staff.name || "Lunde Flooring")}, ${escapeHtml(settings.businessName)}<br>In reply to: “${escapeHtml(clean(item.message, 300))}”</p>`;
+    const result = await sendTransactionalEmail({
+      to,
+      subject: `Re: your message to ${settings.businessName}`,
+      html,
+      text: `${body}\n\n— ${staff.name || "Lunde Flooring"}, ${settings.businessName}`,
+      idempotencyKey: `lunde-msg-reply-${id}-${Date.now()}`
+    });
+    if (result.status !== "sent") return json(res, { ok: false, error: result.error || "Could not send the reply." }, 502);
+    const reply = { at: Date.now(), author: staff.name || staff.email || "Staff", message: body };
+    const items = readStore("feedback", []).map((row) => row?.id === id
+      ? { ...row, replies: [...(Array.isArray(row.replies) ? row.replies : []), reply], status: row.status === "resolved" ? "resolved" : "open" }
+      : row);
+    writeStore("feedback", items);
+    return json(res, { ok: true, items, reply });
+  }
   if (method === "POST") {
     const items = upsertById(store, { createdAt: Date.now(), ...input });
     const created = items[0] || null;
+    // New customer inquiries alert the shop (fire-and-forget; never blocks the submitter).
+    if (publicPost && created && created.source !== "staff" && getSettings().emailNewMessageAlert !== false) {
+      notifyNewMessage(created).catch(() => {});
+    }
     // Never echo the whole store back to an anonymous submitter.
     if (publicPost) return json(res, { ok: true, item: created });
     return json(res, { ok: true, items, item: created });
@@ -1226,7 +1331,7 @@ function handleProducts(req, res, method, input) {
 const STAFF_PAGES = new Set([
   "dashboard.html", "orders.html", "order.html", "inventory.html", "products.html",
   "product-edit.html", "customers.html", "customer-profile.html", "quotes.html",
-  "reports.html", "messages.html", "settings.html", "staff-users.html"
+  "quote-builder.html", "reports.html", "messages.html", "settings.html", "staff-users.html"
 ]);
 
 // Pages that additionally require Owner (admin-management) privileges.
@@ -1868,6 +1973,59 @@ async function sendCustomerDeliveryEmail(order, staff) {
   return result;
 }
 
+/* Alert the shop when a customer submits the contact form. */
+async function notifyNewMessage(item) {
+  const to = clean(config.fulfillmentEmail, 180);
+  if (!to || !config.resendApiKey) return { status: "skipped" };
+  const adminBase = config.adminBaseUrl || config.siteBaseUrl || "";
+  const meta = [item.name, item.email, item.phone, item.topic].filter(Boolean).map((v) => escapeHtml(clean(v, 180))).join(" · ");
+  const html = `<h2 style="margin:0 0 8px">New website message</h2>`
+    + (meta ? `<p style="margin:0 0 10px;color:#666">${meta}</p>` : "")
+    + `<p style="font-size:15px;line-height:1.6">${escapeHtml(clean(item.message, 2000)).replace(/\n/g, "<br>")}</p>`
+    + (Array.isArray(item.photos) && item.photos.length ? `<p style="color:#666">${item.photos.length} photo${item.photos.length === 1 ? "" : "s"} attached — view in the console.</p>` : "")
+    + (adminBase ? `<p><a href="${adminBase}/messages.html">Open the Messages inbox</a></p>` : "");
+  return sendTransactionalEmail({
+    to,
+    subject: `New message from ${clean(item.name, 120) || "a website visitor"}`,
+    html,
+    text: clean(item.message, 2000),
+    idempotencyKey: `lunde-newmsg-${item.id}`
+  });
+}
+
+/* Email a saved quote to its customer (staff action). */
+async function sendQuoteEmail(quote, staff) {
+  const to = clean(quote.customer?.email, 180);
+  if (!to) return { status: "skipped", error: "This quote has no customer email." };
+  const settings = getSettings();
+  const products = productsById();
+  const rows = Object.entries(quote.items || {}).map(([pid, entry]) => {
+    const product = products[pid];
+    if (!product || !(entry.sqft > 0)) return "";
+    const cartons = cartonsFor(product, entry.sqft);
+    const price = cartons * cartonPrice(product);
+    return `<tr><td style="padding:8px 12px;border-bottom:1px solid #eee">${escapeHtml(product.title)}</td>`
+      + `<td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right">${entry.sqft} sq ft · ${cartons} cartons</td>`
+      + `<td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right">$${price.toFixed(2)}</td></tr>`;
+  }).join("");
+  const validUntil = new Date(quote.expiresAt || (quote.createdAt + 30 * 86400000)).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const base = config.siteBaseUrl || "https://lundeflooring.com";
+  const html = `<h2 style="margin:0 0 6px">Your quote from ${escapeHtml(settings.businessName)}</h2>`
+    + `<p style="margin:0 0 14px;color:#666">${escapeHtml(quote.job || "Saved quote")} · ${escapeHtml(quote.id)} · Valid through ${validUntil}</p>`
+    + `<table style="border-collapse:collapse;width:100%;max-width:560px;font-size:14px">${rows}`
+    + `<tr><td style="padding:10px 12px;font-weight:700">Subtotal</td><td></td><td style="padding:10px 12px;text-align:right;font-weight:700">$${Number(quote.totals?.subtotal || 0).toFixed(2)}</td></tr></table>`
+    + (quote.notes ? `<p style="color:#555">${escapeHtml(clean(quote.notes, 1200)).replace(/\n/g, "<br>")}</p>` : "")
+    + `<p>Delivery and tax are calculated at checkout. Reply to this email or call ${escapeHtml(settings.businessPhone)} with any questions.</p>`
+    + `<p><a href="${base}/account?tab=quotes">View your quotes online</a></p>`;
+  return sendTransactionalEmail({
+    to,
+    subject: `Your ${settings.businessName} quote — ${clean(quote.job, 120) || quote.id}`,
+    html,
+    text: `Your quote ${quote.id} (${quote.job || ""}) — subtotal $${Number(quote.totals?.subtotal || 0).toFixed(2)}, valid through ${validUntil}.`,
+    idempotencyKey: `lunde-quote-send-${quote.id}-${Date.now()}`
+  });
+}
+
 async function sendAdminNotification(title, order, details) {
   const to = clean(config.fulfillmentEmail, 180);
   const body = [
@@ -2480,7 +2638,7 @@ function passwordStrengthError(password) {
 function publicUser(user) {
   return {
     id: user.id, name: user.name, initials: user.initials, role: user.role, email: user.email,
-    active: user.active !== false, canManageAdmins: user.role === "Owner"
+    active: user.active !== false, canManageAdmins: user.role === "Owner", avatar: user.avatar || ""
   };
 }
 
@@ -2590,10 +2748,8 @@ function escapeHtml(value) {
 }
 
 function promoForCode(code) {
-  return {
-    LUNDE10: { code: "LUNDE10", label: "LUNDE10", type: "percent", value: 0.10 },
-    SAMPLE5: { code: "SAMPLE5", label: "SAMPLE5", type: "fixed", value: 5 }
-  }[clean(code, 40).toUpperCase()] || null;
+  const codes = getSettings().promoCodes || {};
+  return codes[clean(code, 40).toUpperCase()] || null;
 }
 
 function sqftPerCarton(product) {
@@ -2656,7 +2812,11 @@ function defaultSettings() {
     businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
     businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
     businessHours: "",
-    emailOrderConfirmation: true, emailDeliveryNotice: true, emailReplyTo: ""
+    emailOrderConfirmation: true, emailDeliveryNotice: true, emailNewMessageAlert: true, emailReplyTo: "",
+    promoCodes: {
+      LUNDE10: { code: "LUNDE10", label: "LUNDE10", type: "percent", value: 0.10 },
+      SAMPLE5: { code: "SAMPLE5", label: "SAMPLE5", type: "fixed", value: 5 }
+    }
   };
 }
 
