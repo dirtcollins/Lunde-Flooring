@@ -63,38 +63,12 @@
 .install-manual .im-tool p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .install-manual .im-tool:hover { transform: none; } }
 
-/* ---------- warranty requirements (dark band grid) ---------- */
-.install-manual .im-req { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.16); margin-top: clamp(30px, 4vw, 52px); }
-.install-manual .im-req article { background: var(--black); padding: clamp(22px, 2.6vw, 32px); display: grid; gap: 10px; align-content: start; }
-.install-manual .im-req .n { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; color: #c9a988; }
-.install-manual .im-req h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; color: var(--on-dark); }
-.install-manual .im-req p { margin: 0; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.72); }
-.install-manual .im-req-foot { margin-top: 22px; font-size: 13.5px; color: rgba(255,255,255,0.6); max-width: 72ch; }
-.install-manual .im-req-foot b { color: rgba(255,255,255,0.86); font-weight: 600; }
-
-/* ---------- installation disclaimer (legal) ---------- */
-.install-manual .im-legal { display: grid; grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 76px); align-items: start; }
-.install-manual .im-legal-aside { position: sticky; top: 96px; display: grid; gap: 14px; }
-.install-manual .im-legal-aside h2 { font-size: clamp(26px, 3vw, 42px); line-height: 1; letter-spacing: -0.02em; }
-.install-manual .im-legal-aside p { color: var(--muted); margin: 0; max-width: 30ch; }
-.install-manual .im-legal-body { border: 1px solid var(--line); background: var(--panel); padding: clamp(24px, 3vw, 38px); display: grid; gap: 14px; }
-.install-manual .im-legal-body p { margin: 0; font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 76ch; }
-.install-manual .im-legal-body p b { color: var(--ink-soft); font-weight: 600; }
-.install-manual .im-legal-body .lead { font-size: 15px; color: var(--ink); font-weight: 600; }
-
 /* ---------- responsive ---------- */
 @media (max-width: 1080px) {
   .install-manual .im-tools { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 960px) {
-  .install-manual .im-req { grid-template-columns: repeat(2, 1fr); }
-}
 @media (max-width: 760px) {
   .install-manual .im-tools { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 900px) {
-  .install-manual .im-legal { grid-template-columns: 1fr; }
-  .install-manual .im-legal-aside { position: static; }
 }
 @media (max-width: 860px) {
   .install-manual .im-layout { grid-template-columns: 1fr; }
@@ -103,6 +77,5 @@
 }
 @media (max-width: 560px) {
   .install-manual .im-links { grid-template-columns: 1fr; }
-  .install-manual .im-req { grid-template-columns: 1fr; }
   .install-manual .im-tools { grid-template-columns: 1fr; }
 }
