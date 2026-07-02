@@ -54,8 +54,21 @@
      messages use the matched customer record's photo; initials otherwise. */
   function msgAvatar(f) {
     var photo = "";
-    if (f.source === "staff") photo = f.authorAvatar || "";
-    else { var cust = customerFor(f); photo = (cust && cust.avatar) || ""; }
+    if (f.source === "staff") {
+      photo = f.authorAvatar || "";
+      var me = window.lundeSession || {};
+      // Older notes have no snapshot: fall back to the viewer's own photo when
+      // they authored it, then to a customer account matching the author email
+      // (staff often have one on the same address).
+      if (!photo && me.avatar && (f.authorEmail ? f.authorEmail === me.email : f.name === me.name)) photo = me.avatar;
+      if (!photo && f.authorEmail && L.customers) {
+        var rec = (L.customers() || []).find(function (c) { return String(c.email || "").toLowerCase() === String(f.authorEmail).toLowerCase(); });
+        photo = (rec && rec.avatar) || "";
+      }
+    } else {
+      var cust = customerFor(f);
+      photo = (cust && cust.avatar) || "";
+    }
     if (photo) return '<span class="msg-av" style="background-image:url(' + escAttr(photo) + ')"></span>';
     return '<span class="msg-av">' + esc(initialsOf(f.name, f.email)) + '</span>';
   }
@@ -261,6 +274,7 @@
       source: "staff",
       name: session.name || "Staff",
       authorAvatar: session.avatar || "",
+      authorEmail: session.email || "",
       about: document.getElementById("msgWho").value.trim()
     });
     document.getElementById("msgText").value = "";

@@ -102,6 +102,24 @@
       if (res && typeof res === "object" && res.ok === false) {
         try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
         location.href = "./login.html?next=" + encodeURIComponent(here);
+        return;
+      }
+      // Backfill/refresh the cached session from the server (sessions created
+      // before avatars existed carry none — this heals them without re-login).
+      if (res && res.ok && res.user) {
+        var changed = false;
+        ["avatar", "name", "role", "initials", "email", "canManageAdmins"].forEach(function (k) {
+          if (res.user[k] !== undefined && session[k] !== res.user[k]) { session[k] = res.user[k]; changed = true; }
+        });
+        if (changed) {
+          try { localStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (e) {}
+          window.lundeSession = session;
+          var av = document.querySelector(".app-side-foot .av");
+          if (av) {
+            if (session.avatar) { av.textContent = ""; av.style.backgroundImage = 'url("' + session.avatar + '")'; av.style.backgroundSize = "cover"; av.style.backgroundPosition = "center"; }
+            else { av.style.backgroundImage = ""; av.textContent = session.initials || ""; }
+          }
+        }
       }
     }, function () { /* network error — keep the session */ });
   }
