@@ -10,7 +10,13 @@
   </head>
   <body data-staff="messages">
     <main>
-      <div class="app-head"><div><p class="eyebrow">Inbox</p><h1>Messages</h1><p>Customer feedback from the storefront.</p></div></div>
+      <div class="app-head"><div><p class="eyebrow">Inbox</p><h1>Messages</h1><p>Customer feedback from the storefront, plus notes your team logs here.</p></div>
+        <button class="btn" type="button" id="msgAddToggle">Add message</button></div>
+      <div class="panel" id="msgComposer" hidden style="margin-bottom:18px"><div class="panel-head"><h2>Log a message</h2></div><div class="panel-pad" style="display:grid;gap:12px">
+        <textarea id="msgText" rows="3" placeholder="e.g. Phone call — Maria asked to move Friday's delivery to the afternoon…" style="width:100%;border:1px solid var(--line-2);padding:12px;font:inherit;font-size:14px;outline:none;background:var(--panel);resize:vertical"></textarea>
+        <input id="msgWho" placeholder="Who is it about / from? (optional — name, phone, or email)" style="height:42px;border:1px solid var(--line-2);padding:0 12px;font:inherit;outline:none;background:var(--panel)">
+        <div style="display:flex;gap:10px"><button class="btn" type="button" id="msgSave" style="min-height:42px">Add to inbox</button><button class="btn ghost" type="button" id="msgCancel" style="min-height:42px">Cancel</button></div>
+      </div></div>
       <div class="chips" id="msgChips"></div>
       <div class="panel"><div id="msgList"></div></div>
     </main>

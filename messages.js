@@ -27,9 +27,12 @@
     var msgs = filtered();
     listEl.innerHTML = msgs.length ? msgs.map(function (f) {
       var resolved = f.status === "resolved";
+      var who = f.source === "staff"
+        ? (f.about ? esc(f.about) + ' · ' : '') + 'Logged by ' + esc(f.name || "staff")
+        : (f.name ? esc(f.name) : "Anonymous") + (f.email ? ' · ' + esc(f.email) : '');
       return '<div class="row" style="grid-template-columns:1fr auto;align-items:flex-start;gap:16px">' +
-        '<div><p style="font-size:15px;line-height:1.5;margin-bottom:6px">' + esc(f.message) + '</p>' +
-        '<span class="row-sub">' + (f.name ? esc(f.name) : "Anonymous") + (f.email ? ' · ' + esc(f.email) : '') + (f.createdAt ? ' · ' + ago(f.createdAt) : '') + '</span></div>' +
+        '<div><p style="font-size:15px;line-height:1.5;margin-bottom:6px">' + (f.source === "staff" ? '<span class="status-badge" data-status="placed" style="margin-right:8px;vertical-align:2px"><i></i>Staff note</span>' : '') + esc(f.message) + '</p>' +
+        '<span class="row-sub">' + who + (f.createdAt ? ' · ' + ago(f.createdAt) : '') + '</span></div>' +
         '<div style="display:flex;gap:8px;align-items:center">' +
           '<span class="status-badge" data-status="' + (resolved ? "delivered" : "shipped") + '"><i></i>' + (resolved ? "Resolved" : "Open") + '</span>' +
           '<button class="chip" type="button" data-resolve="' + f.id + '" style="height:34px;padding:0 12px">' + (resolved ? "Reopen" : "Resolve") + '</button>' +
@@ -44,6 +47,37 @@
     var d = e.target.closest("[data-del]");
     if (d && L.deleteFeedback && confirm("Delete this message?")) { await L.deleteFeedback(d.dataset.del); renderChips(); render(); }
   });
+  /* staff-composed messages (phone calls, walk-ins, team notes) */
+  var composer = document.getElementById("msgComposer");
+  var addToggle = document.getElementById("msgAddToggle");
+  addToggle.addEventListener("click", function () {
+    composer.hidden = !composer.hidden;
+    addToggle.textContent = composer.hidden ? "Add message" : "Close";
+    if (!composer.hidden) document.getElementById("msgText").focus();
+  });
+  document.getElementById("msgCancel").addEventListener("click", function () {
+    composer.hidden = true; addToggle.textContent = "Add message";
+  });
+  document.getElementById("msgSave").addEventListener("click", async function () {
+    var text = document.getElementById("msgText").value.trim();
+    if (!text) { if (L.showToast) L.showToast("Write the message first"); return; }
+    var session = window.lundeSession || {};
+    await L.addFeedback({
+      message: text,
+      source: "staff",
+      name: session.name || "Staff",
+      about: document.getElementById("msgWho").value.trim()
+    });
+    document.getElementById("msgText").value = "";
+    document.getElementById("msgWho").value = "";
+    composer.hidden = true; addToggle.textContent = "Add message";
+    if (L.showToast) L.showToast("Message added to the inbox");
+    // addFeedback only writes the local cache when the server is unreachable —
+    // pull the fresh list so the new message shows immediately either way.
+    if (L.refreshFeedback) await L.refreshFeedback();
+    renderChips(); render();
+  });
+
   if (L.refreshFeedback) { L.refreshFeedback().then(function () { renderChips(); render(); }); }
   renderChips(); render();
 })();
