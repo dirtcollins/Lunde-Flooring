@@ -120,8 +120,12 @@
         if (!d || !d.ok) { panel.innerHTML = '<p class="row-sub">Traffic data unavailable.</p>'; return; }
         var days = d.days || [];
         var last14 = days.slice(-14), last7 = days.slice(-7), last30 = days;
+        var today = days[days.length - 1] || { views: 0, uniques: 0 };
         var sum = function (list, k) { return list.reduce(function (s, x) { return s + (x[k] || 0); }, 0); };
-        summary.textContent = sum(last7, "uniques") + " visitors · " + sum(last7, "views") + " views this week";
+        var firstTracked = null;
+        for (var i = 0; i < days.length; i++) { if (days[i].views > 0) { firstTracked = days[i].date; break; } }
+        summary.textContent = sum(last7, "uniques") + " visitors · " + sum(last7, "views") + " views this week" +
+          (firstTracked ? " · counting since " + new Date(firstTracked + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric" }) : " · counting starts with the next visit");
         var max = Math.max.apply(null, last14.map(function (x) { return x.views; }).concat([1]));
         var bars = last14.map(function (x) {
           var h = Math.max(2, Math.round(x.views / max * 100));
@@ -135,10 +139,10 @@
         var pageMax = Math.max.apply(null, pages.map(function (p) { return p.views; }).concat([1]));
         panel.innerHTML =
           '<div class="kpis" style="margin-bottom:18px">' +
-            '<div class="kpi"><span class="kpi-label">Visitors (7 days)</span><span class="kpi-num">' + sum(last7, "uniques").toLocaleString() + '</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Views (7 days)</span><span class="kpi-num">' + sum(last7, "views").toLocaleString() + '</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Visitors (30 days)</span><span class="kpi-num">' + sum(last30, "uniques").toLocaleString() + '</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Views (30 days)</span><span class="kpi-num">' + sum(last30, "views").toLocaleString() + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Today</span><span class="kpi-num">' + today.uniques.toLocaleString() + '</span><span class="kpi-sub">' + today.views.toLocaleString() + ' page view' + (today.views === 1 ? "" : "s") + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Visitors (7 days)</span><span class="kpi-num">' + sum(last7, "uniques").toLocaleString() + '</span><span class="kpi-sub">' + sum(last7, "views").toLocaleString() + ' views</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Visitors (30 days)</span><span class="kpi-num">' + sum(last30, "uniques").toLocaleString() + '</span><span class="kpi-sub">' + sum(last30, "views").toLocaleString() + ' views</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Busiest page (7 days)</span><span class="kpi-num" style="font-size:20px">' + esc((d.topPages && d.topPages[0] && d.topPages[0].path) || "—") + '</span><span class="kpi-sub">' + ((d.topPages && d.topPages[0] && d.topPages[0].views) || 0) + ' views</span></div>' +
           '</div>' +
           '<div class="repchart">' + bars + '</div>' +
           (pages.length ? '<div class="bars" style="margin-top:20px">' + pages.map(function (p) {

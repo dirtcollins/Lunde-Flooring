@@ -5,7 +5,6 @@
   var chipsEl = document.getElementById("qChips");
   var searchEl = document.getElementById("qSearch");
   var state = { q: "", chip: "open" };
-  var convertId = "";      /* quote id with the convert confirm panel open */
   var openIds = null;      /* which <details> are expanded; null = first render */
 
   function esc(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
@@ -46,16 +45,68 @@
     }
     return (q.customer && q.customer.address) || "";
   }
-  function convertMarkup(q) {
+  /* ---------- convert-to-order modal ---------- */
+
+  var cvModal = null; /* scrim element while open */
+  function addressOptions(q) {
+    var addrs = (q.customerId && L.customerAddresses) ? L.customerAddresses(q.customerId) : [];
+    var opts = addrs.map(function (a, i) {
+      var full = L.formatAddress ? L.formatAddress(a) : [a.line1, a.city, a.state, a.zip].filter(Boolean).join(", ");
+      return '<option value="' + esc(full) + '"' + (a.isDefault || (i === 0 && !addrs.some(function (x) { return x.isDefault; })) ? " selected" : "") + '>' + esc((a.label ? a.label + " — " : "") + full) + '</option>';
+    });
+    var fallback = (q.customer && q.customer.address) || "";
+    if (!opts.length && fallback) opts.push('<option value="' + esc(fallback) + '" selected>' + esc(fallback) + '</option>');
+    opts.push('<option value="__new__">+ New address…</option>');
+    return opts.join("");
+  }
+  function closeConvert() {
+    if (cvModal) { cvModal.remove(); cvModal = null; }
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", cvEsc);
+  }
+  function cvEsc(e) { if (e.key === "Escape") closeConvert(); }
+  function openConvert(q) {
+    closeConvert();
     var terms = quoteTerms(q);
     var note = terms ? "Invoice — " + terms : "Collect at pickup/delivery";
-    return '<div class="qc-convert" data-convert-form="' + esc(q.id) + '"><h4>Convert ' + esc(q.id) + ' to an order</h4>' +
-      '<div class="qb-grid2">' +
-        '<label class="qb-field"><span>Fulfillment</span><select data-cv-method><option value="delivery">Delivery</option><option value="pickup">Store pickup</option></select></label>' +
-        '<label class="qb-field"><span>Payment note</span><input data-cv-note value="' + esc(note) + '"></label>' +
-      '</div>' +
-      '<label class="qb-field" data-cv-addr-wrap><span>Delivery address</span><input data-cv-address placeholder="Street, city, state, ZIP" value="' + esc(convertAddress(q)) + '"></label>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="button" data-cv-confirm="' + esc(q.id) + '" style="min-height:42px">Create order</button><button class="btn ghost" type="button" data-cv-cancel style="min-height:42px">Cancel</button></div></div>';
+    var t = L.cartTotals(q.items || {}, "delivery", "curb", "");
+    cvModal = document.createElement("div");
+    cvModal.className = "qcm-scrim";
+    cvModal.innerHTML =
+      '<div class="qcm" role="dialog" aria-modal="true" aria-label="Convert quote to order">' +
+        '<div class="qcm-head"><h2>Convert ' + esc(q.id) + ' to an order</h2><button class="qcm-x" type="button" data-cvm-close aria-label="Close">×</button></div>' +
+        '<div class="qcm-body">' +
+          '<p class="row-sub" style="margin:0 0 14px">' + esc(q.job || "Saved quote") + (q.customer && (q.customer.name || q.customer.company) ? ' · ' + esc(q.customer.company || q.customer.name) : '') + ' · ' + Object.keys(q.items || {}).length + ' floors · est. ' + money(t.total) + '</p>' +
+          '<div class="qb-grid2">' +
+            '<label class="qb-field"><span>Fulfillment</span><select id="cvmMethod"><option value="delivery">Delivery</option><option value="pickup">Store pickup</option></select></label>' +
+            '<label class="qb-field"><span>Payment note</span><input id="cvmNote" value="' + esc(note) + '"></label>' +
+          '</div>' +
+          '<div id="cvmAddrWrap" style="display:grid;gap:10px;margin-top:14px">' +
+            '<label class="qb-field"><span>Delivery address</span><select id="cvmAddrSel">' + addressOptions(q) + '</select></label>' +
+            '<label class="qb-field" id="cvmNewWrap" hidden><span>New address</span><input id="cvmAddrNew" placeholder="Street, city, state, ZIP" autocomplete="off"></label>' +
+          '</div>' +
+          '<div class="qcm-actions"><button class="btn" type="button" id="cvmConfirm">Create order</button><button class="btn ghost" type="button" data-cvm-close>Cancel</button></div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(cvModal);
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", cvEsc);
+    cvModal.addEventListener("mousedown", function (e) { if (e.target === cvModal) closeConvert(); });
+    cvModal.addEventListener("click", function (e) { if (e.target.closest("[data-cvm-close]")) closeConvert(); });
+    var sel = document.getElementById("cvmAddrSel");
+    var newWrap = document.getElementById("cvmNewWrap");
+    var newInput = document.getElementById("cvmAddrNew");
+    sel.addEventListener("change", function () {
+      newWrap.hidden = sel.value !== "__new__";
+      if (!newWrap.hidden) newInput.focus();
+    });
+    if (sel.value === "__new__") newWrap.hidden = false; /* no saved addresses at all */
+    if (window.lundeAddressAutocomplete) window.lundeAddressAutocomplete(newInput);
+    document.getElementById("cvmMethod").addEventListener("change", function () {
+      document.getElementById("cvmAddrWrap").style.display = this.value === "pickup" ? "none" : "grid";
+    });
+    document.getElementById("cvmConfirm").addEventListener("click", function () { confirmConvert(q.id); });
+    sel.focus();
   }
 
   /* ---------- list ---------- */
@@ -111,7 +162,7 @@
         '<div style="display:flex;align-items:center;gap:14px"><span class="status-badge" data-status="' + st.ds + '"><i></i>' + st.label + '</span><strong class="acct-total">' + money(t.subtotal) + '</strong></div></summary>' +
         '<div class="acct-quote-body"><div class="rowlist" style="margin:6px 0 14px">' + lineMarkup(q) + '</div>' +
         (q.notes ? '<p class="row-sub" style="margin-bottom:14px">' + esc(q.notes) + '</p>' : '') +
-        actions + (convertId === q.id ? convertMarkup(q) : '') + '</div></details>';
+        actions + '</div></details>';
     }).join("") : '<div class="app-empty"><h3>' + (qs.length ? "No matching quotes" : "No quotes yet") + '</h3><p>' + (qs.length ? "Try a different search or filter." : "Saved quotes from the storefront appear here.") + '</p></div>';
   }
 
@@ -119,14 +170,7 @@
 
   listEl.addEventListener("click", function (e) {
     var conv = e.target.closest("[data-convert]");
-    if (conv) {
-      convertId = convertId === conv.dataset.convert ? "" : conv.dataset.convert;
-      captureOpen(); if (convertId) openIds[convertId] = true;
-      render(); return;
-    }
-    if (e.target.closest("[data-cv-cancel]")) { convertId = ""; captureOpen(); render(); return; }
-    var cvOk = e.target.closest("[data-cv-confirm]");
-    if (cvOk) { confirmConvert(cvOk.dataset.cvConfirm); return; }
+    if (conv) { var cq = L.quoteById(conv.dataset.convert); if (cq) openConvert(cq); return; }
     var send = e.target.closest("[data-send]");
     if (send) { sendQuote(send); return; }
     var dup = e.target.closest("[data-dup]");
@@ -143,17 +187,9 @@
     if (ed) { location.href = "./quote-builder.html?edit=" + encodeURIComponent(ed.dataset.edit); return; }
     var del = e.target.closest("[data-del]");
     if (del && confirm("Delete this quote?")) {
-      if (convertId === del.dataset.del) convertId = "";
+      closeConvert();
       L.deleteQuote(del.dataset.del); captureOpen(); render();
     }
-  });
-
-  /* pickup needs no address — hide the field when selected */
-  listEl.addEventListener("change", function (e) {
-    var sel = e.target.closest("[data-cv-method]"); if (!sel) return;
-    var box = sel.closest(".qc-convert");
-    var wrap = box && box.querySelector("[data-cv-addr-wrap]");
-    if (wrap) wrap.style.display = sel.value === "pickup" ? "none" : "";
   });
 
   function sendQuote(btn) {
@@ -175,10 +211,10 @@
 
   function confirmConvert(id) {
     var q = L.quoteById(id); if (!q || q.status === "won") return;
-    var form = listEl.querySelector('[data-convert-form="' + id + '"]'); if (!form) return;
-    var method = form.querySelector("[data-cv-method]").value === "pickup" ? "pickup" : "delivery";
-    var address = form.querySelector("[data-cv-address]").value.trim();
-    var note = form.querySelector("[data-cv-note]").value.trim();
+    var method = document.getElementById("cvmMethod").value === "pickup" ? "pickup" : "delivery";
+    var sel = document.getElementById("cvmAddrSel").value;
+    var address = sel === "__new__" ? document.getElementById("cvmAddrNew").value.trim() : sel;
+    var note = document.getElementById("cvmNote").value.trim();
     if (method === "delivery" && !address) { if (L.showToast) L.showToast("Enter a delivery address (or switch to pickup)"); return; }
     var terms = quoteTerms(q);
     var payment = terms ? { method: "invoice", terms: terms } : {};
@@ -193,9 +229,10 @@
       customer: q.customer || {},
       payment: payment
     };
+    order.checkout.quoteId = q.id; // server links + converts on its side too
     L.saveOrder(order);
-    L.updateQuote(q.id, { status: "won" });
-    convertId = "";
+    L.updateQuote(q.id, { status: "won", wonAt: Date.now(), orderId: order.id });
+    closeConvert();
     if (L.showToast) L.showToast("Quote converted to order " + order.id);
     captureOpen(); render();
   }
@@ -208,8 +245,9 @@
     state.chip = c.dataset.chip; captureOpen(); render();
   });
 
-  document.addEventListener("lunde:synced", function () {
-    if (convertId) return; /* don't clobber an in-progress convert */
+  document.addEventListener("lunde:synced", function (e) {
+    if (cvModal) return; /* don't clobber an in-progress convert */
+    if (e.detail && e.detail.changed === false) return; /* nothing new — no rebuild */
     captureOpen(); render();
   });
 

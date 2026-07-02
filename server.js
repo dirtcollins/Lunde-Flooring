@@ -306,7 +306,7 @@ async function handleApi(req, res, url) {
       if (!Object.keys(order.items).length) return json(res, { ok: false, error: "Order has no line items." }, 422);
       const account = currentAccount(req);
       if (account) attachAccountToOrder(order, account);
-      order.totals = computeOrderTotals(order.items, order.delivery.method, order.delivery.placement, order.checkout.promoCode || "");
+      order.totals = computeOrderTotals(order.items, order.delivery.method, order.delivery.placement, order.checkout.promoCode || "", order.checkout.quoteId || "");
       if (order.totals.total <= 0) return json(res, { ok: false, error: "Order total must be greater than zero." }, 422);
       order.payment = { ...(order.payment || {}), method: "stripe", status: "awaiting_payment", amount: order.totals.total };
       const base = siteBase(req);
@@ -637,6 +637,7 @@ async function handleStripeCheckoutCompleted(event) {
     amount: Number(session.amount_total || 0) / 100
   };
   applyInventoryDeduction(order, event.id);
+  markQuoteConverted(order);
   upsertOrderWithoutEmail(order);
   markPendingStripeOrder(order.id, clean(session.id, 180), "paid");
 
@@ -824,6 +825,7 @@ async function handleOrders(req, res, method, parts, input) {
     if (account) attachAccountToOrder(order, account);
     const orders = [order, ...readStore("orders", []).filter((row) => row?.id !== order.id)];
     writeStore("orders", orders);
+    markQuoteConverted(order);
     const email = await sendFulfillmentEmail(order, "automatic");
     recordEmailStatus(order.id, { ...email, source: "automatic" });
     await sendCustomerConfirmation(order, "order-placed");
@@ -1122,6 +1124,17 @@ async function handleCustomerAccounts(req, res, method, parts, input) {
     if (!account) return json(res, { ok: false, error: "Not signed in." }, 401);
     return json(res, { ok: true, items: ordersForAccount(account) });
   }
+  // Their own quotes too — staff drafts stay hidden until sent.
+  if (parts[1] === "quotes" && method === "GET") {
+    const account = currentAccount(req);
+    if (!account) return json(res, { ok: false, error: "Not signed in." }, 401);
+    const email = String(account.email || "").toLowerCase();
+    const items = readStore("quotes", []).filter((q) =>
+      q && q.status !== "draft" &&
+      ((q.customerId && q.customerId === account.id) ||
+       (email && String(q.customer?.email || "").toLowerCase() === email)));
+    return json(res, { ok: true, items });
+  }
   // Update the signed-in customer's own profile / saved addresses (server-backed, cross-device).
   if (parts[1] === "profile" && method === "PATCH") {
     const accounts = readStore("accounts", []);
@@ -1400,7 +1413,15 @@ async function serveStatic(req, res, url) {
   // Hard-cache static media (stable filenames); revalidate code/markup so updates
   // reach returning visitors immediately after a deploy.
   const longCache = [".webp", ".png", ".jpg", ".jpeg", ".ico", ".svg", ".woff", ".woff2"].includes(ext);
-  const cacheControl = longCache ? "public, max-age=31536000, immutable" : "no-cache";
+  // JS/CSS get a short cache + background revalidation: navigations stop paying
+  // ~8 revalidation round-trips per page (the main "console feels janky" cause),
+  // while deploys still reach returning browsers within a minute.
+  const softCache = [".js", ".css"].includes(ext);
+  const cacheControl = longCache
+    ? "public, max-age=31536000, immutable"
+    : softCache
+      ? "public, max-age=60, stale-while-revalidate=600"
+      : "no-cache";
   const ifNoneMatch = req.headers["if-none-match"];
   const ifModifiedSince = Date.parse(req.headers["if-modified-since"] || "");
   if ((ifNoneMatch && ifNoneMatch === etag) || (ifModifiedSince && ifModifiedSince >= Math.floor(stat.mtimeMs / 1000) * 1000)) {
@@ -1610,7 +1631,27 @@ function esc(s) {
   return String(s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function computeOrderTotals(items, delivery, placement, promoCode) {
+function quoteForOrder(quoteId) {
+  const id = clean(quoteId, 100);
+  return id ? readStore("quotes", []).find((row) => row?.id === id) || null : null;
+}
+
+/* When a paid/placed order carries checkout.quoteId, flip that quote to
+   converted and link the order. Idempotent — safe from webhook retries. */
+function markQuoteConverted(order) {
+  const quoteId = clean(order?.checkout?.quoteId, 100);
+  if (!quoteId) return;
+  const quotes = readStore("quotes", []);
+  let changed = false;
+  const next = quotes.map((row) => {
+    if (row?.id !== quoteId || row.status === "won") return row;
+    changed = true;
+    return { ...row, status: "won", wonAt: Date.now(), orderId: order.id, updatedAt: Date.now() };
+  });
+  if (changed) writeStore("quotes", next);
+}
+
+function computeOrderTotals(items, delivery, placement, promoCode, quoteId) {
   const products = productsById();
   let material = 0;
   let samples = 0;
@@ -1629,7 +1670,14 @@ function computeOrderTotals(items, delivery, placement, promoCode) {
   }
   const subtotal = material + samples;
   const promo = promoForCode(promoCode);
-  const discount = promo ? Math.min(subtotal, promo.type === "percent" ? subtotal * promo.value : promo.value) : 0;
+  let discount = promo ? Math.min(subtotal, promo.type === "percent" ? subtotal * promo.value : promo.value) : 0;
+  // A quoted order carries the quote's negotiated discount (wins over promo codes).
+  const quote = quoteForOrder(quoteId);
+  if (quote && Number(quote.discountValue) > 0) {
+    discount = Math.min(subtotal, quote.discountType === "percent"
+      ? subtotal * Math.min(1, Number(quote.discountValue))
+      : Number(quote.discountValue));
+  }
   const discountedSubtotal = Math.max(0, subtotal - discount);
   // Pricing knobs come from staff Settings (with the historical values as defaults).
   const pricing = getSettings();

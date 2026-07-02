@@ -22,10 +22,17 @@
       .qb-line .rm:hover { color: var(--sale); }
       .qb-total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--line); padding-top: 14px; font-weight: 700; }
       .qb-editing { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #9a6a1a; background: #f7f1e6; border: 1px solid #e8dcc4; padding: 4px 10px; }
-      /* convert-to-order confirm panel */
-      .qc-convert { border: 1px solid var(--line-2); background: var(--canvas); padding: 14px; display: grid; gap: 12px; margin-top: 14px; }
-      .qc-convert h4 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-      .qc-convert .qb-grid2 { align-items: end; }
+      /* convert-to-order modal */
+      .qcm-scrim { position: fixed; inset: 0; z-index: 80; background: rgba(20,18,15,.5); }
+      .qcm { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(560px, calc(100vw - 32px)); background: var(--paper); border: 1px solid var(--line); box-shadow: 0 40px 90px -30px rgba(0,0,0,.5); }
+      .qcm-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+      .qcm-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 0; }
+      .qcm-x { background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--muted); padding: 4px 8px; }
+      .qcm-x:hover { color: var(--ink); }
+      .qcm-body { padding: 20px; }
+      .qcm-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+      .qcm-actions .btn { min-height: 42px; }
+      @media (max-width: 640px) { .qcm { left: 0; top: auto; bottom: 0; transform: none; width: 100%; } }
       @media (max-width: 720px) { .qb-grid2 { grid-template-columns: 1fr; } .qb-line { grid-template-columns: 1fr 90px; } .qb-line .calc { grid-column: 1 / -1; padding: 0; } }
     </style>
   </head>
@@ -44,6 +51,7 @@
     <script defer src="./data.js"></script>
     <script defer src="./store.js"></script>
     <script defer src="./app-shell.js"></script>
+    <script defer src="./address-autocomplete.js"></script>
     <script defer src="./quotes.js"></script>
   </body>
 </html>

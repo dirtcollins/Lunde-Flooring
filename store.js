@@ -60,7 +60,7 @@
     else c[productId] = next;
     return saveCart(c);
   }
-  function clearCart() { saveCart({}); }
+  function clearCart() { saveCart({}); try { localStorage.removeItem("lunde_cart_quote_v1"); } catch {} }
 
   function sqftPerCarton(product) { return Number.parseFloat(product?.specs?.squareFootagePerCarton) || 1; }
   function cartonsFor(product, sqft) { return Math.ceil(((Number(sqft) || 0) / sqftPerCarton(product)) - 0.000001); }
@@ -320,9 +320,23 @@
     }
     const subtotal = material + samples;
     const promo = validatePromo(promoCode);
-    const discount = promo
+    let discount = promo
       ? Math.min(subtotal, promo.type === "percent" ? subtotal * promo.value : promo.value)
       : 0;
+    // Quote pricing: when this device's cart came from a quote (and the quoted
+    // lines are intact), the quote's negotiated discount wins over promo codes.
+    let quoteApplied = null;
+    if (!items) {
+      const ctx = activeCartQuote();
+      if (ctx && !ctx.discountBroken && ctx.discountValue > 0) {
+        discount = Math.min(subtotal, ctx.discountType === "percent"
+          ? subtotal * Math.min(1, ctx.discountValue)
+          : ctx.discountValue);
+        quoteApplied = ctx;
+      } else if (ctx && !ctx.discountBroken) {
+        quoteApplied = ctx;
+      }
+    }
     const discountedSubtotal = Math.max(0, subtotal - discount);
     // Pricing knobs come from staff Settings (cached), constants as fallback.
     const s = siteSettings();
@@ -331,7 +345,7 @@
     const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : s.freightFlat;
     const freight = baseFreight + garagePlacement;
     const tax = discountedSubtotal * s.taxRate;
-    return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
+    return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, quote: quoteApplied, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
   }
 
   function cartCount() {
@@ -410,7 +424,9 @@
       id: newQuoteId(),
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      status: "saved",
+      status: o.status === "draft" ? "draft" : "saved",
+      discountType: o.discountType === "percent" || o.discountType === "fixed" ? o.discountType : "",
+      discountValue: Math.max(0, Number(o.discountValue) || 0),
       job: String(job || "Saved quote").trim() || "Saved quote",
       notes: String(o.notes || "").trim(),
       customerId: o.customerId || (customer ? customer.id : ""),
@@ -465,20 +481,50 @@
   /* Merge a quote's lines into the live cart. Pricing re-derives from the
      current catalog (carton math is always recomputed), so quotes never
      carry stale prices into checkout. */
+  /* One-click "Add quote to cart": the quote's items REPLACE the cart and the
+     quote context (id + negotiated discount) rides along to checkout, where the
+     placed order carries checkout.quoteId so the server converts the quote. */
+  const QUOTE_CART_KEY = "lunde_cart_quote_v1";
+  function activeCartQuote() {
+    const ctx = readJson(QUOTE_CART_KEY, null);
+    if (!ctx || !ctx.id) return null;
+    // Discount stays valid while every quoted line is still in the cart.
+    const c = cart();
+    for (const [pid, entry] of Object.entries(ctx.items || {})) {
+      if (!c[pid] || (c[pid].sqft || 0) < (entry.sqft || 0)) return { ...ctx, discountBroken: true };
+    }
+    return ctx;
+  }
+  function clearCartQuote() { localStorage.removeItem(QUOTE_CART_KEY); }
   function quoteToCart(id) {
     const q = quoteById(id);
     if (!q) return 0;
-    const c = cart();
+    const c = {};
     let added = 0;
     for (const [pid, entry] of Object.entries(q.items || {})) {
       if (!productById(pid)) continue;
-      const cur = c[pid] || { sqft: 0, samples: 0 };
-      c[pid] = { sqft: (cur.sqft || 0) + (entry.sqft || 0), samples: (cur.samples || 0) + (entry.samples || 0) };
+      c[pid] = { sqft: entry.sqft || 0, samples: entry.samples || 0 };
       added += 1;
     }
+    if (!added) return 0;
     saveCart(c);
+    writeJson(QUOTE_CART_KEY, {
+      id: q.id, job: q.job || "", items: c,
+      discountType: q.discountType || "", discountValue: Number(q.discountValue) || 0
+    });
     return added;
   }
+  /* Signed-in customer's own quotes (server-side, cross-device): merge the
+     server's view over the local list so staff-sent quotes appear. */
+  async function pullMyQuotes() {
+    const data = await api(`${API_BASE}/customer/quotes`);
+    if (data && data.ok && Array.isArray(data.items)) {
+      const local = quotes().filter((q) => !data.items.some((s) => s.id === q.id));
+      saveQuotes([...data.items, ...local]);
+    }
+    return data;
+  }
+
   async function pullQuotes() {
     const data = await api(QUOTES_ENDPOINT);
     if (data && data.ok && Array.isArray(data.items)) writeJson(QUOTES_KEY, data.items);
@@ -550,24 +596,37 @@
     api(pathname, { method, body }).catch(() => {});
   }
 
+  /* Write only when the payload actually differs, and remember that a sync
+     changed something — pages use this to skip pointless re-renders (the
+     "page rebuilds itself after navigation" jank). */
+  let syncDirty = false;
+  function writeJsonIfChanged(key, value) {
+    const next = JSON.stringify(value);
+    let prev = null;
+    try { prev = localStorage.getItem(key); } catch {}
+    if (prev === next) return false;
+    try { localStorage.setItem(key, next); } catch {}
+    syncDirty = true;
+    return true;
+  }
   async function pullOrders() {
     const data = await api(ORDERS_ENDPOINT);
-    if (data && data.ok && Array.isArray(data.items)) writeJson(ORDERS_KEY, data.items);
+    if (data && data.ok && Array.isArray(data.items)) writeJsonIfChanged(ORDERS_KEY, data.items);
     return data;
   }
   async function pullInventory() {
     const data = await api(INVENTORY_ENDPOINT);
-    if (data && data.ok && data.items && typeof data.items === "object") writeJson(INVENTORY_KEY, data.items);
+    if (data && data.ok && data.items && typeof data.items === "object") writeJsonIfChanged(INVENTORY_KEY, data.items);
     return data;
   }
   async function pullCustomers() {
     const data = await api(CUSTOMERS_ENDPOINT);
-    if (data && data.ok && Array.isArray(data.items)) writeJson(CUSTOMERS_KEY, data.items);
+    if (data && data.ok && Array.isArray(data.items)) writeJsonIfChanged(CUSTOMERS_KEY, data.items);
     return data;
   }
   async function pullProducts() {
     const data = await api(PRODUCTS_ENDPOINT);
-    if (data && data.ok && data.items && typeof data.items === "object") writeJson(PRODUCTS_KEY, data.items);
+    if (data && data.ok && data.items && typeof data.items === "object") writeJsonIfChanged(PRODUCTS_KEY, data.items);
     return data;
   }
   /* Save an edited product as an override (merged over the catalog in data.js). */
@@ -602,9 +661,11 @@
     return data;
   }
   async function syncFromServer() {
+    syncDirty = false;
     await Promise.all([pullOrders(), pullInventory(), pullCustomers(), pullProducts(), pullNotes(), pullQuotes(), pullSettings(), refreshFeedback()]);
-    // Console pages listen for this to re-render with fresh data.
-    try { document.dispatchEvent(new CustomEvent("lunde:synced", { detail: { online: apiOnline === true } })); } catch {}
+    // Console pages listen for this to re-render with fresh data. detail.changed
+    // is false when the server matched the local cache — skip re-rendering then.
+    try { document.dispatchEvent(new CustomEvent("lunde:synced", { detail: { online: apiOnline === true, changed: syncDirty } })); } catch {}
     return apiOnline === true;
   }
 
@@ -1435,6 +1496,7 @@
     orders, orderById, saveOrder, updateOrder, newOrderId, coerceStaffNotes,
     quotes, quoteById, saveQuoteFromCart, updateQuote, duplicateQuote, deleteQuote, quoteToCart, pullQuotes, reorderToCart,
     sendQuoteToCustomer, replyToFeedback, resendOrderReceipt,
+    activeCartQuote, clearCartQuote, pullMyQuotes,
     signInCustomerRemote, hydrateCustomerSession, accountOrders, saveAccountProfile,
     resendVerificationEmail, verifyCustomerEmail, requestPasswordReset, resetCustomerPassword, updateCustomerPassword,
     STATUSES, STATUS_LABELS, FREIGHT_FLAT, TAX_RATE, parseDims,
