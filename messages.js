@@ -45,6 +45,21 @@
     return (L.customers() || []).find(function (c) { return String(c.email || "").toLowerCase() === em; }) || null;
   }
 
+  function initialsOf(name, email) {
+    var s = String(name || email || "?").trim();
+    var parts = s.split(/\s+/);
+    return (parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : s.slice(0, 2)).toUpperCase();
+  }
+  /* Sender avatar: staff notes carry the author's photo snapshot; customer
+     messages use the matched customer record's photo; initials otherwise. */
+  function msgAvatar(f) {
+    var photo = "";
+    if (f.source === "staff") photo = f.authorAvatar || "";
+    else { var cust = customerFor(f); photo = (cust && cust.avatar) || ""; }
+    if (photo) return '<span class="msg-av" style="background-image:url(' + escAttr(photo) + ')"></span>';
+    return '<span class="msg-av">' + esc(initialsOf(f.name, f.email)) + '</span>';
+  }
+
   /* Contact-form submissions store the whole summary in `message`
      (topic header + trailing name/email/phone block). We render those
      structurally, so trim the boilerplate from the body when present. */
@@ -136,14 +151,15 @@
       var badges = (f.source === "staff" ? '<span class="status-badge" data-status="placed" style="margin-right:8px;vertical-align:2px"><i></i>Staff note</span>' : '') +
         (f.topic ? '<span class="msg-topic">' + esc(f.topic) + '</span>' : '');
       return '<div class="row msg-row" style="grid-template-columns:1fr auto;align-items:flex-start;gap:16px">' +
-        '<div style="min-width:0">' +
+        '<div style="min-width:0;display:flex;gap:12px">' + msgAvatar(f) +
+        '<div style="min-width:0;flex:1">' +
           (badges ? '<div>' + badges + '</div>' : '') +
           '<p class="msg-body">' + esc(displayMessage(f)) + '</p>' +
           photosHtml(f) +
           repliesHtml(f) +
           metaHtml(f) +
           replyBoxHtml(f) +
-        '</div>' +
+        '</div></div>' +
         '<div class="msg-actions">' +
           '<span class="status-badge" data-status="' + stBadge[0] + '"><i></i>' + stBadge[1] + '</span>' +
           (st === "new" ? '<button class="chip" type="button" data-mark-read="' + escAttr(f.id) + '" style="height:34px;padding:0 12px">Mark read</button>' : '') +
@@ -244,6 +260,7 @@
       message: text,
       source: "staff",
       name: session.name || "Staff",
+      authorAvatar: session.avatar || "",
       about: document.getElementById("msgWho").value.trim()
     });
     document.getElementById("msgText").value = "";
