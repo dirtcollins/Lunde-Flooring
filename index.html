@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./interior.css">
+    <link rel="stylesheet" href="./bestsellers.css">
     <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
     <script defer src="./seo.js"></script>
     <style>
@@ -78,18 +79,16 @@
         </div>
       </section>
 
-      <!-- FEATURED PRODUCTS (early, price-forward) -->
-      <section class="section wrap">
-        <div class="v6-prod-head reveal">
-          <div class="section-head">
+      <!-- FEATURED PRODUCTS (early, price-forward) — V7 best-sellers section -->
+      <section class="bestsellers">
+        <div class="sec-head reveal">
+          <div>
             <p class="eyebrow">Shop best sellers</p>
-            <h2 class="display">Popular floors, ready to ship.</h2>
+            <h2>Popular floors, ready to ship.</h2>
           </div>
-          <a class="link-underline" href="./catalog.html">Shop all floors
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </a>
+          <a class="link-arrow" href="./catalog.html">Shop all floors<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
         </div>
-        <div class="v6-grid reveal" id="featGrid"></div>
+        <div class="pgrid reveal" id="featGrid"></div>
         <div style="text-align:center;margin-top:clamp(28px,4vw,44px)"><a class="btn lg" href="./catalog.html">Browse the full catalog</a></div>
       </section>
 
@@ -186,11 +185,15 @@
         function money(n){ return "$" + Number(n).toFixed(2); }
         function carton(p){ var s = parseFloat((p.specs && p.specs.squareFootagePerCarton) || 0) || 0; return p.pricePerSqft * s; }
         g.innerHTML = all.slice(0, 8).map(function (p) {
-          return '<article class="v6-card">' +
-            '<a class="v6-card-media" href="./product.html?slug=' + p.slug + '" aria-label="' + p.title + '"><div class="swatch" style="background-image:url(\'' + ((window.lunde && window.lunde.img) ? window.lunde.img(p.mainImage) : p.mainImage) + '\')"></div></a>' +
-            '<a class="v6-card-body" href="./product.html?slug=' + p.slug + '"><span class="v6-card-coll">' + (p.color || p.collection) + '</span><span class="v6-card-name">' + p.title + '</span>' +
-            '<span class="v6-card-price"><b>' + money(p.pricePerSqft) + '</b><span> / sq. ft.</span>' +
-            (carton(p) ? '<span class="carton">' + money(carton(p)) + ' / carton</span>' : '') + '</span></a></article>';
+          var img = (window.lunde && window.lunde.img) ? window.lunde.img(p.mainImage) : p.mainImage;
+          return '<article class="pcard">' +
+            '<a class="ph" href="./product.html?slug=' + p.slug + '" style="background-image:url(\'' + img + '\')" aria-label="' + p.title + '"></a>' +
+            '<div class="bd">' +
+            '<div class="tone">' + (p.color || p.collection) + '</div>' +
+            '<a class="nm" href="./product.html?slug=' + p.slug + '">' + p.title + '</a>' +
+            '<div class="pr">' + money(p.pricePerSqft) + '<span> / sq ft</span></div>' +
+            (carton(p) ? '<div class="ct">' + money(carton(p)) + ' / carton</div>' : '') +
+            '</div></article>';
         }).join("");
       });
     </script>
