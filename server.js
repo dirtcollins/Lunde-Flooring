@@ -763,6 +763,8 @@ async function handleOrders(req, res, method, parts, input) {
     const id = clean(parts[1], 80);
     const orders = readStore("orders", []);
     let found = false;
+    let deliveredTransition = false;
+    let updatedOrder = null;
     for (let i = 0; i < orders.length; i += 1) {
       if (orders[i]?.id !== id) continue;
       const merged = {
@@ -770,8 +772,10 @@ async function handleOrders(req, res, method, parts, input) {
         delivery: orders[i].delivery && typeof orders[i].delivery === "object" ? { ...orders[i].delivery } : {}
       };
       if (input.status && input.status !== orders[i].status) {
-        merged.status = clean(input.status, 40);
-        merged.history = [...(orders[i].history || []), { status: input.status, at: Date.now() }];
+        const nextStatus = clean(input.status, 40);
+        deliveredTransition = nextStatus === "delivered";
+        merged.status = nextStatus;
+        merged.history = [...(orders[i].history || []), { status: nextStatus, at: Date.now() }];
       }
       if (input.staffNotes !== undefined) {
         // Internal notes are an append-only running log. Coerce any historical
@@ -796,11 +800,16 @@ async function handleOrders(req, res, method, parts, input) {
         if (input.delivery.notes !== undefined) merged.delivery.notes = clean(input.delivery.notes, 1200);
       }
       orders[i] = normalizeOrder(merged, orders[i]);
+      updatedOrder = orders[i];
       found = true;
     }
     if (!found) return json(res, { ok: false, error: "Order not found." }, 404);
     writeStore("orders", orders);
-    return json(res, { ok: true, items: orders, item: orders.find((row) => row.id === id) });
+    if (deliveredTransition && updatedOrder?.deliveryEmail?.status !== "sent") {
+      await sendCustomerDeliveryEmail(updatedOrder, staff);
+    }
+    const fresh = readStore("orders", []);
+    return json(res, { ok: true, items: fresh, item: fresh.find((row) => row.id === id) });
   }
   if (parts.length === 3 && parts[2] === "fulfillment-email" && method === "POST") {
     const user = currentStaff(req);
@@ -1529,7 +1538,8 @@ function normalizeOrder(order, base = {}) {
     paymentNotices: Array.isArray(order.paymentNotices) ? order.paymentNotices : (base.paymentNotices || []),
     refunds: Array.isArray(order.refunds) ? order.refunds : (base.refunds || []),
     fulfillmentEmail: order.fulfillmentEmail && typeof order.fulfillmentEmail === "object" ? order.fulfillmentEmail : (base.fulfillmentEmail || {}),
-    confirmationEmail: order.confirmationEmail && typeof order.confirmationEmail === "object" ? order.confirmationEmail : (base.confirmationEmail || {})
+    confirmationEmail: order.confirmationEmail && typeof order.confirmationEmail === "object" ? order.confirmationEmail : (base.confirmationEmail || {}),
+    deliveryEmail: order.deliveryEmail && typeof order.deliveryEmail === "object" ? order.deliveryEmail : (base.deliveryEmail || {})
   };
 }
 
@@ -1780,6 +1790,20 @@ async function sendCustomerPaymentUpdate(order, kind, options) {
   return result;
 }
 
+async function sendCustomerDeliveryEmail(order, staff) {
+  const url = config.siteBaseUrl ? `${config.siteBaseUrl}/my-order.html?id=${encodeURIComponent(order.id)}` : "";
+  const template = buildDeliveryEmail(order, url || config.siteBaseUrl || "https://lundeflooring.com/");
+  const result = await sendTransactionalEmail({
+    to: order.customer?.email || "",
+    subject: `Your Lunde Flooring order ${order.id} has been delivered`,
+    idempotencyKey: `lunde-delivered-${order.id}`,
+    ...template
+  });
+  recordDeliveryEmailStatus(order.id, { ...result, source: "status-delivered", staffId: staff?.id || "", staffName: staff?.name || staff?.email || "" });
+  if (result.status === "failed") logOperationalEvent("error", "customer_delivery_email_failed", { orderId: order.id, error: result.error });
+  return result;
+}
+
 async function sendAdminNotification(title, order, details) {
   const to = clean(config.fulfillmentEmail, 180);
   const body = [
@@ -1810,6 +1834,21 @@ async function sendAdminNotification(title, order, details) {
   recordAdminNotificationStatus(order.id, { ...result, title, source: details.source || "system", eventId: details.eventId || "" });
   if (result.status === "failed") logOperationalEvent("error", "admin_notification_failed", { orderId: order.id, title, error: result.error });
   return result;
+}
+
+function buildDeliveryEmail(order, orderUrl) {
+  const deliveredAt = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const pickup = order.delivery?.method === "pickup";
+  const destination = pickup
+    ? "your pickup order from our Bakersfield warehouse"
+    : `your order to ${order.delivery?.address || "the delivery address on file"}`;
+  return buildActionEmail({
+    title: "Your order has been delivered",
+    intro: `Hi ${order.customer?.name || "there"}, order ${order.id} has been marked delivered on ${deliveredAt}. Thanks for choosing Lunde Flooring Co. for ${destination}. If anything does not look right, reply to this email and our team will help.`,
+    buttonText: "View order",
+    url: orderUrl,
+    footer: "Keep your receipt and order details for care, maintenance, and warranty reference."
+  });
 }
 
 function buildActionEmail({ title, intro, buttonText, url, footer }) {
@@ -1951,6 +1990,37 @@ function recordPaymentNoticeStatus(orderId, kind, details) {
         error: clean(details.error || "", 600)
       }
     ].slice(-20);
+    writeStore("orders", orders);
+    return order;
+  }
+  return null;
+}
+
+function recordDeliveryEmailStatus(orderId, details) {
+  const orders = readStore("orders", []);
+  for (const order of orders) {
+    if (order.id !== orderId) continue;
+    const prev = order.deliveryEmail || {};
+    const attempts = Array.isArray(prev.attempts) ? prev.attempts : [];
+    const entry = {
+      status: clean(details.status, 40),
+      at: Date.now(),
+      source: clean(details.source, 60),
+      staffId: clean(details.staffId || "", 80),
+      staffName: clean(details.staffName || "", 180),
+      recipient: clean(details.recipient || prev.recipient || "", 180),
+      messageId: clean(details.messageId || "", 180),
+      error: clean(details.error || "", 600)
+    };
+    order.deliveryEmail = {
+      status: entry.status,
+      lastAttemptAt: entry.at,
+      sentAt: entry.status === "sent" ? entry.at : Number(prev.sentAt || 0),
+      recipient: entry.recipient,
+      messageId: entry.messageId || prev.messageId || "",
+      error: entry.error,
+      attempts: [...attempts, entry].slice(-10)
+    };
     writeStore("orders", orders);
     return order;
   }
