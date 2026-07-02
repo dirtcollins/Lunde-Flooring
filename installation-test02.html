@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Installation Guide (Concept 02 — Choose Your Path) — Lunde Flooring Co.</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+    <style>
+      /* Concept 02 — "Choose your path": DIY vs hire-a-pro tracks with an
+         interactive room-readiness checklist that saves as you go. */
+      .it2-hero { position:relative; isolation:isolate; display:grid; align-items:end; min-height:clamp(380px,52vh,540px); background:var(--black); color:var(--on-dark); overflow:hidden; }
+      .it2-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-1; }
+      .it2-hero::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(5,7,8,.15), rgba(5,7,8,.72)); }
+      .it2-hero-in { width:100%; max-width:var(--maxw); margin-inline:auto; padding:clamp(72px,10vh,120px) var(--gutter) clamp(30px,4vw,52px); }
+      .it2-hero h1 { font-size:clamp(38px,5.4vw,72px); font-weight:600; letter-spacing:-0.02em; line-height:0.98; margin:12px 0 0; max-width:16ch; text-wrap:balance; }
+      .it2-hero .eyebrow { color:rgba(255,255,255,.85); }
+
+      .it2-switch { border-bottom:1px solid var(--line); background:var(--paper); position:sticky; top:0; z-index:5; }
+      .it2-switch-in { max-width:var(--maxw); margin-inline:auto; padding:0 var(--gutter); display:flex; gap:0; }
+      .it2-switch button { appearance:none; background:none; border:0; border-bottom:2px solid transparent; padding:18px 22px; font:inherit; font-size:13px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); cursor:pointer; transition:color .2s, border-color .2s; }
+      .it2-switch button[aria-pressed="true"] { color:var(--ink); border-color:var(--accent); }
+      .it2-switch button:hover { color:var(--ink); }
+
+      [data-path] { display:none; }
+      body.path-diy [data-path~="diy"], body.path-pro [data-path~="pro"] { display:block; }
+
+      .it2-steps { counter-reset: step; display:grid; gap:1px; background:var(--line); border:1px solid var(--line); }
+      .it2-steps > div { background:var(--paper); padding:clamp(20px,2.6vw,32px); display:grid; grid-template-columns:64px 1fr; gap:18px; align-items:start; }
+      .it2-steps > div::before { counter-increment:step; content:counter(step, decimal-leading-zero); font-size:26px; font-weight:700; letter-spacing:-0.02em; color:var(--accent); }
+      .it2-steps h3 { margin:0 0 6px; font-size:17px; font-weight:700; }
+      .it2-steps p { margin:0; color:var(--ink-soft); max-width:64ch; }
+      @media (max-width:640px){ .it2-steps > div { grid-template-columns:44px 1fr; } }
+
+      .it2-check { border:1px solid var(--line); background:var(--paper-2); padding:clamp(22px,3vw,36px); }
+      .it2-check-head { display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
+      .it2-check-head h3 { margin:0; font-size:clamp(20px,2.2vw,28px); font-weight:600; letter-spacing:-0.01em; }
+      .it2-meter { font-size:12px; font-weight:800; letter-spacing:.06em; color:var(--muted); }
+      .it2-bar { height:4px; background:var(--stone); margin-bottom:22px; }
+      .it2-bar i { display:block; height:100%; width:0; background:var(--accent); transition:width .3s var(--ease); }
+      .it2-check label { display:flex; gap:13px; align-items:baseline; padding:11px 2px; border-top:1px solid var(--line); cursor:pointer; }
+      .it2-check label:first-of-type { border-top:0; }
+      .it2-check input { width:17px; height:17px; accent-color:var(--accent); flex:none; transform:translateY(2px); }
+      .it2-check b { font-weight:600; font-size:15px; }
+      .it2-check span { display:block; color:var(--muted); font-size:13.5px; margin-top:2px; }
+      .it2-check input:checked ~ div b { text-decoration:line-through; text-decoration-color:var(--faint); color:var(--muted); }
+
+      .it2-dd { display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,2vw,22px); }
+      .it2-dd > div { border:1px solid var(--line); background:var(--paper); padding:clamp(18px,2.4vw,28px); }
+      .it2-dd h4 { margin:0 0 12px; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+      .it2-dd .yes h4 { color:var(--sage); } .it2-dd .no h4 { color:var(--sale); }
+      .it2-dd ul { margin:0; padding:0; list-style:none; display:grid; gap:9px; }
+      .it2-dd li { font-size:14.5px; color:var(--ink-soft); padding-left:16px; position:relative; }
+      .it2-dd li::before { content:""; position:absolute; left:0; top:8px; width:6px; height:6px; }
+      .it2-dd .yes li::before { background:var(--sage); } .it2-dd .no li::before { background:var(--sale); }
+      @media (max-width:760px){ .it2-dd { grid-template-columns:1fr; } }
+    </style>
+      <script defer src="./seo.js"></script>
+  </head>
+  <body data-nav="resources">
+    <main>
+      <section class="it2-hero">
+        <img src="./media/lifestyle/luxury-vinyl-plank-installation.webp" srcset="./media/lifestyle/luxury-vinyl-plank-installation-800.webp 800w, ./media/lifestyle/luxury-vinyl-plank-installation-1400.webp 1400w" sizes="100vw" alt="Installer fitting a luxury vinyl plank into place" fetchpriority="high">
+        <div class="it2-hero-in">
+          <p class="eyebrow">Installation guide · Concept 02</p>
+          <h1>Installing it yourself, or hiring it out?</h1>
+        </div>
+      </section>
+
+      <div class="it2-switch">
+        <div class="it2-switch-in" role="group" aria-label="Choose your installation path">
+          <button type="button" id="pathDiy" aria-pressed="true">I'm installing it myself</button>
+          <button type="button" id="pathPro" aria-pressed="false">I'm hiring a pro</button>
+        </div>
+      </div>
+
+      <!-- DIY track -->
+      <section class="section wrap" data-path="diy">
+        <div class="section-head reveal" style="margin-bottom:clamp(26px,3.5vw,42px)">
+          <p class="eyebrow">The DIY route</p>
+          <h2 class="display" style="font-size:clamp(28px,3.6vw,48px)">Click-lock floors reward patience, not muscle.</h2>
+        </div>
+        <div class="it2-steps reveal">
+          <div><div><h3>Acclimate and inspect</h3><p>Bring cartons into the room's normal climate, then check style, color, quantity, and condition. Never install a visibly defective plank — report it first.</p></div></div>
+          <div><div><h3>Prep the subfloor</h3><p>Hard, sound, clean, smooth, flat, dry. Fix dips and high spots, clear debris and residue. No extra underlayment — the 1.5&nbsp;mm pad is already attached.</p></div></div>
+          <div><div><h3>Moisture test</h3><p>Test concrete and wood substrates and keep the readings. New concrete must be fully cured. Waterproof planks don't fix a wet slab.</p></div></div>
+          <div><div><h3>Dry-lay the layout</h3><p>Start from a straight wall, stagger the end joints, blend planks from multiple cartons, and make sure the last row isn't a sliver.</p></div></div>
+          <div><div><h3>Lock rows with spacers in</h3><p>Expansion gaps at every wall, jamb, column, and transition. Undercut door jambs. Tapping block and pull bar — never a bare hammer on the joint.</p></div></div>
+          <div><div><h3>Trim without pinning</h3><p>Baseboards fasten to the wall, not through the floor. Keep leftover cartons as attic stock for future repairs.</p></div></div>
+        </div>
+      </section>
+
+      <section class="section wrap" data-path="diy" style="padding-top:0">
+        <div class="it2-dd reveal">
+          <div class="yes">
+            <h4>Good DIY projects</h4>
+            <ul>
+              <li>Open rectangular rooms over a prepared subfloor</li>
+              <li>Floating click-lock installs at ground level or above</li>
+              <li>Rooms where cabinets are already in place to floor around</li>
+            </ul>
+          </div>
+          <div class="no">
+            <h4>Call a pro instead</h4>
+            <ul>
+              <li>Stairs — they need stair nose and an adhesive method</li>
+              <li>Glue-down installs and large connected spaces</li>
+              <li>Out-of-flat subfloors or moisture problems below</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRO track -->
+      <section class="section wrap" data-path="pro">
+        <div class="section-head reveal" style="margin-bottom:clamp(26px,3.5vw,42px)">
+          <p class="eyebrow">Working with an installer</p>
+          <h2 class="display" style="font-size:clamp(28px,3.6vw,48px)">Your job is the five questions, not the tapping block.</h2>
+        </div>
+        <div class="it2-steps reveal">
+          <div><div><h3>Ask about subfloor prep</h3><p>What will they do to get it hard, clean, flat, and dry — and is that work in the quote? Prep is where good installs are won.</p></div></div>
+          <div><div><h3>Ask for the moisture readings</h3><p>Concrete and wood substrates should be tested and documented before day one. Keep those readings with your order records.</p></div></div>
+          <div><div><h3>Confirm expansion space</h3><p>Gaps at every wall, jamb, and transition, jambs undercut, and no fasteners through a floating floor — including under trim.</p></div></div>
+          <div><div><h3>Confirm no added underlayment</h3><p>The pad is attached to the plank. Extra underlayment under our floors voids the warranty unless the product guide allows it.</p></div></div>
+          <div><div><h3>Schedule delivery before labor</h3><p>Freight arrives curbside. Get cartons indoors and acclimating before the installer is on the clock — and inspect everything before install day.</p></div></div>
+        </div>
+      </section>
+
+      <!-- shared: readiness checklist -->
+      <section class="section band-2">
+        <div class="wrap" style="max-width:900px">
+          <div class="it2-check reveal">
+            <div class="it2-check-head">
+              <h3>Room-readiness checklist</h3>
+              <span class="it2-meter" id="it2Meter">0 OF 6 DONE</span>
+            </div>
+            <div class="it2-bar"><i id="it2Bar"></i></div>
+            <label><input type="checkbox" data-ck="product"><div><b>Order confirmed against the room</b><span>Style, color, and enough cartons for the full connected space, plus extra for cuts and attic stock.</span></div></label>
+            <label><input type="checkbox" data-ck="acclimate"><div><b>Cartons indoors and acclimating</b><span>Stored flat in the installation environment, protected from moisture and job-site damage.</span></div></label>
+            <label><input type="checkbox" data-ck="inspect"><div><b>Planks inspected</b><span>No visible defects; carton labels and photos saved with the order record.</span></div></label>
+            <label><input type="checkbox" data-ck="subfloor"><div><b>Subfloor flat, clean, and dry</b><span>Dips, high spots, debris, and movement corrected.</span></div></label>
+            <label><input type="checkbox" data-ck="moisture"><div><b>Moisture tested and documented</b><span>Concrete fully cured; readings kept with your records.</span></div></label>
+            <label><input type="checkbox" data-ck="site"><div><b>Site ready</b><span>Cabinets in, jambs planned for undercutting, delivery access sorted with Lunde.</span></div></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="section band-ink">
+        <div class="wrap measure">
+          <p class="eyebrow">Either path</p>
+          <h2 class="display" style="font-size:clamp(30px,4vw,54px)">Talk to us before install day.</h2>
+          <p class="lede">Rural address? Stairs? Odd subfloor? Five minutes with our Bakersfield team saves a change order later.</p>
+          <div class="v6-hero-cta" style="margin-top:26px">
+            <a class="btn on-dark lg" href="./contact.html">Contact us</a>
+            <a class="btn ghost on-dark lg" href="./samples.html">Order free samples</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+      (function () {
+        // Path toggle
+        var diy = document.getElementById("pathDiy"), pro = document.getElementById("pathPro");
+        function setPath(p) {
+          document.body.classList.toggle("path-diy", p === "diy");
+          document.body.classList.toggle("path-pro", p === "pro");
+          diy.setAttribute("aria-pressed", p === "diy");
+          pro.setAttribute("aria-pressed", p === "pro");
+          try { localStorage.setItem("lunde-install-path", p); } catch (e) {}
+        }
+        diy.addEventListener("click", function () { setPath("diy"); });
+        pro.addEventListener("click", function () { setPath("pro"); });
+        var saved = "diy";
+        try { saved = localStorage.getItem("lunde-install-path") || "diy"; } catch (e) {}
+        setPath(saved);
+
+        // Readiness checklist with progress, persisted per box
+        var boxes = [].slice.call(document.querySelectorAll("[data-ck]"));
+        var meter = document.getElementById("it2Meter"), bar = document.getElementById("it2Bar");
+        function paint() {
+          var done = boxes.filter(function (b) { return b.checked; }).length;
+          meter.textContent = done + " OF " + boxes.length + " DONE";
+          bar.style.width = (done / boxes.length) * 100 + "%";
+        }
+        boxes.forEach(function (b) {
+          try { b.checked = localStorage.getItem("lunde-install-ck-" + b.dataset.ck) === "1"; } catch (e) {}
+          b.addEventListener("change", function () {
+            try { localStorage.setItem("lunde-install-ck-" + b.dataset.ck, b.checked ? "1" : "0"); } catch (e) {}
+            paint();
+          });
+        });
+        paint();
+      })();
+    </script>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./reveal.js"></script>
+  </body>
+</html>
