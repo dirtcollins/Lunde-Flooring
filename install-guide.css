@@ -1,0 +1,108 @@
+/* ============================================================
+   Installation guide — "The Manual"
+   Scoped under .install-manual (page-level class, per handoff
+   rules). Load AFTER v6.css and interior.css.
+   Anatomy: chapter rail w/ scrollspy + checklist, numbered
+   chapters, tool strip, warranty requirements band, disclaimer.
+   ============================================================ */
+
+/* ---------- rule zero callout (extends .feat-card) ---------- */
+.install-manual .im-callout { display: flex; gap: clamp(18px, 3vw, 32px); align-items: center; flex-wrap: wrap; justify-content: space-between; border-left: 3px solid var(--accent); }
+.install-manual .im-callout .btn { flex: none; }
+
+/* ---------- layout: sticky rail + chapters ---------- */
+.install-manual .im-layout { max-width: var(--maxw); margin-inline: auto; padding: clamp(36px, 5vw, 64px) var(--gutter) clamp(56px, 7vw, 104px); display: grid; grid-template-columns: 262px minmax(0, 1fr); gap: clamp(32px, 5vw, 88px); align-items: start; }
+.install-manual .im-rail { position: sticky; top: 96px; display: grid; gap: 14px; }
+
+/* progress */
+.install-manual .im-progress { display: grid; gap: 9px; }
+.install-manual .im-progress-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.install-manual .im-progress-top span { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.install-manual .im-progress-top b { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.install-manual .im-bar { height: 3px; background: var(--stone); overflow: hidden; }
+.install-manual .im-bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s var(--ease); }
+
+/* rail rows: checkbox + chapter link */
+.install-manual .im-links { display: grid; gap: 2px; }
+.install-manual .im-row { display: flex; align-items: stretch; gap: 10px; }
+.install-manual .im-check { width: 20px; height: 20px; flex: none; align-self: center; display: grid; place-items: center; font-size: 12px; line-height: 1; color: #fff; border: 1px solid var(--line-2); background: var(--paper); transition: background .15s var(--ease), border-color .15s var(--ease); }
+.install-manual .im-check:hover { border-color: var(--accent); }
+.install-manual .im-row.done .im-check { background: var(--accent); border-color: var(--accent); }
+.install-manual .im-row a { flex: 1; display: flex; gap: 13px; align-items: baseline; padding: 10px 13px; font-size: 13.5px; font-weight: 600; color: var(--muted); border-left: 2px solid var(--line); transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease); }
+.install-manual .im-row a i { font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; color: var(--faint); }
+.install-manual .im-row a:hover { color: var(--ink); }
+.install-manual .im-row.on a { color: var(--ink); border-color: var(--accent); background: var(--paper-2); }
+.install-manual .im-row.on a i { color: var(--accent); }
+.install-manual .im-row.done a { text-decoration: line-through; text-decoration-color: var(--line-2); }
+.install-manual .im-row.done.on a { text-decoration: none; }
+
+/* ---------- chapters ---------- */
+.install-manual .im-ch { padding: clamp(30px, 4vw, 52px) 0; border-top: 1px solid var(--line); display: grid; gap: 18px; scroll-margin-top: 92px; }
+.install-manual .im-ch:first-child { border-top: 0; padding-top: 0; }
+.install-manual .im-ch:last-child { padding-bottom: 0; }
+.install-manual .im-num { font-size: clamp(52px, 6vw, 84px); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--stone); }
+.install-manual .im-ch h2 { font-size: clamp(24px, 2.6vw, 36px); font-weight: 600; letter-spacing: -0.015em; line-height: 1.05; margin: 0; max-width: 22ch; }
+.install-manual .im-ch > p { color: var(--ink-soft); max-width: 62ch; margin: 0; }
+.install-manual .im-ch img { width: 100%; aspect-ratio: 16 / 8.5; object-fit: cover; border: 1px solid var(--line); }
+.install-manual .im-points { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+.install-manual .im-points li { display: flex; gap: 12px; align-items: baseline; max-width: 60ch; }
+.install-manual .im-points li::before { content: ""; width: 7px; height: 7px; background: var(--accent); flex: none; transform: translateY(-1px); }
+.install-manual .im-warn { border: 1px solid var(--line); border-left: 3px solid var(--sale); background: var(--panel); padding: 16px 18px; font-size: 14px; color: var(--ink-soft); max-width: 60ch; }
+.install-manual .im-warn b { color: var(--ink); }
+
+/* ---------- tool kit cards (V7 card language) ---------- */
+.install-manual .im-tools { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(12px, 1.4vw, 18px); margin-top: clamp(26px, 3vw, 40px); }
+.install-manual .im-tool { position: relative; background: var(--paper); border: 1px solid #ebe7e0; padding: clamp(20px, 2vw, 26px) clamp(18px, 1.8vw, 22px); display: grid; gap: 10px; align-content: start; overflow: hidden; transition: border-color .2s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease); }
+.install-manual .im-tool::after { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease); }
+.install-manual .im-tool:hover { border-color: var(--ink); box-shadow: 0 22px 44px -26px rgba(30,26,20,0.45); transform: translateY(-4px); }
+.install-manual .im-tool:hover::after { transform: scaleX(1); }
+.install-manual .im-tool .ic { width: 30px; height: 30px; color: var(--accent); }
+.install-manual .im-tool .ic svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.3; }
+.install-manual .im-tool .lab { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #8a837a; }
+.install-manual .im-tool strong { font-size: 15.5px; font-weight: 600; line-height: 1.25; }
+.install-manual .im-tool p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .install-manual .im-tool:hover { transform: none; } }
+
+/* ---------- warranty requirements (dark band grid) ---------- */
+.install-manual .im-req { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.16); margin-top: clamp(30px, 4vw, 52px); }
+.install-manual .im-req article { background: var(--black); padding: clamp(22px, 2.6vw, 32px); display: grid; gap: 10px; align-content: start; }
+.install-manual .im-req .n { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; color: #c9a988; }
+.install-manual .im-req h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; color: var(--on-dark); }
+.install-manual .im-req p { margin: 0; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.72); }
+.install-manual .im-req-foot { margin-top: 22px; font-size: 13.5px; color: rgba(255,255,255,0.6); max-width: 72ch; }
+.install-manual .im-req-foot b { color: rgba(255,255,255,0.86); font-weight: 600; }
+
+/* ---------- installation disclaimer (legal) ---------- */
+.install-manual .im-legal { display: grid; grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 76px); align-items: start; }
+.install-manual .im-legal-aside { position: sticky; top: 96px; display: grid; gap: 14px; }
+.install-manual .im-legal-aside h2 { font-size: clamp(26px, 3vw, 42px); line-height: 1; letter-spacing: -0.02em; }
+.install-manual .im-legal-aside p { color: var(--muted); margin: 0; max-width: 30ch; }
+.install-manual .im-legal-body { border: 1px solid var(--line); background: var(--panel); padding: clamp(24px, 3vw, 38px); display: grid; gap: 14px; }
+.install-manual .im-legal-body p { margin: 0; font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 76ch; }
+.install-manual .im-legal-body p b { color: var(--ink-soft); font-weight: 600; }
+.install-manual .im-legal-body .lead { font-size: 15px; color: var(--ink); font-weight: 600; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .install-manual .im-tools { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 960px) {
+  .install-manual .im-req { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .install-manual .im-tools { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .install-manual .im-legal { grid-template-columns: 1fr; }
+  .install-manual .im-legal-aside { position: static; }
+}
+@media (max-width: 860px) {
+  .install-manual .im-layout { grid-template-columns: 1fr; }
+  .install-manual .im-rail { position: static; }
+  .install-manual .im-links { grid-template-columns: 1fr 1fr; gap: 2px 14px; }
+}
+@media (max-width: 560px) {
+  .install-manual .im-links { grid-template-columns: 1fr; }
+  .install-manual .im-req { grid-template-columns: 1fr; }
+  .install-manual .im-tools { grid-template-columns: 1fr; }
+}
