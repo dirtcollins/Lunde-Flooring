@@ -3101,6 +3101,7 @@ async function lookupVisitorCity(ip, dayKey) {
       if (!response.ok) return;
       const data = await response.json().catch(() => null);
       city = data && data.city ? [data.city, data.region].filter(Boolean).join(", ") : "";
+      if (city && data.country && data.country !== "US") city += ` (${clean(data.country, 8)})`;
     } catch { return; }
     if (Object.keys(geoState.cache).length < 20000) {
       geoState.cache[cacheKey] = city;

@@ -138,26 +138,44 @@
         var sum = function (list, k) { return list.reduce(function (s, x) { return s + (x[k] || 0); }, 0); };
         var firstTracked = null;
         for (var i = 0; i < days.length; i++) { if (days[i].views > 0) { firstTracked = days[i].date; break; } }
-        summary.textContent = sum(last7, "uniques") + " visitors · " + sum(last7, "views") + " views this week" +
+        summary.textContent = sum(last7, "uniques") + " unique visitors this week" +
           (firstTracked ? " · counting since " + new Date(firstTracked + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric" }) : " · counting starts with the next visit");
-        var max = Math.max.apply(null, last14.map(function (x) { return x.views; }).concat([1]));
+
+        /* ecommerce metrics from the orders already in the console */
+        var now = Date.now();
+        var liveOrders = (L.orders ? L.orders() : []).filter(function (o) { return o.status !== "cancelled"; });
+        var inWindow = function (daysBack) { return liveOrders.filter(function (o) { return o.createdAt >= now - daysBack * 86400000; }); };
+        var orders7 = inWindow(7), orders30 = inWindow(30);
+        var revenue7 = orders7.reduce(function (s, o) { return s + (o.totals && o.totals.total || 0); }, 0);
+        var uniques7 = sum(last7, "uniques"), uniques30 = sum(last30, "uniques");
+        var conv7 = uniques7 ? (orders7.length / uniques7 * 100) : 0;
+        var pagesPer = uniques7 ? (sum(last7, "views") / uniques7) : 0;
+        /* the chart plots UNIQUE visitors — the number that matters */
+        var max = Math.max.apply(null, last14.map(function (x) { return x.uniques; }).concat([1]));
         var bars = last14.map(function (x) {
-          var h = Math.max(2, Math.round(x.views / max * 100));
+          var h = Math.max(2, Math.round(x.uniques / max * 100));
           var label = new Date(x.date + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric" });
-          return '<div class="repbar" title="' + label + ': ' + x.views + ' views · ' + x.uniques + ' visitors">' +
-            '<b>' + (x.views || "—") + '</b>' +
-            '<span class="rb-fill' + (x.views ? "" : " is-zero") + '" style="height:' + h + '%"></span>' +
+          return '<div class="repbar" title="' + label + ': ' + x.uniques + ' unique visitor' + (x.uniques === 1 ? "" : "s") + ' · ' + x.views + ' page views">' +
+            '<b>' + (x.uniques || "—") + '</b>' +
+            '<span class="rb-fill' + (x.uniques ? "" : " is-zero") + '" style="height:' + h + '%"></span>' +
             '<small>' + label.replace(" ", "&nbsp;") + '</small></div>';
         }).join("");
         var pages = (d.topPages || []).slice(0, 6);
         var pageMax = Math.max.apply(null, pages.map(function (p) { return p.views; }).concat([1]));
         panel.innerHTML =
           '<div class="kpis" style="margin-bottom:18px">' +
-            '<div class="kpi"><span class="kpi-label">Today</span><span class="kpi-num">' + today.uniques.toLocaleString() + '</span><span class="kpi-sub">' + today.views.toLocaleString() + ' page view' + (today.views === 1 ? "" : "s") + '</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Visitors (7 days)</span><span class="kpi-num">' + sum(last7, "uniques").toLocaleString() + '</span><span class="kpi-sub">' + sum(last7, "views").toLocaleString() + ' views</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Visitors (30 days)</span><span class="kpi-num">' + sum(last30, "uniques").toLocaleString() + '</span><span class="kpi-sub">' + sum(last30, "views").toLocaleString() + ' views</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Avg. time on site (7 days)</span><span class="kpi-num">' + fmtDur(d.avgVisitSeconds || 0) + '</span><span class="kpi-sub">per visitor per day</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Unique visitors today</span><span class="kpi-num">' + today.uniques.toLocaleString() + '</span><span class="kpi-sub">' + today.views.toLocaleString() + ' page view' + (today.views === 1 ? "" : "s") + ' total</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Unique visitors (7 days)</span><span class="kpi-num">' + uniques7.toLocaleString() + '</span><span class="kpi-sub">' + sum(last7, "views").toLocaleString() + ' page views total</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Unique visitors (30 days)</span><span class="kpi-num">' + uniques30.toLocaleString() + '</span><span class="kpi-sub">' + sum(last30, "views").toLocaleString() + ' page views total</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Conversion rate (7 days)</span><span class="kpi-num">' + (uniques7 ? conv7.toFixed(1) + "%" : "—") + '</span><span class="kpi-sub">' + orders7.length + ' order' + (orders7.length === 1 ? "" : "s") + ' from ' + uniques7 + ' visitors</span></div>' +
           '</div>' +
+          '<div class="kpis" style="margin-bottom:18px">' +
+            '<div class="kpi"><span class="kpi-label">Avg. time on site (7 days)</span><span class="kpi-num">' + fmtDur(d.avgVisitSeconds || 0) + '</span><span class="kpi-sub">per unique visitor per day</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Pages per visitor (7 days)</span><span class="kpi-num">' + (uniques7 ? pagesPer.toFixed(1) : "—") + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Revenue (7 days)</span><span class="kpi-num">' + money(revenue7) + '</span><span class="kpi-sub">' + (uniques7 ? money(revenue7 / uniques7) + " per visitor" : "") + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Orders (30 days)</span><span class="kpi-num">' + orders30.length + '</span></div>' +
+          '</div>' +
+          '<h3 style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Unique visitors — last 14 days</h3>' +
           '<div class="repchart">' + bars + '</div>' +
           '<div class="cols-2-even" style="margin-top:20px;gap:24px"><div>' +
             barList("Top pages", pages.map(function (p) { return { lab: p.path, n: p.views }; }), "views") +
