@@ -1540,10 +1540,12 @@ async function serveStatic(req, res, url) {
   const softCache = [".js", ".css"].includes(ext) && basename !== "data.js";
   const cacheControl = longCache
     ? "public, max-age=31536000, immutable"
-    : softCache
-      ? "public, max-age=60, stale-while-revalidate=120"
-      : "no-cache";
-  const ifNoneMatch = req.headers["if-none-match"];
+    : basename === "data.js"
+      ? "private, no-cache, must-revalidate" // price-bearing: shared proxies must not cache it
+      : softCache
+        ? "public, max-age=60, stale-while-revalidate=120"
+        : "no-cache";
+  const ifNoneMatch = String(req.headers["if-none-match"] || "").replace(/^W\//, "");
   const ifModifiedSince = Date.parse(req.headers["if-modified-since"] || "");
   // data.js: mtime alone can't validate (markup changes without touching the
   // file) — only the markup-aware ETag counts for it.
