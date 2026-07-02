@@ -47,9 +47,11 @@
         '<span class="v6-line-price">' + money(materialEstimate(p, e.sqft)) + '</span></div>';
     }
     if ((e.samples || 0) > 0) {
+      // Free sample-box orders carry $0 sample totals; paid orders show the real price.
+      var sampleFree = !((order.totals || {}).samples > 0);
       lines += '<div class="v6-line"><a class="v6-line-img" href="./product.html?slug=' + p.slug + '" style="background-image:url(\'' + L.thumb(p.mainImage) + '\')" aria-label="' + esc(p.title) + '"></a>' +
-        '<div class="v6-line-info"><strong>' + esc(p.title) + ' — sample</strong><span>' + e.samples + ' × ' + money(p.samplePrice) + '</span></div>' +
-        '<span class="v6-line-price">' + money(e.samples * p.samplePrice) + '</span></div>';
+        '<div class="v6-line-info"><strong>' + esc(p.title) + ' — sample</strong><span>' + e.samples + ' × ' + (sampleFree ? "Free" : money(p.samplePrice)) + '</span></div>' +
+        '<span class="v6-line-price">' + (sampleFree ? "Free" : money(e.samples * p.samplePrice)) + '</span></div>';
     }
   });
 

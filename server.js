@@ -367,6 +367,7 @@ async function handleApi(req, res, url) {
   }
 
   if (parts[0] === "admins") return handleAdminUsers(req, res, method, parts, input);
+  if (parts[0] === "samples" && method === "POST") return handleSampleRequest(req, res, input);
   if (parts[0] === "orders") return handleOrders(req, res, method, parts, input);
   if (parts[0] === "customers") return handleCustomers(req, res, method, input);
   if (parts[0] === "customer") return handleCustomerAccounts(req, res, method, parts, input);
@@ -686,6 +687,53 @@ async function markStripeOrderPaymentFailed(order, status, details) {
     detail: details.message || ""
   });
   logOperationalEvent("warn", "stripe_order_payment_failed", { orderId: order.id, eventId: details.eventId, status });
+}
+
+// Free sample box (public, no payment). Creates a $0 order so fulfillment,
+// account order history, tracking, and the confirmation email all ride the
+// existing order pipeline. The site promises "4 free samples, delivered".
+async function handleSampleRequest(req, res, input) {
+  if (rateLimit(res, `samples:${clientIp(req)}`, 6, 60 * 60 * 1000)) return;
+  const MAX_SAMPLES = 4;
+  const products = productsById();
+  const ids = [...new Set((Array.isArray(input.ids) ? input.ids : []).map((id) => clean(id, 60)))]
+    .filter((id) => products[id] && !productIsArchived(products[id]));
+  if (!ids.length) return json(res, { ok: false, error: "Pick at least one floor to sample." }, 422);
+  if (ids.length > MAX_SAMPLES) return json(res, { ok: false, error: `The sample box holds ${MAX_SAMPLES} swatches max.` }, 422);
+  const customer = input.customer && typeof input.customer === "object" ? input.customer : {};
+  const address = input.address && typeof input.address === "object" ? input.address : {};
+  const name = clean(customer.name, 180);
+  const email = clean(customer.email, 180).toLowerCase();
+  const line1 = clean(address.line1, 200);
+  const city = clean(address.city, 80);
+  const state = clean(address.state, 40);
+  const zip = clean(address.zip, 20);
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(res, { ok: false, error: "Add your name and a valid email." }, 422);
+  if (!line1 || !city || !zip) return json(res, { ok: false, error: "Add a full delivery address." }, 422);
+  const items = {};
+  for (const id of ids) items[id] = { sqft: 0, samples: 1 };
+  const order = normalizeOrder({
+    items,
+    status: "placed",
+    checkout: { mode: "guest", type: "sample-box" },
+    delivery: {
+      method: "delivery",
+      address: [line1, `${city}, ${state} ${zip}`.replace(/\s+/g, " ").trim()].join(", "),
+      notes: ""
+    },
+    customer: { name, email, phone: clean(customer.phone, 80) },
+    payment: { method: "none", status: "no_charge", amount: 0, last4: "", name: "" },
+    totals: { material: 0, samples: 0, cartons: 0, subtotal: 0, discount: 0, freight: 0, garagePlacement: 0, tax: 0, total: 0 }
+  });
+  const account = currentAccount(req);
+  if (account) attachAccountToOrder(order, account);
+  const orders = [order, ...readStore("orders", []).filter((row) => row?.id !== order.id)];
+  writeStore("orders", orders);
+  const emailStatus = await sendFulfillmentEmail(order, "automatic");
+  recordEmailStatus(order.id, { ...emailStatus, source: "automatic" });
+  await sendCustomerConfirmation(order, "order-placed");
+  const saved = readStore("orders", []).find((row) => row?.id === order.id) || order;
+  return json(res, { ok: true, id: order.id, item: saved });
 }
 
 async function handleOrders(req, res, method, parts, input) {

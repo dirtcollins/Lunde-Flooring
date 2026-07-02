@@ -3,30 +3,58 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Order Samples — Lunde Flooring Co.</title>
-    <meta name="description" content="Order flooring samples from Lunde Flooring Co. to compare color, texture, and finish before choosing your floor.">
+    <title>Order Free Samples — Lunde Flooring Co.</title>
+    <meta name="description" content="Order up to 4 free full-size flooring samples, delivered free to your door. Compare color, texture, and finish in your own light before you buy.">
     <link rel="icon" href="./favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./v6.css">
-      <script defer src="./seo.js"></script>
+    <script defer src="./seo.js"></script>
   </head>
   <body data-nav="samples">
     <main>
-      <div class="cat">
-        <div class="cat-hero">
-          <p class="eyebrow">The sample box</p>
-          <h1 class="display">See it in your light, free.</h1>
-          <p class="lede">Choose any floors below and we'll send full-size swatches to your door at no cost. Live with them for a week — morning light, lamp light, next to your cabinets — then order with confidence.</p>
+      <section class="samples-page">
+        <div class="chip">Free &middot; ships in 2&ndash;3 days</div>
+        <h1>Order free samples</h1>
+        <p class="lede">Pick up to 4 full-size swatches. We deliver them free &mdash; no card required. Live with them for a week &mdash; morning light, lamp light, next to your cabinets &mdash; then order with confidence.</p>
+        <div class="count-row"><span>Your samples</span><span class="n"><b id="sampleCount">0</b> of 4 selected</span></div>
+        <div class="pgrid" id="sampleGrid" aria-live="polite"></div>
+        <button class="btn" type="button" id="shipSamples">Ship my free samples</button>
+
+        <form class="samples-ship v6-form" id="shipForm" hidden novalidate>
+          <div class="v6-fieldset">
+            <h2>Where should we send your box?</h2>
+            <div class="v6-field-row">
+              <label class="v6-field"><span>Full name</span><input name="name" autocomplete="name" required></label>
+              <label class="v6-field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+            </div>
+            <div class="v6-field-row">
+              <label class="v6-field"><span>Phone <em class="opt">(optional)</em></span><input name="phone" type="tel" autocomplete="tel"></label>
+              <label class="v6-field"><span>Street address</span><input name="line1" autocomplete="address-line1" required></label>
+            </div>
+            <div class="v6-field-row three">
+              <label class="v6-field"><span>City</span><input name="city" autocomplete="address-level2" required></label>
+              <label class="v6-field"><span>State</span><input name="state" autocomplete="address-level1" value="CA"></label>
+              <label class="v6-field"><span>ZIP</span><input name="zip" autocomplete="postal-code" required></label>
+            </div>
+            <p class="samples-msg" id="shipStatus" role="status"></p>
+            <button class="btn" type="submit" id="shipSubmit">Send my sample box</button>
+          </div>
+        </form>
+
+        <div class="samples-done" id="shipDone" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"></path></svg>
+          <div>
+            <h2>Your sample box is on the way.</h2>
+            <p id="doneCopy"></p>
+            <div class="samples-done-cta">
+              <a class="btn" href="./catalog.html">Keep browsing floors</a>
+              <a class="btn ghost" id="doneTrack" href="./my-order.html">Track my box</a>
+            </div>
+          </div>
         </div>
-        <p class="cat-count" id="sampleCount"></p>
-        <div class="cat-grid" id="sampleGrid"></div>
-      </div>
+      </section>
     </main>
-    <div class="v6-samplebar" id="sampleBar">
-      <span><b id="sampleBarN">0</b> samples in your box · ships free</span>
-      <a class="btn on-dark" href="./cart.html">Review &amp; check out</a>
-    </div>
     <script defer src="./chrome.js"></script>
     <script defer src="./data.js"></script>
     <script defer src="./store.js"></script>
