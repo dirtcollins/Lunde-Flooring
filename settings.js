@@ -56,6 +56,9 @@
           '</div><div class="v6-field-row">' +
             field('Tax rate (%)', '<input id="setTax" type="number" min="0" max="25" step="0.05" value="' + (s.taxRate * 100).toFixed(2) + '">') +
             field('Garage placement ($/carton)', '<input id="setGarage" type="number" min="0" step="0.5" value="' + s.garagePerCarton + '">') +
+          '</div><div class="v6-field-row">' +
+            field('Product markup (%)', '<input id="setMarkup" type="number" min="0" max="500" step="1" value="' + (s.priceMarkupPercent || 0) + '">') +
+            '<div class="v6-field"><span>&nbsp;</span><p class="row-sub" style="margin:10px 0 0">Catalog prices are your <b>cost</b> — customers see cost + this markup everywhere (catalog, quotes, cart, checkout). A manual price edit on a product overrides it.</p></div>' +
           '</div>' +
           '<p class="row-sub">Used everywhere totals are shown — cart, checkout, Stripe, and staff orders. Update the advertised “free delivery over $1,200” copy if you change that threshold.</p>' +
           '<div><button class="btn" type="button" id="savePricing" style="min-height:42px">Save pricing</button></div>' +
@@ -194,7 +197,8 @@
         freightFlat: Number(document.getElementById("setFreight").value),
         freeShipOver: Number(document.getElementById("setFreeOver").value),
         taxRate: Number(document.getElementById("setTax").value) / 100,
-        garagePerCarton: Number(document.getElementById("setGarage").value)
+        garagePerCarton: Number(document.getElementById("setGarage").value),
+        priceMarkupPercent: Number(document.getElementById("setMarkup").value)
       }, "savedPricing");
     });
     document.getElementById("saveBiz").addEventListener("click", function () {

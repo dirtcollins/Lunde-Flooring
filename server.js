@@ -215,8 +215,19 @@ async function handleApi(req, res, url) {
   const input = parseJson(raw);
 
   if (parts[0] === "settings" && method === "GET") {
-    const body = { ok: true, settings: getSettings() };
     const staff = currentStaff(req);
+    const all = getSettings();
+    // Public payload: only what the storefront needs. Markup (cost basis) and
+    // email/notification prefs are staff-only.
+    const publicSettings = {
+      freightFlat: all.freightFlat, garagePerCarton: all.garagePerCarton,
+      taxRate: all.taxRate, freeShipOver: all.freeShipOver,
+      businessName: all.businessName, businessPhone: all.businessPhone,
+      businessEmail: all.businessEmail, businessAddress: all.businessAddress,
+      businessHours: all.businessHours,
+      promoCodes: all.promoCodes
+    };
+    const body = { ok: true, settings: staff ? all : publicSettings };
     if (staff) {
       body.email = {
         resendApiKeyConfigured: Boolean(config.resendApiKey),
@@ -267,6 +278,7 @@ async function handleApi(req, res, url) {
     if (patch.garagePerCarton !== undefined) cur.garagePerCarton = num(patch.garagePerCarton, 0, 100, cur.garagePerCarton);
     if (patch.taxRate !== undefined) cur.taxRate = num(patch.taxRate, 0, 0.25, cur.taxRate);
     if (patch.freeShipOver !== undefined) cur.freeShipOver = num(patch.freeShipOver, 0, 100000, cur.freeShipOver);
+    if (patch.priceMarkupPercent !== undefined) cur.priceMarkupPercent = num(patch.priceMarkupPercent, 0, 500, cur.priceMarkupPercent);
     for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo"]) {
       if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
     }
@@ -1358,6 +1370,14 @@ async function serveStatic(req, res, url) {
   let pathname = decodeURIComponent(url.pathname);
   if (pathname === "/") pathname = "/index.html";
   if (pathname.split("/").some((part) => part.startsWith(".")) || pathname.startsWith("/api/data/")) return notFound(res);
+  // Server-side code, docs, and infra files are not web assets — never serve them.
+  const lowerPath = pathname.toLowerCase();
+  if (["/server.js", "/loader.cjs", "/package.json", "/package-lock.json"].includes(lowerPath) ||
+      lowerPath.startsWith("/scripts/") || lowerPath.startsWith("/supabase/") || lowerPath.startsWith("/node_modules/") ||
+      lowerPath.endsWith(".md") || lowerPath.endsWith(".sql") || lowerPath.endsWith(".mjs") || lowerPath.endsWith(".cjs") ||
+      lowerPath.endsWith(".txt.example") || lowerPath === "/readme.txt" || lowerPath === "/.env.example") {
+    return notFound(res);
+  }
 
   // ---- Customer account area (clean URLs, server-gated) ----
   if (pathname === "/account" || pathname === "/account/") {
@@ -1409,14 +1429,19 @@ async function serveStatic(req, res, url) {
   }
   const stat = fs.statSync(filePath);
   const lastModified = stat.mtime.toUTCString();
-  const etag = `"${stat.size.toString(36)}-${Math.floor(stat.mtimeMs).toString(36)}"`;
+  // data.js carries the injected price markup, so its ETag must change when
+  // the markup setting does — otherwise browsers keep 304-ing the old price.
+  const markupTag = basename === "data.js" ? `-m${Number(getSettings().priceMarkupPercent) || 0}` : "";
+  const etag = `"${stat.size.toString(36)}-${Math.floor(stat.mtimeMs).toString(36)}${markupTag}"`;
   // Hard-cache static media (stable filenames); revalidate code/markup so updates
   // reach returning visitors immediately after a deploy.
   const longCache = [".webp", ".png", ".jpg", ".jpeg", ".ico", ".svg", ".woff", ".woff2"].includes(ext);
   // JS/CSS get a short cache + background revalidation: navigations stop paying
   // ~8 revalidation round-trips per page (the main "console feels janky" cause),
   // while deploys still reach returning browsers within a minute.
-  const softCache = [".js", ".css"].includes(ext);
+  // data.js is price-bearing (markup injected per request) — it must revalidate
+  // on every navigation so displayed prices never lag what checkout charges.
+  const softCache = [".js", ".css"].includes(ext) && basename !== "data.js";
   const cacheControl = longCache
     ? "public, max-age=31536000, immutable"
     : softCache
@@ -1424,9 +1449,21 @@ async function serveStatic(req, res, url) {
       : "no-cache";
   const ifNoneMatch = req.headers["if-none-match"];
   const ifModifiedSince = Date.parse(req.headers["if-modified-since"] || "");
-  if ((ifNoneMatch && ifNoneMatch === etag) || (ifModifiedSince && ifModifiedSince >= Math.floor(stat.mtimeMs / 1000) * 1000)) {
+  // data.js: mtime alone can't validate (markup changes without touching the
+  // file) — only the markup-aware ETag counts for it.
+  const timeFresh = basename !== "data.js" && ifModifiedSince && ifModifiedSince >= Math.floor(stat.mtimeMs / 1000) * 1000;
+  if ((ifNoneMatch && ifNoneMatch === etag) || (!ifNoneMatch && timeFresh)) {
     res.writeHead(304, { ETag: etag, "Last-Modified": lastModified, "Cache-Control": cacheControl });
     return res.end();
+  }
+  // Catalog prices in data.js are cost — inject the staff-set markup so the
+  // client applies retail pricing before any page script reads a price.
+  if (basename === "data.js") {
+    const markup = Number(getSettings().priceMarkupPercent) || 0;
+    const body = `window.LUNDE_PRICE_MARKUP=${markup};\n` + fs.readFileSync(filePath, "utf8");
+    res.writeHead(200, { "Content-Type": MIME[".js"], "Cache-Control": cacheControl, ETag: etag });
+    if (req.method === "HEAD") return res.end();
+    return res.end(body);
   }
   // Per-product SEO: rewrite product.html's <head> for the requested floor.
   if (basename === "product.html" && url.searchParams.get("slug")) {
@@ -1452,7 +1489,24 @@ function productsById() {
   const raw = fs.readFileSync(path.join(__dirname, "data.js"), "utf8");
   const match = raw.match(/const products = (\[[\s\S]*?\]);\s*const productGalleries/);
   const products = match ? JSON.parse(match[1]) : [];
-  return Object.fromEntries(products.map((p) => [String(p.id), p]));
+  // Catalog prices in data.js are COST. Retail = cost + the staff-set markup,
+  // except where staff overrode a product's price directly (override = retail).
+  const markup = Number(getSettings().priceMarkupPercent) || 0;
+  const overrides = readStore("products", {});
+  return Object.fromEntries(products.map((p) => {
+    const out = { ...p };
+    if (markup > 0 && Number(out.pricePerSqft) > 0) {
+      out.basePricePerSqft = out.pricePerSqft;
+      out.pricePerSqft = Math.round(out.pricePerSqft * (1 + markup / 100) * 100) / 100;
+    }
+    const ov = overrides && overrides[p.id];
+    if (ov && typeof ov === "object") {
+      const { specs, ...rest } = ov;
+      Object.assign(out, rest);
+      if (specs && typeof specs === "object") out.specs = { ...out.specs, ...specs };
+    }
+    return [String(p.id), out];
+  }));
 }
 
 function productIsArchived(product) {
@@ -2857,6 +2911,7 @@ function siteBase(req) {
 function defaultSettings() {
   return {
     freightFlat: 149, garagePerCarton: 3, taxRate: 0.065, freeShipOver: 1200,
+    priceMarkupPercent: 0, // catalog price = cost in data.js + this markup
     businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
     businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
     businessHours: "",
