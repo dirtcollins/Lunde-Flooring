@@ -37,6 +37,105 @@
     }).join("") : '<div class="app-empty"><h3>No quotes yet</h3><p>Saved quotes from the storefront appear here.</p></div>';
   }
 
+  /* ---------- quote builder ---------- */
+  var qbPanel = document.getElementById("qbPanel");
+  var qbBody = document.getElementById("qbBody");
+  var qbLines = [];
+
+  function products() { return window.LUNDE_PUBLIC_PRODUCTS || window.LUNDE_PRODUCTS || []; }
+  function qbItems() {
+    var items = {};
+    qbLines.forEach(function (ln) {
+      if (ln.productId && ln.sqft > 0) {
+        items[ln.productId] = { sqft: (items[ln.productId] ? items[ln.productId].sqft : 0) + ln.sqft, samples: 0 };
+      }
+    });
+    return items;
+  }
+  function qbLineCalc(ln) {
+    var p = ln.productId && productById(ln.productId);
+    if (!p || !(ln.sqft > 0)) return "—";
+    return cartonsFor(p, ln.sqft) + " cartons · " + money(materialEstimate(p, ln.sqft));
+  }
+  function renderBuilder() {
+    var custOptions = '<option value="">Guest / manual entry</option>' + (L.customers ? L.customers() : []).map(function (c) {
+      return '<option value="' + esc(c.id) + '">' + esc(c.name || c.email) + (c.company ? " — " + esc(c.company) : "") + '</option>';
+    }).join("");
+    var lines = qbLines.map(function (ln, i) {
+      var opts = '<option value="">Choose a floor…</option>' + products().map(function (p) {
+        return '<option value="' + esc(p.id) + '"' + (p.id === ln.productId ? " selected" : "") + '>' + esc(p.title) + ' — ' + money(p.pricePerSqft) + '/sq ft</option>';
+      }).join("");
+      return '<div class="qb-line">' +
+        '<label class="qb-field"><span>Floor</span><select data-qb-product="' + i + '">' + opts + '</select></label>' +
+        '<label class="qb-field"><span>Sq. ft.</span><input type="number" min="0" step="1" value="' + (ln.sqft || "") + '" data-qb-sqft="' + i + '"></label>' +
+        '<span class="calc">' + qbLineCalc(ln) + '</span>' +
+        '<button class="rm" type="button" data-qb-rm="' + i + '">Remove</button></div>';
+    }).join("");
+    var t = L.cartTotals(qbItems());
+    qbBody.innerHTML =
+      '<div class="qb-grid2">' +
+        '<label class="qb-field"><span>Customer</span><select id="qbCustomer">' + custOptions + '</select></label>' +
+        '<label class="qb-field"><span>Job name</span><input id="qbJob" placeholder="e.g. Kitchen remodel" value="' + esc(qbJobVal) + '"></label>' +
+      '</div>' +
+      '<div class="qb-grid2" id="qbGuestRow"' + (qbCustomerVal ? ' hidden' : '') + '>' +
+        '<label class="qb-field"><span>Customer name</span><input id="qbGuestName" value="' + esc(qbGuestName) + '"></label>' +
+        '<label class="qb-field"><span>Customer email</span><input id="qbGuestEmail" type="email" value="' + esc(qbGuestEmail) + '"></label>' +
+      '</div>' +
+      lines +
+      '<div><button class="btn ghost" type="button" id="qbAddLine" style="min-height:40px">+ Add floor</button></div>' +
+      '<label class="qb-field"><span>Notes (shown on the quote)</span><textarea id="qbNotes">' + esc(qbNotesVal) + '</textarea></label>' +
+      '<div class="qb-total"><span>Quote subtotal</span><span>' + money(t.subtotal) + '</span></div>' +
+      '<div style="display:flex;gap:10px"><button class="btn" type="button" id="qbSave">Save quote</button><button class="btn ghost" type="button" id="qbCancel">Cancel</button></div>';
+    document.getElementById("qbCustomer").value = qbCustomerVal;
+  }
+  var qbCustomerVal = "", qbJobVal = "", qbNotesVal = "", qbGuestName = "", qbGuestEmail = "";
+  function qbSnapshot() {
+    qbCustomerVal = document.getElementById("qbCustomer").value;
+    qbJobVal = document.getElementById("qbJob").value;
+    qbNotesVal = document.getElementById("qbNotes").value;
+    qbGuestName = document.getElementById("qbGuestName").value;
+    qbGuestEmail = document.getElementById("qbGuestEmail").value;
+  }
+  function qbReset() { qbLines = [{ productId: "", sqft: 0 }]; qbCustomerVal = qbJobVal = qbNotesVal = qbGuestName = qbGuestEmail = ""; }
+
+  document.getElementById("qbToggle").addEventListener("click", function () {
+    if (qbPanel.hidden) { qbReset(); renderBuilder(); }
+    qbPanel.hidden = !qbPanel.hidden;
+    this.textContent = qbPanel.hidden ? "New quote" : "Close builder";
+  });
+
+  qbBody.addEventListener("change", function (e) {
+    qbSnapshot();
+    var pSel = e.target.closest("[data-qb-product]");
+    if (pSel) qbLines[Number(pSel.dataset.qbProduct)].productId = pSel.value;
+    var sq = e.target.closest("[data-qb-sqft]");
+    if (sq) qbLines[Number(sq.dataset.qbSqft)].sqft = Math.max(0, Number(sq.value) || 0);
+    if (e.target.id === "qbCustomer") document.getElementById("qbGuestRow").hidden = !!e.target.value;
+    if (pSel || sq) renderBuilder();
+  });
+
+  qbBody.addEventListener("click", function (e) {
+    if (e.target.id === "qbAddLine") { qbSnapshot(); qbLines.push({ productId: "", sqft: 0 }); renderBuilder(); return; }
+    if (e.target.id === "qbCancel") { qbPanel.hidden = true; document.getElementById("qbToggle").textContent = "New quote"; return; }
+    var rm = e.target.closest("[data-qb-rm]");
+    if (rm) { qbSnapshot(); qbLines.splice(Number(rm.dataset.qbRm), 1); if (!qbLines.length) qbLines.push({ productId: "", sqft: 0 }); renderBuilder(); return; }
+    if (e.target.id === "qbSave") {
+      qbSnapshot();
+      var items = qbItems();
+      if (!Object.keys(items).length) { if (L.showToast) L.showToast("Add at least one floor with square footage"); return; }
+      var rec = qbCustomerVal && L.customerById ? L.customerById(qbCustomerVal) : null;
+      var customer = rec
+        ? { name: rec.name || "", company: rec.company || "", email: rec.email || "", phone: rec.phone || "" }
+        : { name: qbGuestName.trim(), company: "", email: qbGuestEmail.trim(), phone: "" };
+      var q = L.saveQuoteFromCart(qbJobVal.trim() || "Staff quote", { items: items, customer: customer, customerId: rec ? rec.id : "", notes: qbNotesVal.trim() });
+      if (q) {
+        if (L.showToast) L.showToast("Quote " + q.id + " saved");
+        qbPanel.hidden = true; document.getElementById("qbToggle").textContent = "New quote";
+        render();
+      }
+    }
+  });
+
   listEl.addEventListener("click", function (e) {
     var conv = e.target.closest("[data-convert]");
     if (conv) {

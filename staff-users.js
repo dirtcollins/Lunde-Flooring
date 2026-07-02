@@ -50,17 +50,27 @@
       : '<span class="status-badge" data-status="cancelled"><i></i>Inactive</span>';
   }
 
+  function initialsOf(u) {
+    return (u.initials || (u.name || u.email || "?").split(" ").map(function (w) { return w[0]; }).join("")).slice(0, 2).toUpperCase();
+  }
+  function joined(u) {
+    if (!u.createdAt) return "";
+    var d = new Date(u.createdAt);
+    return isNaN(d) ? "" : "Added " + d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
   function userRow(u) {
     var self = u.id === session.id;
+    var meta = [joined(u), self ? "This is you" : ""].filter(Boolean).join(" · ");
     var actions =
       '<button class="btn ghost" type="button" data-edit="' + u.id + '" style="min-height:36px;padding:6px 12px">Edit</button>' +
       '<button class="btn ghost" type="button" data-toggle="' + u.id + '" style="min-height:36px;padding:6px 12px"' + (self ? ' disabled title="You can\'t deactivate your own account"' : '') + '>' + (u.active ? "Deactivate" : "Activate") + '</button>' +
       '<button class="btn ghost" type="button" data-remove="' + u.id + '" style="min-height:36px;padding:6px 12px;color:#b4322a"' + (self ? ' disabled title="You can\'t remove your own account"' : '') + '>Remove</button>';
-    return '<div class="row" style="grid-template-columns:1fr auto;gap:12px 16px;align-items:center;flex-wrap:wrap">' +
-        '<span style="min-width:0"><span class="row-title">' + esc(u.name) + (self ? ' <span class="row-sub">(you)</span>' : '') + '</span>' +
-        '<span class="row-sub" style="display:block;word-break:break-all">' + esc(u.email) + '</span></span>' +
+    return '<div class="row" style="grid-template-columns:44px 1fr auto;gap:12px 14px;align-items:center;flex-wrap:wrap">' +
+        '<span class="av" style="width:44px;height:44px;border-radius:999px;background:' + (u.active ? "var(--accent)" : "var(--stone)") + ';color:' + (u.active ? "#fff" : "var(--muted)") + ';display:grid;place-items:center;font-size:14px;font-weight:700">' + esc(initialsOf(u)) + '</span>' +
+        '<span style="min-width:0"><span class="row-title">' + esc(u.name) + '</span>' +
+        '<span class="row-sub" style="display:block;word-break:break-all">' + esc(u.email) + (meta ? ' · ' + meta : '') + '</span></span>' +
         '<span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end">' + roleBadge(u.role) + statusBadge(u.active) + '</span>' +
-        '<span style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap">' + actions + '</span>' +
+        '<span style="grid-column:2/-1;display:flex;gap:8px;flex-wrap:wrap">' + actions + '</span>' +
       '</div>';
   }
 
@@ -101,7 +111,7 @@
         '<div class="rowlist">' + (users.map(userRow).join("") || '<div class="panel-pad"><p class="row-sub">No staff accounts yet.</p></div>') + '</div></div>';
 
     mount.innerHTML =
-      '<div class="app-head"><div><p class="eyebrow">Team</p><h1>Staff accounts</h1></div>' +
+      '<div class="app-head"><div><p class="eyebrow">Team</p><h1>Staff accounts</h1><p>Owners manage accounts; Managers and Staff get full console access without account management.</p></div>' +
         (editing ? "" : '<button class="btn" type="button" id="addBtn" style="min-height:42px">Add staff account</button>') +
       '</div>' +
       (editing ? formPanel() : "") +

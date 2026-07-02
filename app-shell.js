@@ -17,7 +17,7 @@
     ["quotes", "Quotes", "quotes.html", '<path d="M5 3h10l4 4v14H5z"/><path d="M14 3v5h5"/><path d="M8 13h8M8 17h6"/>'],
     ["reports", "Reports", "reports.html", '<path d="M4 20V4"/><path d="M4 20h16"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/>'],
     ["messages", "Messages", "messages.html", '<path d="M4 5h16v11H9l-4 4V5Z"/>'],
-    ["settings", "Settings", "settings.html", '<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>']
+    ["settings", "Settings", "settings.html", '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>']
   ];
   // Owners can manage staff accounts; hidden for everyone else (server also enforces).
   if (session.role === "Owner" || session.canManageAdmins) {
@@ -41,11 +41,20 @@
     '<div class="app-top-spacer"></div><span class="app-top-date">' + dateStr + '</span>' +
     '<a class="app-top-date" href="./index.html" style="text-decoration:underline;text-underline-offset:3px">View store ↗</a></header>';
 
+  // App-style bottom tab bar for phones: the four everyday destinations plus
+  // "More", which opens the full sidebar menu (same as the burger).
+  var TAB_KEYS = ["dashboard", "orders", "customers", "quotes"];
+  var tabbar = '<nav class="app-tabbar" aria-label="Console navigation">' +
+    NAV.filter(function (n) { return TAB_KEYS.indexOf(n[0]) > -1; }).map(function (n) {
+      return '<a href="./' + n[2] + '"' + (n[0] === active ? ' aria-current="page"' : '') + '>' + ic(n[3]) + '<span>' + n[1] + '</span></a>';
+    }).join("") +
+    '<button type="button" id="appMoreTab"' + (TAB_KEYS.indexOf(active) === -1 ? ' class="on"' : '') + '>' + ic('<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>') + '<span>More</span></button></nav>';
+
   var main = document.querySelector("main");
   var content = main ? main.innerHTML : "";
   var app = document.createElement("div");
   app.className = "app"; app.id = "app";
-  app.innerHTML = side + '<div class="app-main">' + topbar + '<div class="app-content">' + content + '</div></div>';
+  app.innerHTML = side + '<div class="app-main">' + topbar + '<div class="app-content">' + content + '</div></div>' + tabbar;
   if (main) main.remove();
   document.body.insertBefore(app, document.body.firstChild);
 
@@ -61,6 +70,8 @@
   function toggle() { app.classList.toggle("nav-open"); }
   burger.addEventListener("click", toggle);
   scrim.addEventListener("click", toggle);
+  var moreTab = document.getElementById("appMoreTab");
+  if (moreTab) moreTab.addEventListener("click", toggle);
 
   window.lundeSession = session;
 })();

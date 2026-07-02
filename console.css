@@ -170,11 +170,35 @@ a.tbl-row:hover { background: var(--paper); }
 @media (max-width: 1100px) { .kpis { grid-template-columns: repeat(2, 1fr); } .cols-2, .cols-2-even { grid-template-columns: 1fr; } }
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
-  .app-side { position: fixed; left: 0; top: 0; width: 258px; transform: translateX(-100%); transition: transform .25s var(--ease); }
+  .app-side { position: fixed; left: 0; top: 0; width: 258px; transform: translateX(-100%); transition: transform .25s var(--ease); z-index: 45; }
   .app.nav-open .app-side { transform: none; box-shadow: 0 0 60px rgba(0,0,0,.4); }
-  .app-scrim { display: none; position: fixed; inset: 0; background: rgba(20,18,15,0.4); z-index: 39; }
+  .app-scrim { display: none; position: fixed; inset: 0; background: rgba(20,18,15,0.4); z-index: 44; }
   .app.nav-open .app-scrim { display: block; }
   .app-burger { display: inline-grid; place-items: center; width: 40px; height: 40px; color: var(--ink); }
   .app-burger svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 }
 @media (max-width: 560px) { .kpis { grid-template-columns: 1fr; } .app-search { display: none; } }
+
+/* app-style bottom tab bar for phones (mirrors the storefront .v6-tabbar) */
+.app-tabbar { display: none; }
+@media (max-width: 900px) {
+  .app-content { padding-bottom: calc(86px + env(safe-area-inset-bottom)); }
+  .app-tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    min-height: calc(64px + env(safe-area-inset-bottom));
+    padding: 7px max(8px, env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right));
+    background: rgba(255,255,255,0.96);
+    -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -12px 30px rgba(0,0,0,0.08);
+  }
+  .app-tabbar a, .app-tabbar button {
+    display: grid; justify-items: center; align-content: center; gap: 4px;
+    font: inherit; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--muted); background: none; border: 0; cursor: pointer; padding: 0;
+  }
+  .app-tabbar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .app-tabbar a[aria-current="page"], .app-tabbar button.on { color: var(--ink); }
+  .app-tabbar a[aria-current="page"] svg, .app-tabbar button.on svg { color: var(--accent); }
+}

@@ -267,6 +267,26 @@
   function setMyDefaultAddress(addrId) { const c = currentCustomer(); if (c) setDefaultAddress(c.id, addrId); }
 
 
+  /* Store-wide pricing/settings: server-backed, cached locally, constants as fallback. */
+  const SETTINGS_KEY = "lunde_settings_v1";
+  function siteSettings() {
+    return {
+      freightFlat: FREIGHT_FLAT, garagePerCarton: GARAGE_PLACEMENT_PER_CARTON,
+      taxRate: TAX_RATE, freeShipOver: FREE_FREIGHT_MIN,
+      ...readJson(SETTINGS_KEY, {})
+    };
+  }
+  async function pullSettings() {
+    const data = await api(`${API_BASE}/settings`);
+    if (data && data.ok && data.settings) writeJson(SETTINGS_KEY, data.settings);
+    return data;
+  }
+  async function updateSettings(patch) {
+    const data = await api(`${API_BASE}/settings`, { method: "PATCH", body: patch });
+    if (data && data.ok && data.settings) writeJson(SETTINGS_KEY, data.settings);
+    return data;
+  }
+
   function cartTotals(items, delivery, placement, promoCode) {
     let material = 0, samples = 0, cartons = 0;
     for (const [id, entry] of Object.entries(items || cart())) {
@@ -284,12 +304,13 @@
       ? Math.min(subtotal, promo.type === "percent" ? subtotal * promo.value : promo.value)
       : 0;
     const discountedSubtotal = Math.max(0, subtotal - discount);
-    const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * GARAGE_PLACEMENT_PER_CARTON;
-    // Honor the advertised "free local delivery over $1,200" promise (topbar/cart/home copy).
-    const freeDelivery = discountedSubtotal >= FREE_FREIGHT_MIN;
-    const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : FREIGHT_FLAT;
+    // Pricing knobs come from staff Settings (cached), constants as fallback.
+    const s = siteSettings();
+    const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * s.garagePerCarton;
+    const freeDelivery = discountedSubtotal >= s.freeShipOver;
+    const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : s.freightFlat;
     const freight = baseFreight + garagePlacement;
-    const tax = discountedSubtotal * TAX_RATE;
+    const tax = discountedSubtotal * s.taxRate;
     return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
   }
 
@@ -335,7 +356,8 @@
       if (typeof patch.staffNotes === "string") {
         const text = patch.staffNotes.trim();
         const prior = coerceStaffNotes(order.staffNotes, order.createdAt);
-        next.staffNotes = text ? [...prior, { at: Date.now(), author: "You", text }] : prior;
+        const author = (typeof window !== "undefined" && window.lundeSession && window.lundeSession.name) || "Staff";
+        next.staffNotes = text ? [...prior, { at: Date.now(), author, text }] : prior;
       }
       return next;
     });
@@ -363,7 +385,7 @@
     if (!Object.keys(items).length) return null;
     const t = cartTotals(items);
     const customer = currentCustomer();
-    const detail = customer ? customerDetails(customer) : (o.customer || {});
+    const detail = o.customer || (customer ? customerDetails(customer) : {});
     const quote = {
       id: newQuoteId(),
       createdAt: Date.now(),
@@ -371,7 +393,7 @@
       status: "saved",
       job: String(job || "Saved quote").trim() || "Saved quote",
       notes: String(o.notes || "").trim(),
-      customerId: customer ? customer.id : "",
+      customerId: o.customerId || (customer ? customer.id : ""),
       items: JSON.parse(JSON.stringify(items)),
       totals: { material: t.material, samples: t.samples, cartons: t.cartons, subtotal: t.subtotal, total: t.total },
       customer: { name: detail.name || "", company: detail.company || "", email: detail.email || "", phone: detail.phone || "" }
@@ -543,7 +565,7 @@
     return data;
   }
   async function syncFromServer() {
-    await Promise.all([pullOrders(), pullInventory(), pullCustomers(), pullProducts(), pullNotes(), pullQuotes()]);
+    await Promise.all([pullOrders(), pullInventory(), pullCustomers(), pullProducts(), pullNotes(), pullQuotes(), pullSettings()]);
     return apiOnline === true;
   }
 
@@ -1359,6 +1381,7 @@
     signInCustomerRemote, hydrateCustomerSession, accountOrders, saveAccountProfile,
     resendVerificationEmail, verifyCustomerEmail, requestPasswordReset, resetCustomerPassword, updateCustomerPassword,
     STATUSES, STATUS_LABELS, FREIGHT_FLAT, TAX_RATE, parseDims,
+    siteSettings, pullSettings, updateSettings,
     favorites, isFavorite, toggleFavorite,
     recentlyViewed, trackRecentlyViewed, clearRecentlyViewed,
     inventory, setStock, decrementStock, stockInfo,
@@ -1376,4 +1399,5 @@
   mountModeToggle();
   renderHeaderCount();
   hydrateCustomerSession();
+  pullSettings().catch(() => {}); // keep cached pricing/settings fresh on every page
 })();

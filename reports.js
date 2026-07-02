@@ -92,6 +92,7 @@
         '<div class="panel"><div class="panel-head"><h2>Orders by status</h2></div><div class="panel-pad"><div class="bars">' +
           STATUSES.concat(["cancelled"]).filter(function (s) { return byStatus[s]; }).map(function (s) { return bar(STATUS_LABELS[s], byStatus[s], statusMax, byStatus[s]); }).join("") + '</div></div></div>' +
       '</div>' +
+      '<div class="panel" style="margin-top:18px"><div class="panel-head"><h2>Site traffic — last 14 days</h2><span class="row-sub" id="trafficSummary">Loading…</span></div><div class="panel-pad" id="trafficPanel"><p class="row-sub">Counting storefront visits…</p></div></div>' +
       '<div class="cols-2-even" style="margin-top:18px">' +
         '<div class="panel"><div class="panel-head"><h2>Top customers</h2><a href="./customers.html">All →</a></div><div class="rep-custs">' +
           (topCust.length ? topCust.map(function (c, i) {
@@ -105,6 +106,46 @@
 
     var btn = document.getElementById("exportCsv");
     if (btn) btn.addEventListener("click", exportCsv);
+    loadTraffic();
+  }
+
+  /* Site traffic: first-party counts from /api/traffic (views + unique visitors). */
+  function loadTraffic() {
+    var panel = document.getElementById("trafficPanel");
+    var summary = document.getElementById("trafficSummary");
+    if (!panel) return;
+    fetch("/api/traffic", { credentials: "same-origin", headers: { Accept: "application/json" } })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { panel.innerHTML = '<p class="row-sub">Traffic data unavailable.</p>'; return; }
+        var days = d.days || [];
+        var last14 = days.slice(-14), last7 = days.slice(-7), last30 = days;
+        var sum = function (list, k) { return list.reduce(function (s, x) { return s + (x[k] || 0); }, 0); };
+        summary.textContent = sum(last7, "uniques") + " visitors · " + sum(last7, "views") + " views this week";
+        var max = Math.max.apply(null, last14.map(function (x) { return x.views; }).concat([1]));
+        var bars = last14.map(function (x) {
+          var h = Math.max(2, Math.round(x.views / max * 100));
+          var label = new Date(x.date + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          return '<div class="repbar" title="' + label + ': ' + x.views + ' views · ' + x.uniques + ' visitors">' +
+            '<b>' + (x.views || "—") + '</b>' +
+            '<span class="rb-fill' + (x.views ? "" : " is-zero") + '" style="height:' + h + '%"></span>' +
+            '<small>' + label.replace(" ", "&nbsp;") + '</small></div>';
+        }).join("");
+        var pages = (d.topPages || []).slice(0, 6);
+        var pageMax = Math.max.apply(null, pages.map(function (p) { return p.views; }).concat([1]));
+        panel.innerHTML =
+          '<div class="kpis" style="margin-bottom:18px">' +
+            '<div class="kpi"><span class="kpi-label">Visitors (7 days)</span><span class="kpi-num">' + sum(last7, "uniques").toLocaleString() + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Views (7 days)</span><span class="kpi-num">' + sum(last7, "views").toLocaleString() + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Visitors (30 days)</span><span class="kpi-num">' + sum(last30, "uniques").toLocaleString() + '</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Views (30 days)</span><span class="kpi-num">' + sum(last30, "views").toLocaleString() + '</span></div>' +
+          '</div>' +
+          '<div class="repchart">' + bars + '</div>' +
+          (pages.length ? '<div class="bars" style="margin-top:20px">' + pages.map(function (p) {
+            return '<div class="bar-row"><span class="lab">' + esc(p.path) + '</span><span class="bar-track"><span class="bar-fill" style="width:' + Math.max(3, Math.round(p.views / pageMax * 100)) + '%"></span></span><span class="val">' + p.views + '</span></div>';
+          }).join("") + '</div>' : '');
+      })
+      .catch(function () { panel.innerHTML = '<p class="row-sub">Traffic data unavailable.</p>'; });
   }
 
   function exportCsv() {

@@ -215,7 +215,7 @@ async function handleApi(req, res, url) {
   const input = parseJson(raw);
 
   if (parts[0] === "settings" && method === "GET") {
-    const body = { ok: true, settings: readStore("settings", defaultSettings()) };
+    const body = { ok: true, settings: getSettings() };
     const staff = currentStaff(req);
     if (staff) {
       body.email = {
@@ -226,8 +226,55 @@ async function handleApi(req, res, url) {
         from: config.fromEmail,
         adminBaseUrl: config.adminBaseUrl
       };
+      body.integrations = {
+        stripe: Boolean(config.stripeSecretKey),
+        stripeWebhook: Boolean(config.stripeWebhookSecret),
+        resend: Boolean(config.resendApiKey),
+        supabase: Boolean(config.supabaseUrl && config.supabaseServiceRoleKey),
+        dataBackend: config.supabaseUrl && config.supabaseServiceRoleKey ? "supabase" : "local-files"
+      };
     }
     return json(res, body);
+  }
+
+  if (parts[0] === "traffic" && method === "GET") {
+    const denied = requireStaff(req, res);
+    if (denied) return;
+    const days = loadTraffic();
+    const series = [];
+    for (let i = 29; i >= 0; i--) {
+      const key = trafficDayKey(Date.now() - i * 86400000);
+      const d = days[key] || {};
+      series.push({ date: key, views: d.views || 0, uniques: d.uniques || 0 });
+    }
+    const pageTotals = {};
+    for (let i = 6; i >= 0; i--) {
+      const d = days[trafficDayKey(Date.now() - i * 86400000)];
+      if (d && d.pages) for (const [p, n] of Object.entries(d.pages)) pageTotals[p] = (pageTotals[p] || 0) + n;
+    }
+    const topPages = Object.entries(pageTotals).sort((a, b) => b[1] - a[1]).slice(0, 10)
+      .map(([pagePath, views]) => ({ path: pagePath, views }));
+    return json(res, { ok: true, days: series, topPages });
+  }
+
+  if (parts[0] === "settings" && method === "PATCH") {
+    const denied = requireStaff(req, res);
+    if (denied) return;
+    const cur = getSettings();
+    const patch = input && typeof input === "object" ? input : {};
+    const num = (v, min, max, fallback) => { const n = Number(v); return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback; };
+    if (patch.freightFlat !== undefined) cur.freightFlat = num(patch.freightFlat, 0, 10000, cur.freightFlat);
+    if (patch.garagePerCarton !== undefined) cur.garagePerCarton = num(patch.garagePerCarton, 0, 100, cur.garagePerCarton);
+    if (patch.taxRate !== undefined) cur.taxRate = num(patch.taxRate, 0, 0.25, cur.taxRate);
+    if (patch.freeShipOver !== undefined) cur.freeShipOver = num(patch.freeShipOver, 0, 100000, cur.freeShipOver);
+    for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo"]) {
+      if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
+    }
+    for (const key of ["emailOrderConfirmation", "emailDeliveryNotice"]) {
+      if (patch[key] !== undefined) cur[key] = Boolean(patch[key]);
+    }
+    writeStore("settings", cur);
+    return json(res, { ok: true, settings: cur });
   }
 
   if (parts[0] === "stripe") {
@@ -1237,6 +1284,11 @@ async function serveStatic(req, res, url) {
   if (!fs.existsSync(filePath) && !path.extname(filePath)) filePath += ".html";
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) return notFound(res);
   const ext = path.extname(filePath).toLowerCase();
+  // First-party page-view counting: public HTML pages only, never staff/console.
+  if (ext === ".html" && req.method === "GET" && !STAFF_PAGES.has(basename) &&
+      !["admin.html", "login.html", "staff-reset.html"].includes(basename)) {
+    recordPageView(req, basename);
+  }
   const stat = fs.statSync(filePath);
   const lastModified = stat.mtime.toUTCString();
   const etag = `"${stat.size.toString(36)}-${Math.floor(stat.mtimeMs).toString(36)}"`;
@@ -1474,12 +1526,13 @@ function computeOrderTotals(items, delivery, placement, promoCode) {
   const promo = promoForCode(promoCode);
   const discount = promo ? Math.min(subtotal, promo.type === "percent" ? subtotal * promo.value : promo.value) : 0;
   const discountedSubtotal = Math.max(0, subtotal - discount);
-  const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * 3;
-  // Must match the client (store.js cartTotals): free local delivery at/above $1,200.
-  const freeDelivery = discountedSubtotal >= 1200;
-  const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : 149;
+  // Pricing knobs come from staff Settings (with the historical values as defaults).
+  const pricing = getSettings();
+  const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * pricing.garagePerCarton;
+  const freeDelivery = discountedSubtotal >= pricing.freeShipOver;
+  const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : pricing.freightFlat;
   const freight = baseFreight + garagePlacement;
-  const tax = discountedSubtotal * 0.065;
+  const tax = discountedSubtotal * pricing.taxRate;
   return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
 }
 
@@ -1671,6 +1724,7 @@ async function sendCustomerConfirmation(order, source) {
 async function sendCustomerEmail(order, source) {
   const to = clean(order.customer?.email, 180);
   if (!to) return { status: "skipped", error: "Order has no customer email." };
+  if (!getSettings().emailOrderConfirmation) return { status: "skipped", recipient: to, error: "Order confirmation emails are turned off in Settings." };
   if (!config.resendApiKey) return { status: "skipped", recipient: to, error: "RESEND_API_KEY is not configured." };
   const base = config.siteBaseUrl || config.adminBaseUrl || "";
   const template = buildCustomerEmail(order, base ? `${base}/account` : "");
@@ -1682,7 +1736,7 @@ async function sendCustomerEmail(order, source) {
       // one confirmation per order, even if the Stripe webhook retries
       "Idempotency-Key": `lunde-confirm-${order.id}`
     },
-    body: JSON.stringify({ from: config.fromEmail, to: [to], subject: `Your Lunde Flooring order ${order.id} is confirmed`, ...template })
+    body: JSON.stringify({ from: config.fromEmail, to: [to], subject: `Your Lunde Flooring order ${order.id} is confirmed`, ...template, ...replyToField() })
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) return { status: "failed", recipient: to, error: clean(data.message || `Resend HTTP ${response.status}`, 600) };
@@ -1757,11 +1811,17 @@ async function sendTransactionalEmail({ to, subject, html, text, idempotencyKey 
       "Content-Type": "application/json",
       "Idempotency-Key": clean(idempotencyKey, 180)
     },
-    body: JSON.stringify({ from: config.fromEmail, to: [recipient], subject, html, text })
+    body: JSON.stringify({ from: config.fromEmail, to: [recipient], subject, html, text, ...replyToField() })
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) return { status: "failed", recipient, error: clean(data.message || `Resend HTTP ${response.status}`, 600) };
   return { status: "sent", recipient, messageId: clean(data.id, 180) };
+}
+
+/* Optional reply-to from staff Settings, spread into Resend payloads. */
+function replyToField() {
+  const replyTo = clean(getSettings().emailReplyTo, 180);
+  return replyTo ? { reply_to: replyTo } : {};
 }
 
 async function sendCustomerPaymentUpdate(order, kind, options) {
@@ -1792,6 +1852,9 @@ async function sendCustomerPaymentUpdate(order, kind, options) {
 }
 
 async function sendCustomerDeliveryEmail(order, staff) {
+  if (!getSettings().emailDeliveryNotice) {
+    return { status: "skipped", recipient: order.customer?.email || "", error: "Delivery notice emails are turned off in Settings." };
+  }
   const url = config.siteBaseUrl ? `${config.siteBaseUrl}/my-order.html?id=${encodeURIComponent(order.id)}` : "";
   const template = buildDeliveryEmail(order, url || config.siteBaseUrl || "https://lundeflooring.com/");
   const result = await sendTransactionalEmail({
@@ -2588,8 +2651,65 @@ function siteBase(req) {
 }
 
 function defaultSettings() {
-  return { freightFlat: 149, garagePerCarton: 3, taxRate: 0.065, freeShipOver: 1200 };
+  return {
+    freightFlat: 149, garagePerCarton: 3, taxRate: 0.065, freeShipOver: 1200,
+    businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
+    businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
+    businessHours: "",
+    emailOrderConfirmation: true, emailDeliveryNotice: true, emailReplyTo: ""
+  };
 }
+
+/* Stored settings merged over defaults, so new fields appear without migrations. */
+function getSettings() {
+  return { ...defaultSettings(), ...readStore("settings", {}) };
+}
+
+/* ---------- site traffic (first-party, cookie-free, staff-only reporting) ----------
+   Counts storefront HTML page views per day with an approximate unique-visitor
+   count (salted daily hash of ip+ua — never stored raw, resets every day).
+   Buffered in memory and flushed to the store at most every 30s so Supabase
+   isn't written on every page view. */
+const trafficState = { days: null, dirty: false };
+function trafficDayKey(ts = Date.now()) { return new Date(ts).toISOString().slice(0, 10); }
+function loadTraffic() {
+  if (!trafficState.days) {
+    const stored = readStore("traffic", { days: {} });
+    trafficState.days = stored && stored.days ? stored.days : {};
+  }
+  return trafficState.days;
+}
+function recordPageView(req, basename) {
+  try {
+    const ua = String(req.headers["user-agent"] || "");
+    if (!ua || /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|lighthouse|headless|pingdom|uptime|monitor/i.test(ua)) return;
+    if (currentStaff(req)) return; // staff browsing the store shouldn't inflate numbers
+    const days = loadTraffic();
+    const key = trafficDayKey();
+    const day = days[key] || (days[key] = { views: 0, uniques: 0, hashes: [], pages: {} });
+    day.views += 1;
+    const visitorHash = crypto.createHash("sha256")
+      .update(`${clientIp(req)}|${ua}|${key}|${config.authSecret}`)
+      .digest("hex").slice(0, 16);
+    if (day.hashes.length < 5000 && !day.hashes.includes(visitorHash)) {
+      day.hashes.push(visitorHash);
+      day.uniques += 1;
+    }
+    const page = basename === "index.html" ? "/" : `/${basename}`;
+    if (Object.keys(day.pages).length < 200 || day.pages[page] !== undefined) {
+      day.pages[page] = (day.pages[page] || 0) + 1;
+    }
+    const keys = Object.keys(days).sort();
+    while (keys.length > 60) delete days[keys.shift()]; // keep ~2 months
+    trafficState.dirty = true;
+  } catch { /* analytics must never break a page load */ }
+}
+setInterval(() => {
+  if (trafficState.dirty && trafficState.days) {
+    trafficState.dirty = false;
+    try { writeStore("traffic", { days: trafficState.days }); } catch { trafficState.dirty = true; }
+  }
+}, 30 * 1000).unref();
 
 function trimSlash(value) {
   return String(value || "").replace(/\/+$/, "");
