@@ -982,6 +982,7 @@ async function handleCustomerAccounts(req, res, method, parts, input) {
     if (patch.company !== undefined) account.company = clean(patch.company, 180);
     if (patch.phone !== undefined) account.phone = clean(patch.phone, 80);
     if (Array.isArray(patch.addresses)) account.addresses = patch.addresses.slice(0, 20).map(normalizeAddress);
+    if (Array.isArray(patch.favorites)) account.favorites = [...new Set(patch.favorites.slice(0, 200).map((v) => clean(v, 80)).filter(Boolean))];
     if (patch.notifications && typeof patch.notifications === "object") {
       const prefs = {};
       for (const key of ["samplesFollowUp", "newCollections", "promotions"]) {
