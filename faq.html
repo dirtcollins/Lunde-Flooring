@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./interior.css">
     <style>
-      .faq-cat { font-size: clamp(22px, 3vw, 32px); font-weight: 600; letter-spacing: -0.01em; margin: 56px 0 20px; display:flex; align-items:center; gap:14px; }
+      .faq-cat { font-size: clamp(22px, 3vw, 32px); font-weight: 600; letter-spacing: -0.01em; line-height: 1; margin: 56px 0 20px; display:flex; align-items:center; gap:12px; }
       .faq-cat:first-child { margin-top: 0; }
-      .faq-cat .faq-cat-ic { width: 26px; height: 26px; color: var(--accent); flex:none; }
-      .faq-cat .faq-cat-ic svg { width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.4; }
+      .faq-cat .faq-cat-ic { width: 0.95em; height: 0.95em; color: var(--accent); flex:none; }
+      .faq-cat .faq-cat-ic svg { display:block; width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
       .faq-search { display: flex; align-items: center; gap: 10px; max-width: 560px;
         border: 1px solid var(--line-2); border-radius: 0; padding: 15px 18px; background: var(--panel); transition: border-color .15s, box-shadow .15s; }
       .faq-search:focus-within { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
@@ -50,7 +50,7 @@
       <section class="section">
         <div class="wrap" style="max-width:980px">
 
-          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"></path><path d="M4 7l4-3h8l4 3M9 12h6"></path></svg></span>Product basics</h2>
+          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14"></rect><path d="M3 9.67h18M3 14.33h18M9 5v4.67M15 9.67v4.66M9 14.33V19"></path></svg></span>Product basics</h2>
           <div class="faq-list">
             <details open><summary>What type of flooring does Lunde sell?</summary><p>Lunde sells crafted luxury vinyl plank flooring with rigid waterproof core options, attached pad where applicable, matte wear surfaces, and painted bevel details. Product pages list each floor's thickness, wear layer, carton coverage, installation method, and grade rating.</p></details>
             <details><summary>What is a wear layer and why does it matter?</summary><p>The wear layer is the top protective surface of the plank. It helps protect the floor from everyday traffic, scuffs, and surface wear. Lunde product data currently lists 20 mil wear layer products and commercial-grade wear layer products, depending on the floor.</p></details>
@@ -61,7 +61,7 @@
             <details><summary>Will the floor look exactly like the sample or website photo?</summary><p>Samples and photos are useful for choosing a color family, but they may not show every plank variation. Natural-looking flooring can vary in pattern, tone, and texture. Review samples in your own lighting and blend cartons during installation.</p></details>
           </div>
 
-          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24"><path d="M4 20h7l9-9-4-4-9 9z"></path><path d="M13 6l5 5"></path></svg></span>Installation</h2>
+          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="9" width="19" height="6"></rect><circle cx="12" cy="12" r="1.8"></circle><path d="M6.5 9v6M17.5 9v6"></path></svg></span>Installation</h2>
           <div class="faq-list">
             <details><summary>Should I inspect the flooring before installation?</summary><p>Yes. Confirm the style, color, quantity, carton condition, and visible product quality before installation begins. Do not install visibly defective material. Save carton labels, order records, site notes, and photos for warranty documentation.</p></details>
             <details><summary>Should the flooring acclimate before installation?</summary><p>Yes. Lunde's install page already tells customers to inspect, acclimate, moisture test, and then install. Keep cartons indoors in the installation environment and follow the applicable installation guide before work begins.</p></details>
@@ -79,7 +79,7 @@
             <details><summary>Can I use extra underlayment?</summary><p>Do not add extra underlayment unless the specific product installation guide allows it. The updated Lunde warranty page says the floor must be installed without additional underlayment beyond the attached 1.5 mm padding.</p></details>
           </div>
 
-          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24"><path d="M12 3s5 6 5 10a5 5 0 0 1-10 0c0-4 5-10 5-10Z"></path></svg></span>Care &amp; maintenance</h2>
+          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4l1.7 4.3L16 10l-4.3 1.7L10 16l-1.7-4.3L4 10l4.3-1.7z"></path><path d="M18 13l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"></path></svg></span>Care &amp; maintenance</h2>
           <div class="faq-list">
             <details><summary>What cleaner should I use?</summary><p>Use a damp microfiber mop and a pH-neutral hard-surface cleaner. Plain water is often enough for routine cleaning. Do not use wax, polish, steam mops, mop-and-shine products, or harsh cleaners.</p></details>
             <details><summary>Are steam mops okay?</summary><p>No. Steam can force heat and moisture into seams and edges. Use a damp microfiber mop instead.</p></details>
@@ -89,7 +89,7 @@
             <details><summary>Can one damaged plank be replaced?</summary><p>Often yes, but replacing a plank in the middle of a floor is advanced work. Keep attic stock from the original order so future repairs have the best chance of matching.</p></details>
           </div>
 
-          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span>Warranty</h2>
+          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 6.5-7 9-4-2.5-7-5-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span>Warranty</h2>
           <div class="faq-list">
             <details><summary>What does the Stoneform warranty cover?</summary><p>The updated Lunde warranty page describes limited wear and structure coverage for manufacturing defects, including qualifying warping, cracking, delaminating, and wear-through under normal approved use.</p></details>
             <details><summary>How long is the warranty?</summary><p>The updated Lunde warranty page lists 20-year limited residential coverage for 12, 20, and 30 mil Stoneform flooring. It also lists 10-year commercial coverage for 20 mil light commercial and 30 mil medium commercial products.</p></details>
@@ -98,7 +98,7 @@
             <details><summary>What records should I keep for a warranty claim?</summary><p>Keep the sales order, receipt, carton labels, product details, purchase date, installation notes, site-condition records, and photos. Report visible defects before installation.</p></details>
           </div>
 
-          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"></path><circle cx="7.5" cy="18" r="1.6"></circle><circle cx="17.5" cy="18" r="1.6"></circle></svg></span>Shipping &amp; ordering</h2>
+          <h2 class="faq-cat"><span class="faq-cat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h13l3 4v4H4z"></path><circle cx="8" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg></span>Shipping &amp; ordering</h2>
           <div class="faq-list">
             <details><summary>How is flooring delivered?</summary><p>Flooring orders ship by freight or may be prepared for warehouse pickup. Freight carriers deliver curbside or to the driveway. Inspect the shipment and note visible pallet or carton damage before signing.</p></details>
             <details><summary>How much does shipping cost?</summary><p>Lunde's shipping page says flat-rate delivery starts at $149 and orders over $1,200 qualify for free curbside freight in the checkout estimate.</p></details>
