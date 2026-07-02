@@ -102,7 +102,8 @@
         '<span class="v6-card-coll">' + shortColl(p.collection) + '</span>' +
         '<span class="v6-card-name">' + p.title + '</span>' +
         '<span class="v6-card-size"><i style="width:' + barW + 'px;height:' + barH + 'px"></i>' + d.label + ' · ' + p.specs.thickness + '</span>' +
-        '<span class="v6-card-price"><b>' + money(p.pricePerSqft) + '</b><span> / sq. ft.</span> &nbsp;·&nbsp; ' + money(cartonPrice(p)) + ' carton</span>' +
+        '<span class="v6-card-price"><b>' + money(p.pricePerSqft) + '</b><span> / sq. ft.</span></span>' +
+        '<span class="v6-card-carton">' + money(cartonPrice(p)) + ' / carton</span>' +
       '</a>' +
     '</article>';
   }

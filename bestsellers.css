@@ -25,3 +25,15 @@
 @media (max-width:960px){ .bestsellers .pgrid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:600px){ .bestsellers .pgrid{gap:20px 12px} .bestsellers .nm{font-size:14px} }
 @media (prefers-reduced-motion: reduce){ .bestsellers .pcard:hover,.bestsellers .pcard:focus-within{transform:none} }
+
+/* ============================================================
+   V7 card skin for the catalog grid — same concepts applied to
+   the existing .v6-card markup (fav/compare/sample untouched).
+   ============================================================ */
+.cat-grid .v6-card{background:#fff;border:1px solid #ebe7e0;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.cat-grid .v6-card:hover,.cat-grid .v6-card:focus-within{transform:translateY(-4px);box-shadow:0 22px 44px -26px rgba(30,26,20,.45)}
+.cat-grid .v6-card-media{aspect-ratio:1/1;background:#f2efe9}
+.cat-grid .v6-card-body{padding:13px 14px 15px}
+.cat-grid .v6-card-coll{font-size:10.5px;letter-spacing:.05em;color:#8a837a}
+.cat-grid .v6-card-carton{font-size:11.5px;color:#8a837a;margin-top:-2px}
+@media (prefers-reduced-motion: reduce){ .cat-grid .v6-card:hover,.cat-grid .v6-card:focus-within{transform:none;box-shadow:none} }
