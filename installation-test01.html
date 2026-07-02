@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Installation Guide (Concept 01 — The Manual) — Lunde Flooring Co.</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+    <style>
+      /* Concept 01 — "The Manual": a chaptered, numbered install guide
+         with a sticky chapter rail that tracks scroll position. */
+      .it1-hero { border-bottom:1px solid var(--line); background:var(--paper-2); }
+      .it1-hero-in { max-width:var(--maxw); margin-inline:auto; padding:clamp(56px,8vw,110px) var(--gutter) clamp(40px,5vw,72px); display:grid; grid-template-columns:1.2fr .8fr; gap:clamp(28px,5vw,80px); align-items:end; }
+      .it1-hero h1 { font-size:clamp(38px,5.4vw,74px); font-weight:600; letter-spacing:-0.02em; line-height:0.98; margin:14px 0 0; text-wrap:balance; }
+      .it1-hero-note { border-left:3px solid var(--accent); padding-left:18px; color:var(--muted); max-width:34ch; }
+      .it1-hero-note b { color:var(--ink); display:block; margin-bottom:6px; font-size:15px; }
+      @media (max-width:860px){ .it1-hero-in { grid-template-columns:1fr; align-items:start; } }
+
+      .it1-layout { max-width:var(--maxw); margin-inline:auto; padding:clamp(40px,5vw,72px) var(--gutter) clamp(56px,7vw,104px); display:grid; grid-template-columns:250px 1fr; gap:clamp(32px,5vw,88px); align-items:start; }
+      .it1-rail { position:sticky; top:96px; display:grid; gap:2px; }
+      .it1-rail a { display:flex; gap:14px; align-items:baseline; padding:11px 14px; font-size:13.5px; font-weight:600; color:var(--muted); border-left:2px solid var(--line); transition:color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease); }
+      .it1-rail a i { font-style:normal; font-size:11px; font-weight:800; letter-spacing:.06em; color:var(--faint); }
+      .it1-rail a:hover { color:var(--ink); }
+      .it1-rail a.on { color:var(--ink); border-color:var(--accent); background:var(--paper-2); }
+      .it1-rail a.on i { color:var(--accent); }
+      @media (max-width:860px){ .it1-layout { grid-template-columns:1fr; } .it1-rail { position:static; grid-template-columns:1fr 1fr; display:grid; } }
+
+      .it1-ch { padding:clamp(30px,4vw,52px) 0; border-top:1px solid var(--line); display:grid; gap:18px; scroll-margin-top:92px; }
+      .it1-ch:first-child { border-top:0; padding-top:0; }
+      .it1-num { font-size:clamp(52px,6vw,84px); font-weight:700; letter-spacing:-0.04em; line-height:1; color:var(--stone); }
+      .it1-ch h2 { font-size:clamp(24px,2.6vw,36px); font-weight:600; letter-spacing:-0.015em; line-height:1.05; margin:0; max-width:22ch; }
+      .it1-ch p { color:var(--ink-soft); max-width:62ch; margin:0; }
+      .it1-ch img { width:100%; aspect-ratio:16/8.5; object-fit:cover; border:1px solid var(--line); }
+      .it1-points { display:grid; gap:10px; margin:4px 0 0; padding:0; list-style:none; }
+      .it1-points li { display:flex; gap:12px; align-items:baseline; max-width:60ch; }
+      .it1-points li::before { content:""; width:7px; height:7px; background:var(--accent); flex:none; transform:translateY(-1px); }
+      .it1-warn { border:1px solid var(--line); border-left:3px solid var(--sale); background:var(--panel); padding:16px 18px; font-size:14px; color:var(--ink-soft); max-width:60ch; }
+      .it1-warn b { color:var(--ink); }
+
+      .it1-tools { border-top:1px solid var(--line); background:var(--paper-2); }
+      .it1-tools-in { max-width:var(--maxw); margin-inline:auto; padding:clamp(40px,5vw,64px) var(--gutter); }
+      .it1-tools-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:26px; }
+      .it1-tools-grid div { background:var(--paper); padding:18px 16px; font-size:13.5px; font-weight:600; }
+      .it1-tools-grid span { display:block; font-size:11px; font-weight:700; letter-spacing:.07em; color:var(--faint); margin-bottom:6px; }
+      @media (max-width:960px){ .it1-tools-grid { grid-template-columns:repeat(2,1fr); } }
+    </style>
+      <script defer src="./seo.js"></script>
+  </head>
+  <body data-nav="resources">
+    <main>
+      <section class="it1-hero">
+        <div class="it1-hero-in">
+          <div>
+            <p class="eyebrow">Installation guide · Concept 01</p>
+            <h1>The install manual, start to finish.</h1>
+          </div>
+          <div class="it1-hero-note"><b>Rule zero</b>Inspect, acclimate, and moisture test before the first plank clicks. Never install visibly defective material.</div>
+        </div>
+      </section>
+
+      <div class="it1-layout">
+        <nav class="it1-rail" aria-label="Guide chapters">
+          <a href="#ch1" class="on"><i>01</i>Confirm the product</a>
+          <a href="#ch2"><i>02</i>Prepare the subfloor</a>
+          <a href="#ch3"><i>03</i>Control moisture</a>
+          <a href="#ch4"><i>04</i>Plan the layout</a>
+          <a href="#ch5"><i>05</i>Install the rows</a>
+          <a href="#ch6"><i>06</i>Finish &amp; protect</a>
+        </nav>
+
+        <div>
+          <section class="it1-ch" id="ch1">
+            <span class="it1-num">01</span>
+            <h2>Confirm the product before work begins.</h2>
+            <p>Check style, color, quantity, and carton condition the day the order arrives — not install day. Save carton labels, order records, and photos with your warranty documentation.</p>
+            <ul class="it1-points">
+              <li>Blend planks from several cartons for a natural, even layout</li>
+              <li>Let cartons acclimate indoors, in the room's normal climate</li>
+              <li>Report visible defects before installation — installed planks are accepted planks</li>
+            </ul>
+          </section>
+
+          <section class="it1-ch" id="ch2">
+            <span class="it1-num">02</span>
+            <h2>The subfloor decides how good the floor feels.</h2>
+            <img src="./media/lifestyle/installation-diy-planks.webp" srcset="./media/lifestyle/installation-diy-planks-800.webp 800w, ./media/lifestyle/installation-diy-planks.webp 1280w" sizes="(max-width:860px) calc(100vw - 32px), 60vw" alt="Prepared subfloor with the first rows of luxury vinyl plank going down" loading="lazy">
+            <p>Hard, sound, clean, smooth, flat, and dry — all six, no exceptions. Correct dips, high spots, adhesive residue, debris, and movement first. An uneven subfloor makes a floating floor sound hollow, flex, or unlock.</p>
+            <div class="it1-warn"><b>Skip the extra padding.</b> Our planks ship with an attached 1.5&nbsp;mm pad. Adding more underlayment voids the warranty unless the product's install guide explicitly allows it.</div>
+          </section>
+
+          <section class="it1-ch" id="ch3">
+            <span class="it1-num">03</span>
+            <h2>Moisture problems come from below.</h2>
+            <p>A rigid waterproof core shrugs off spills from above — it can't stop vapor from underneath. Test and document concrete and wood substrates before installing. New concrete must be fully cured.</p>
+            <ul class="it1-points">
+              <li>Moisture test every substrate, and keep the readings with your records</li>
+              <li>Fix hydrostatic and drainage problems before flooring, not after</li>
+              <li>Indoors only — dry, climate-controlled spaces</li>
+            </ul>
+          </section>
+
+          <section class="it1-ch" id="ch4">
+            <span class="it1-num">04</span>
+            <h2>Plan the layout before you lock a joint.</h2>
+            <p>Dry-lay a few rows first. Start from a straight wall, stagger end joints so the pattern reads naturally, and check that the last row won't end in a sliver.</p>
+            <ul class="it1-points">
+              <li>Expansion gaps at every wall, column, jamb, and transition</li>
+              <li>Undercut door jambs so planks slide underneath cleanly</li>
+              <li>Cabinets go in first — never pin a floating floor underneath them</li>
+            </ul>
+          </section>
+
+          <section class="it1-ch" id="ch5">
+            <span class="it1-num">05</span>
+            <h2>Lock the floor together, row by row.</h2>
+            <img src="./media/new-site/hostinger-v7/web/install-video-still.webp" srcset="./media/new-site/hostinger-v7/web/install-video-still-800.webp 800w, ./media/new-site/hostinger-v7/web/install-video-still.webp 1400w" sizes="(max-width:860px) calc(100vw - 32px), 60vw" alt="Luxury vinyl plank being laid row by row across a room" loading="lazy">
+            <p>Use spacers against the walls, engage each plank fully before moving on, and tap joints closed with a tapping block — never a bare hammer on the plank edge. A pull bar closes the last plank in each row.</p>
+            <div class="it1-warn"><b>Stairs are a different job.</b> They need stair nose, trim, and an adhesive method per the product guidance — not a standard floating install. Ask us before ordering for stairs.</div>
+          </section>
+
+          <section class="it1-ch" id="ch6">
+            <span class="it1-num">06</span>
+            <h2>Finish the edges, keep the leftovers.</h2>
+            <p>Reinstall baseboards or trim without fastening through the flooring — the floor needs to move freely under it. Then keep the extra cartons: attic stock from the original production run is the best match you'll ever get for a future repair.</p>
+            <ul class="it1-points">
+              <li>Trim attaches to the wall, never through the plank</li>
+              <li>Felt pads under furniture, walk-off mats at entries</li>
+              <li>Store attic stock flat, indoors, away from moisture</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <section class="it1-tools">
+        <div class="it1-tools-in">
+          <div class="section-head">
+            <p class="eyebrow">Have these on hand</p>
+            <h2 class="display" style="font-size:clamp(26px,3vw,42px)">The tool list is short.</h2>
+          </div>
+          <div class="it1-tools-grid">
+            <div><span>MEASURE</span>Tape measure &amp; straightedge</div>
+            <div><span>SPACE</span>Expansion spacers</div>
+            <div><span>LOCK</span>Tapping block &amp; mallet</div>
+            <div><span>FINISH ROWS</span>Pull bar</div>
+            <div><span>CUT</span>Utility knife, saw &amp; oscillating tool</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section band-ink">
+        <div class="wrap measure">
+          <p class="eyebrow">Not sure about your room?</p>
+          <h2 class="display" style="font-size:clamp(30px,4vw,54px)">Send us the layout — we'll talk it through.</h2>
+          <div class="v6-hero-cta" style="margin-top:26px">
+            <a class="btn on-dark lg" href="./contact.html">Ask about your project</a>
+            <a class="btn ghost on-dark lg" href="./catalog.html">Shop floors</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+      // Chapter rail scrollspy
+      (function () {
+        var links = [].slice.call(document.querySelectorAll(".it1-rail a"));
+        var chs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+        if (!("IntersectionObserver" in window) || !chs.every(Boolean)) return;
+        function activate(href) {
+          links.forEach(function (a) { a.classList.toggle("on", a.getAttribute("href") === href); });
+        }
+        // Clicks always update the rail, even where IntersectionObserver is throttled.
+        links.forEach(function (a) { a.addEventListener("click", function () { activate(a.getAttribute("href")); }); });
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (x) {
+            if (x.isIntersecting) activate("#" + x.target.id);
+          });
+        }, { rootMargin: "-25% 0px -65% 0px" });
+        chs.forEach(function (c) { io.observe(c); });
+      })();
+    </script>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+  </body>
+</html>
