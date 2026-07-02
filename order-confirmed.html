@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Confirmed — Lunde Flooring Co.</title>
+    <meta name="description" content="Your Lunde Flooring order is confirmed.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+    <meta name="robots" content="noindex, follow">
+    <style>
+      /* Post-payment order confirmation ("thank you") — scoped, kept out of v6.css */
+      /* --- photographic hero band --- */
+      .oc-hero-band { position: relative; overflow: hidden; background: var(--black); color: var(--on-dark); display: grid; place-items: center; min-height: clamp(400px, 56vh, 560px); }
+      .oc-hero-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .oc-hero-band::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(5,7,8,0.5), rgba(5,7,8,0.34) 42%, rgba(5,7,8,0.74)); }
+      .oc-hero-inner { position: relative; z-index: 2; text-align: center; display: grid; justify-items: center; gap: 14px; max-width: 640px; padding: clamp(96px,12vw,120px) var(--gutter) clamp(48px,6vw,74px); }
+      .oc-hero-inner .eyebrow { color: #c9a988; }
+      .oc-hero-inner h1 { font-family: var(--font-display); font-size: clamp(34px,5vw,60px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.0; color: var(--on-dark); text-wrap: balance; }
+      .oc-sub { color: rgba(255,255,255,0.86); max-width: 48ch; line-height: 1.55; font-size: clamp(15px,1.1vw,17px); }
+      .oc-sub b { color: #fff; font-weight: 600; }
+      .oc-check { width: 62px; height: 62px; margin-bottom: 2px; }
+      .oc-check circle { fill: none; stroke: rgba(255,255,255,0.42); stroke-width: 2; }
+      .oc-check path { fill: none; stroke: #7fd08a; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      @media (prefers-reduced-motion: no-preference) {
+        .oc-check path { stroke-dasharray: 34; stroke-dashoffset: 34; animation: ocDraw .55s .2s ease forwards; }
+        .oc-check circle { transform-origin: center; animation: ocPop .45s ease forwards; }
+        @keyframes ocDraw { to { stroke-dashoffset: 0; } }
+        @keyframes ocPop { from { transform: scale(.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+      }
+      /* --- body (centered on paper) --- */
+      .oc-wrap { max-width: 760px; margin-inline: auto; padding: clamp(30px,5vw,60px) var(--gutter) clamp(56px,8vw,110px); }
+      .oc-note { padding: 18px 20px; background: var(--paper-2); border: 1px solid var(--line); border-left: 3px solid var(--accent); font-size: 14.5px; line-height: 1.6; }
+      .oc-note b { font-weight: 600; }
+      .oc-note a { text-decoration: underline; text-underline-offset: 2px; }
+      .oc-card { border: 1px solid var(--line); background: var(--panel); margin-top: clamp(24px,3.5vw,36px); }
+      .oc-card-head { padding: 16px 22px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+      .oc-card-head h2 { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+      .oc-card-head span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+      .oc-card-body { padding: 4px 22px 22px; }
+      .oc-card-body .v6-line:first-child { border-top: 0; }
+      .oc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+      @media (max-width: 620px) { .oc-grid { grid-template-columns: 1fr; gap: 18px; } }
+      .oc-block h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+      .oc-block p { font-size: 14.5px; line-height: 1.6; }
+      .oc-steps { margin-top: clamp(28px,4vw,44px); display: grid; gap: 16px; }
+      .oc-steps h2 { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+      .oc-step { display: grid; grid-template-columns: 36px 1fr; gap: 15px; align-items: start; border: 1px solid var(--line); background: var(--panel); padding: 16px 18px; }
+      .oc-step b { width: 36px; height: 36px; background: var(--black); color: var(--on-dark); border-radius: 999px; display: grid; place-items: center; font-size: 14px; font-weight: 700; font-family: var(--font-display); }
+      .oc-step p { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+      .oc-step p strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 3px; }
+      .oc-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(28px,4vw,40px); }
+      .oc-actions .btn { flex: 1; min-width: 210px; }
+    </style>
+  </head>
+  <body data-nav="account">
+    <main>
+      <section class="oc-hero-band">
+        <img class="oc-hero-media" src="./media/lifestyle/family-kitchen-vinyl-plank.webp" srcset="./media/lifestyle/family-kitchen-vinyl-plank-800.webp 800w, ./media/lifestyle/family-kitchen-vinyl-plank-1400.webp 1400w, ./media/lifestyle/family-kitchen-vinyl-plank.webp 1535w" sizes="100vw" alt="A family at home enjoying their new luxury vinyl plank floor" fetchpriority="high">
+        <div class="oc-hero-inner" id="ocHero"></div>
+      </section>
+      <div class="oc-wrap" id="ocPage"></div>
+    </main>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./order-confirmed.js"></script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout — Lunde Flooring Co.</title>
+    <meta name="description" content="Complete your Lunde Flooring order with secure Stripe checkout, pickup or delivery details, and customer account support.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+      <meta name="robots" content="noindex, follow">
+  </head>
+  <body>
+    <main>
+      <div class="v6-page" id="coPage">
+        <div class="v6-page-head"><p class="eyebrow">Checkout</p><h1 class="display">Almost home.</h1></div>
+        <div class="co-layout">
+          <form class="v6-form" id="coForm">
+            <div class="co-account-note" id="coAcct"><span>Have an account? Sign in for saved addresses and faster checkout.</span><a href="/account/login">Sign in</a></div>
+
+            <fieldset class="v6-fieldset">
+              <h3>Contact</h3>
+              <div class="v6-field-row">
+                <label class="v6-field"><span>Full name</span><input name="name" autocomplete="name" required></label>
+                <label class="v6-field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+              </div>
+              <div class="v6-field-row">
+                <label class="v6-field"><span>Phone</span><input name="phone" autocomplete="tel"></label>
+                <label class="v6-field"><span>Company <em style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</em></span><input name="company" autocomplete="organization"></label>
+              </div>
+              <label class="v6-field wide"><span>Project name <em style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</em></span><input name="project" placeholder="e.g. Master bath remodel"></label>
+            </fieldset>
+
+            <fieldset class="v6-fieldset">
+              <h3>Delivery</h3>
+              <div class="v6-choice two">
+                <label class="v6-opt"><input type="radio" name="delivery" value="delivery" checked><span class="v6-opt-t"><strong>Curbside delivery</strong><span>Freight from $149 · free over $1,200</span></span></label>
+                <label class="v6-opt"><input type="radio" name="delivery" value="pickup"><span class="v6-opt-t"><strong>Warehouse pickup</strong><span>Free · Bakersfield, CA</span></span></label>
+              </div>
+              <div id="addrFields" class="v6-field-row three" style="margin-top:4px">
+                <label class="v6-field wide"><span>Street address</span><input name="address" autocomplete="address-line1"></label>
+                <label class="v6-field"><span>City</span><input name="city" autocomplete="address-level2"></label>
+                <label class="v6-field"><span>State</span><input name="state" autocomplete="address-level1"></label>
+                <label class="v6-field"><span>ZIP</span><input name="zip" autocomplete="postal-code"></label>
+              </div>
+              <div id="deliveryDetails" class="v6-fieldset" style="gap:12px">
+                <label class="v6-field"><span>Delivery window</span><select name="deliveryWindow"><option value="morning">Morning (8am–12pm)</option><option value="afternoon">Afternoon (12pm–5pm)</option></select></label>
+                <div class="v6-choice two">
+                  <label class="v6-opt"><input type="radio" name="deliveryPlacement" value="curb" checked><span class="v6-opt-t"><strong>Curbside</strong><span>Dropped at the curb</span></span></label>
+                  <label class="v6-opt"><input type="radio" name="deliveryPlacement" value="garage"><span class="v6-opt-t"><strong>Garage placement</strong><span>+$3 / carton</span></span></label>
+                </div>
+                <label class="v6-field"><span>Delivery notes <em style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</em></span><textarea name="deliveryNotes" rows="2" placeholder="Gate code, access instructions…"></textarea></label>
+              </div>
+            </fieldset>
+          </form>
+
+          <aside class="v6-sum">
+            <h3>Order summary</h3>
+            <div id="coLines"></div>
+            <div class="v6-promo">
+              <input id="promoCode" placeholder="Promo code" aria-label="Promo code">
+              <button type="button" id="applyPromo">Apply</button>
+            </div>
+            <p class="v6-promo-msg" id="promoMessage"></p>
+            <div class="v6-sumrow"><span>Material</span><b id="sumMaterial">$0.00</b></div>
+            <div class="v6-sumrow"><span>Samples</span><b id="sumSamples">$0.00</b></div>
+            <div class="v6-sumrow" id="sumDiscountRow" hidden><span id="sumDiscountLabel">Discount</span><b id="sumDiscount">$0.00</b></div>
+            <div class="v6-sumrow"><span id="sumFreightLabel">Curbside freight</span><b id="sumFreight">Free</b></div>
+            <div class="v6-sumrow"><span>Estimated tax</span><b id="sumTax">$0.00</b></div>
+            <div class="v6-sumtotal"><span>Total</span><b id="sumTotal">$0.00</b></div>
+            <button class="btn lg" type="submit" form="coForm" id="placeOrder">Continue to secure payment</button>
+            <p class="v6-sum-note">Payment is processed securely by Stripe. Material ships after payment is confirmed.</p>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./checkout.js"></script>
+  </body>
+</html>

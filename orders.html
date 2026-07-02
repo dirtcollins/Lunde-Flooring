@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Orders — Lunde Staff</title>
+    <link rel="icon" href="./favicon.ico">
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./console.css">
+  </head>
+  <body data-staff="orders">
+    <main>
+      <div class="app-head"><div><p class="eyebrow">Fulfillment</p><h1>Orders</h1></div>
+        <div class="app-search" style="max-width:320px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg><input id="orderSearch" type="search" placeholder="Search orders, customers…" aria-label="Search orders"></div>
+      </div>
+      <div class="chips" id="orderChips"></div>
+      <div class="panel"><div id="orderTable"></div></div>
+    </main>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./app-shell.js"></script>
+    <script defer src="./orders.js"></script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script>if(location.pathname.indexOf('/account/')===0)document.write('<base href="/">');</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reset Password — Lunde Flooring Co.</title>
+    <meta name="description" content="Request or complete a secure password reset for your Lunde Flooring customer account.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+      <meta name="robots" content="noindex, follow">
+  </head>
+  <body>
+    <header class="auth-top">
+      <div class="auth-top-inner">
+        <a class="v6-brand" href="./index.html" aria-label="Lunde Flooring Co."><span class="bw"><span>L</span><span>U</span><span>N</span><span>D</span><span>E</span></span><small>Flooring Co.</small></a>
+        <a class="auth-top-back" href="./account/login">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Back to sign in
+        </a>
+      </div>
+    </header>
+    <main>
+      <div class="auth">
+        <div class="auth-media">
+          <img src="./media/lifestyle/herringbone-kitchen.webp" alt="Bright kitchen with herringbone luxury vinyl plank flooring">
+          <div class="auth-media-copy">
+            <p class="eyebrow">My account</p>
+            <p class="auth-media-quote">Let's get you back to your floors.</p>
+            <div class="auth-media-perks">
+              <span><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Secure reset link</span>
+              <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Expires for safety</span>
+            </div>
+          </div>
+        </div>
+        <div class="auth-panel">
+          <div class="auth-card">
+            <span class="eyebrow">My account</span>
+            <h1 class="display" id="resetTitle">Reset your password.</h1>
+            <p class="sub" id="resetIntro">Enter your account email and we'll send a secure reset link.</p>
+            <form class="v6-form" id="requestForm">
+              <label class="v6-field"><span>Email</span><input name="email" type="email" autocomplete="email" required placeholder="you@email.com"></label>
+              <p class="v6-promo-msg" id="requestStatus" role="status" aria-live="polite"></p>
+              <button class="btn lg" type="submit" id="requestSubmit">Send reset link</button>
+            </form>
+            <form class="v6-form" id="resetForm" hidden>
+              <label class="v6-field"><span>New password</span><input name="password" type="password" autocomplete="new-password" minlength="10" required placeholder="At least 10 characters"></label>
+              <label class="v6-field"><span>Confirm new password</span><input name="confirm" type="password" autocomplete="new-password" minlength="10" required placeholder="Re-enter new password"></label>
+              <p class="v6-promo-msg" id="resetStatus" role="status" aria-live="polite"></p>
+              <button class="btn lg" type="submit" id="resetSubmit">Update password</button>
+            </form>
+            <div class="auth-alt"><a href="./account/login">Back to sign in</a></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./account-reset.js"></script>
+  </body>
+</html>

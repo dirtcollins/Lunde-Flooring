@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Staff Sign In — Lunde Flooring Co.</title>
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+      <meta name="robots" content="noindex, follow">
+  </head>
+  <body>
+    <header class="auth-top">
+      <div class="auth-top-inner">
+        <a class="v6-brand" href="./index.html" aria-label="Lunde Flooring Co."><span class="bw"><span>L</span><span>U</span><span>N</span><span>D</span><span>E</span></span><small>Flooring Co.</small></a>
+        <a class="auth-top-back" href="./index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Back to store
+        </a>
+      </div>
+    </header>
+    <main>
+      <div class="auth">
+        <div class="auth-media">
+          <img src="./media/lifestyle/modern-kitchen-wood-cabinets.webp" srcset="./media/lifestyle/modern-kitchen-wood-cabinets-800.webp 800w, ./media/lifestyle/modern-kitchen-wood-cabinets-1400.webp 1400w, ./media/lifestyle/modern-kitchen-wood-cabinets.webp 2000w" sizes="(max-width: 860px) 100vw, 52vw" alt="Modern kitchen with natural wood cabinets and warm luxury vinyl plank flooring">
+          <div class="auth-media-copy">
+            <p class="eyebrow">Staff console</p>
+            <p class="auth-media-quote">Everything you need to run Lunde, in one place.</p>
+            <div class="auth-media-perks">
+              <span><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7Z"></path><path d="M9 7a3 3 0 0 1 6 0"></path></svg>Orders &amp; fulfillment</span>
+              <span><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM4 11h16"></path></svg>Inventory</span>
+              <span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path></svg>Customers</span>
+            </div>
+          </div>
+        </div>
+        <div class="auth-panel">
+          <div class="auth-card">
+            <span class="eyebrow">Staff console</span>
+            <h1 class="display">Sign in.</h1>
+            <p class="sub">Access orders, inventory, customers, and quotes.</p>
+            <form class="v6-form" id="loginForm">
+              <label class="v6-field"><span>Email</span><input name="email" type="email" autocomplete="username" required placeholder="you@lundeflooring.com"></label>
+              <label class="v6-field"><span>Password</span><input name="password" type="password" autocomplete="current-password" required placeholder="••••••••"></label>
+              <p class="v6-promo-msg" id="loginStatus" role="status" aria-live="polite"></p>
+              <button class="btn lg" type="submit" id="loginSubmit">Sign in</button>
+            </form>
+            <div class="auth-alt"><a href="./admin/reset">Forgot password?</a></div>
+            <div class="auth-reassure">
+              <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+              <span>Authorized staff only. Sessions are verified securely on the server.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./login.js"></script>
+  </body>
+</html>

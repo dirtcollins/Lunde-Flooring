@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Account — Lunde Flooring Co.</title>
+    <meta name="description" content="Manage your Lunde Flooring account, order history, saved addresses, favorites, and password.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+      <meta name="robots" content="noindex, follow">
+  </head>
+  <body data-nav="account">
+    <main>
+      <div class="v6-page">
+        <div id="placedBanner"></div>
+        <div class="v6-page-head"><p class="eyebrow">My account</p><h1 class="display">Welcome back.</h1></div>
+        <nav class="acct-tabs" aria-label="Account sections">
+          <button class="acct-tab" type="button" data-account-tab="orders">Orders <span id="ordersTabCount"></span></button>
+          <button class="acct-tab" type="button" data-account-tab="favorites">Favorites <span id="favoritesTabCount"></span></button>
+          <button class="acct-tab" type="button" data-account-tab="quotes">Quotes <span id="quotesTabCount"></span></button>
+          <button class="acct-tab" type="button" data-account-tab="addresses">Addresses <span id="addressesTabCount"></span></button>
+          <button class="acct-tab" type="button" data-account-tab="settings">Settings</button>
+        </nav>
+
+        <section class="acct-panel" data-account-panel="orders">
+          <div class="acct-panel-head"><h2>Your orders</h2><span id="orderCount"></span></div>
+          <div class="acct-orders" id="ordersList"></div>
+        </section>
+
+        <section class="acct-panel" data-account-panel="favorites" hidden>
+          <div class="acct-panel-head"><h2>Saved floors</h2><span id="favCount"></span></div>
+          <div class="acct-favs" id="favGrid"></div>
+        </section>
+
+        <section class="acct-panel" data-account-panel="quotes" hidden>
+          <div class="acct-panel-head"><h2>Saved quotes</h2><span id="quoteCount"></span></div>
+          <div id="quotesList"></div>
+        </section>
+
+        <section class="acct-panel" data-account-panel="addresses" hidden>
+          <div class="acct-panel-head"><h2>Shipping addresses</h2><button class="btn ghost" type="button" id="addAddressBtn" hidden>Add address</button></div>
+          <div class="acct-addr-grid" id="myAddresses"></div>
+        </section>
+
+        <section class="acct-panel" data-account-panel="settings" hidden>
+          <div class="acct-panel-head"><h2>Account &amp; details</h2></div>
+          <div class="acct-settings">
+            <div id="authBlock"></div>
+            <form class="v6-form" id="profileForm">
+              <fieldset class="v6-fieldset">
+                <h3>Saved details</h3>
+                <div class="v6-field-row">
+                  <label class="v6-field"><span>Full name</span><input name="name"></label>
+                  <label class="v6-field"><span>Email</span><input name="email" type="email" readonly></label>
+                </div>
+                <div class="v6-field-row">
+                  <label class="v6-field"><span>Phone</span><input name="phone"></label>
+                  <label class="v6-field"><span>Company</span><input name="company"></label>
+                </div>
+                <button class="btn" type="submit" style="justify-self:start">Save details</button>
+              </fieldset>
+            </form>
+            <form class="v6-form" id="passwordForm">
+              <fieldset class="v6-fieldset">
+                <h3>Password</h3>
+                <label class="v6-field"><span>Current password</span><input name="currentPassword" type="password" autocomplete="current-password" required></label>
+                <div class="v6-field-row">
+                  <label class="v6-field"><span>New password</span><input name="newPassword" type="password" autocomplete="new-password" minlength="10" required></label>
+                  <label class="v6-field"><span>Confirm new password</span><input name="confirmPassword" type="password" autocomplete="new-password" minlength="10" required></label>
+                </div>
+                <p class="v6-promo-msg" id="passwordStatus"></p>
+                <button class="btn" type="submit" style="justify-self:start">Update password</button>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./account.js"></script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Feedback — Lunde Flooring Co.</title>
+    <meta name="description" content="Send feedback or a support note to Lunde Flooring Co.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+      <script defer src="./seo.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="v6-page" style="max-width:680px">
+        <div class="v6-page-head"><p class="eyebrow">We're listening</p><h1 class="display">Tell us what you think.</h1><p>Found something confusing, broken, or just have an idea? We read every note — it shapes what we build next.</p></div>
+        <form class="v6-form" id="fbForm" style="padding-bottom:clamp(56px,7vw,100px)">
+          <fieldset class="v6-fieldset">
+            <label class="v6-field"><span>Your feedback</span><textarea name="message" rows="5" required placeholder="What's on your mind?"></textarea></label>
+            <div class="v6-field-row">
+              <label class="v6-field"><span>Name <em style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</em></span><input name="name"></label>
+              <label class="v6-field"><span>Email <em style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</em></span><input name="email" type="email"></label>
+            </div>
+            <p class="v6-promo-msg" id="fbMsg"></p>
+            <button class="btn lg" type="submit" id="fbSubmit" style="justify-self:start">Send feedback</button>
+          </fieldset>
+        </form>
+      </div>
+    </main>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script>
+      (function () {
+        var form = document.getElementById("fbForm");
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          var fd = new FormData(form);
+          var msg = String(fd.get("message") || "").trim();
+          if (!msg) return;
+          var btn = document.getElementById("fbSubmit");
+          btn.disabled = true; btn.textContent = "Sending…";
+          try { if (window.lunde && window.lunde.addFeedback) await window.lunde.addFeedback({ message: msg, name: String(fd.get("name") || "").trim(), email: String(fd.get("email") || "").trim(), page: "feedback" }); } catch (err) {}
+          form.innerHTML = '<div class="acct-empty-state" style="padding:40px 0"><h3 class="display">Thank you.</h3><p>We got your note and we appreciate it. If you left an email, we may follow up.</p><a class="btn" href="./index.html">Back to home</a></div>';
+        });
+      })();
+    </script>
+  </body>
+</html>

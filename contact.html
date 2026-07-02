@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Lunde Flooring Co. | Bakersfield &amp; Kern County Flooring</title>
+    <meta name="description" content="Contact Lunde Flooring Co., your local luxury vinyl plank flooring supplier for Bakersfield and Kern County. Send a message about samples, orders, delivery, or project help — we reply within one business day.">
+    <meta property="og:title" content="Contact Lunde Flooring Co. | Bakersfield &amp; Kern County">
+    <meta property="og:description" content="Local LVP flooring supplier for Bakersfield &amp; Kern County. Message us about samples, orders, and local delivery.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+      <script defer src="./seo.js"></script>
+    <style>
+      /* Contact page — scoped helpers (kept out of v6.css) */
+      .contact-layout { display: grid; grid-template-columns: minmax(0,1fr) 360px; gap: clamp(32px,5vw,72px); align-items: start; }
+      @media (max-width: 900px) { .contact-layout { grid-template-columns: 1fr; } }
+      .contact-reassure { font-size: 13px; color: var(--muted); line-height: 1.5; }
+      /* Photo upload */
+      .contact-drop { border: 1px dashed var(--line-2); background: var(--panel); padding: 20px 18px; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; display: grid; gap: 4px; justify-items: center; }
+      .contact-drop:hover, .contact-drop.is-over { border-color: var(--ink); background: var(--canvas); }
+      .contact-drop strong { font-weight: 600; font-size: 14px; }
+      .contact-drop span { font-size: 12.5px; color: var(--muted); }
+      .contact-drop input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+      .contact-thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px,1fr)); gap: 10px; margin-top: 12px; }
+      .contact-thumb { position: relative; aspect-ratio: 1/1; background-size: cover; background-position: center; background-color: var(--canvas); border: 1px solid var(--line); }
+      .contact-thumb button { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 999px; background: var(--black); color: #fff; font-size: 13px; line-height: 1; display: grid; place-items: center; cursor: pointer; }
+      /* Info sidebar cards */
+      .contact-info { display: grid; gap: 2px; border: 1px solid var(--line); background: var(--panel); padding: clamp(22px,2.4vw,30px); }
+      .contact-info article { padding: 20px 0; border-top: 1px solid var(--line); display: grid; gap: 6px; }
+      .contact-info article:first-child { border-top: 0; padding-top: 0; }
+      .contact-info .contact-info-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .contact-info article strong { font-family: var(--font-display); font-size: 20px; font-weight: 600; line-height: 1.15; }
+      .contact-info article a { text-decoration: underline; text-underline-offset: 3px; }
+      .contact-info article p { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0; }
+      .contact-hours { display: grid; gap: 3px; font-size: 14px; }
+      .contact-hours div { display: flex; justify-content: space-between; gap: 16px; }
+      .contact-hours span { color: var(--muted); }
+      .contact-hours b.open { color: var(--sage); }
+      .contact-cta-band { background: var(--paper-2); }
+      .contact-card { position: relative; }
+      .contact-card-go { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); transition: gap .25s var(--ease); }
+      .contact-card-go svg { width: 15px; height: 15px; }
+      .contact-card:hover .contact-card-go { gap: 13px; }
+    </style>
+  </head>
+  <body data-nav="resources">
+    <main>
+      <!-- photographic hero -->
+      <section class="pg-hero">
+        <div class="pg-hero-media">
+          <img src="./media/lifestyle/living-room-light-oak.webp" srcset="./media/lifestyle/living-room-light-oak-800.webp 800w, ./media/lifestyle/living-room-light-oak-1400.webp 1400w, ./media/lifestyle/living-room-light-oak.webp 1920w" sizes="100vw" alt="Sunlit Bakersfield living room with wide-plank light oak luxury vinyl flooring" fetchpriority="high">
+        </div>
+        <div class="pg-hero-inner">
+          <p class="eyebrow">Contact · Bakersfield &amp; Kern County</p>
+          <h1 class="display">Tell us what you're working on.</h1>
+          <p>Choosing flooring, checking on an order, or planning a whole-house project — send a message and a real person from our Bakersfield team will get back to you.</p>
+          <div class="pg-hero-meta">
+            <span><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path></svg>Replies within one business day</span>
+            <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Local delivery across Kern County</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section band-2">
+        <div class="v6-page contact-layout" style="max-width:1180px">
+          <form class="v6-form" id="contactForm" novalidate>
+            <fieldset class="v6-fieldset">
+              <h3>Contact information</h3>
+              <label class="v6-field">
+                <span>Full name *</span>
+                <input name="name" type="text" autocomplete="name" required placeholder="Your name">
+              </label>
+              <div class="v6-field-row">
+                <label class="v6-field">
+                  <span>Email address *</span>
+                  <input name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" required placeholder="you@email.com">
+                </label>
+                <label class="v6-field">
+                  <span>Phone number *</span>
+                  <input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="(661) 444-2857">
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="v6-fieldset">
+              <h3>Project information</h3>
+              <label class="v6-field">
+                <span>What can we help you with? *</span>
+                <select name="topic" required>
+                  <option value="" disabled selected>Choose a topic…</option>
+                  <option>Product Question</option>
+                  <option>Need Help Choosing Flooring</option>
+                  <option>Order Question</option>
+                  <option>Delivery Question</option>
+                  <option>Warranty</option>
+                  <option>Returns</option>
+                  <option>Contractor Inquiry</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label class="v6-field">
+                <span>Message *</span>
+                <textarea name="message" rows="6" required placeholder="Tell us about your project, the flooring you're interested in, or how we can help."></textarea>
+              </label>
+            </fieldset>
+
+            <fieldset class="v6-fieldset">
+              <h3>Photos <em style="text-transform:none;letter-spacing:0;font-weight:400;font-family:var(--font-display);font-size:16px;color:var(--muted)">(optional)</em></h3>
+              <div class="v6-field">
+                <label class="contact-drop" id="contactDrop">
+                  <strong>Upload photos</strong>
+                  <span>Show us your room or project — up to 10 images.</span>
+                  <input type="file" id="contactFiles" accept="image/*" multiple>
+                </label>
+                <div class="contact-thumbs" id="contactThumbs" hidden></div>
+              </div>
+            </fieldset>
+
+            <div class="v6-field">
+              <p class="v6-promo-msg" id="contactMsg" role="status" aria-live="polite"></p>
+              <button class="btn lg" type="submit" id="contactSubmit" style="justify-self:start">Send message</button>
+              <p class="contact-reassure" style="margin-top:12px">We'll get back to you within one business day.</p>
+            </div>
+          </form>
+
+          <aside class="contact-info">
+            <article>
+              <span class="contact-info-ic"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path></svg></span>
+              <span class="contact-info-label">Email us</span>
+              <strong><a href="mailto:orders@lundeflooring.com">orders@lundeflooring.com</a></strong>
+              <p>The fastest way to reach us. Use the same email you used at checkout for order questions.</p>
+            </article>
+            <article>
+              <span class="contact-info-ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13H6z"></path><path d="M15 3v5h5"></path><path d="M9 13h6M9 17h4"></path></svg></span>
+              <span class="contact-info-label">Call or text</span>
+              <strong><a href="tel:+16614442857">(661) 444-2857</a></strong>
+              <p>Use this number for sample questions, order help, warranty support, or help planning your flooring project.</p>
+            </article>
+            <article>
+              <span class="contact-info-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+              <span class="contact-info-label">Service area</span>
+              <strong>Bakersfield &amp; Kern County</strong>
+              <p>Local delivery from Southwest and Northwest Bakersfield to Oildale, Rosedale, Shafter, Delano, Tehachapi, and beyond.</p>
+            </article>
+            <article>
+              <span class="contact-info-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+              <span class="contact-info-label">Hours</span>
+              <div class="contact-hours">
+                <div><span>Monday–Friday</span><b>8:00 AM – 5:00 PM</b></div>
+                <div><span>Saturday</span><b>9:00 AM – 2:00 PM</b></div>
+                <div><span>Sunday</span><b>Closed</b></div>
+              </div>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <!-- reassurance band -->
+      <section class="section contact-cta-band">
+        <div class="wrap">
+          <div class="section-head center reveal" style="margin-bottom:clamp(32px,4vw,48px)">
+            <p class="eyebrow">While you're here</p>
+            <h2 class="display" style="font-size:clamp(28px,3.4vw,46px)">Not ready to write? Start here.</h2>
+          </div>
+          <div class="feat-grid reveal">
+            <a class="feat-card contact-card" href="./samples.html">
+              <span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg></span>
+              <h3>Order free samples</h3>
+              <p>Choose any four floors and live with full-size swatches in your own light — free, delivered to your door.</p>
+              <span class="contact-card-go">Order swatches <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+            </a>
+            <a class="feat-card contact-card" href="./catalog.html">
+              <span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg></span>
+              <h3>Browse the collection</h3>
+              <p>Waterproof, wide-plank LVP grouped by tone, with honest carton pricing on every floor.</p>
+              <span class="contact-card-go">Shop floors <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+            </a>
+            <a class="feat-card contact-card" href="./faq.html">
+              <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.2 9a2.8 2.8 0 0 1 5.5.8c0 1.9-2.7 2.2-2.7 4"></path><path d="M12 17.5h.01"></path></svg></span>
+              <h3>Read the FAQ</h3>
+              <p>Answers on carton math, installation, care, warranty, and local delivery before you order.</p>
+              <span class="contact-card-go">Read answers <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script defer src="./chrome.js"></script>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script>
+      (function () {
+        var form = document.getElementById("contactForm");
+        var msgEl = document.getElementById("contactMsg");
+        var fileInput = document.getElementById("contactFiles");
+        var drop = document.getElementById("contactDrop");
+        var thumbs = document.getElementById("contactThumbs");
+        var MAX_PHOTOS = 10;
+        var MAX_EDGE = 1400;      // downscale longest edge (no upload backend — attach compact data URLs)
+        var JPEG_QUALITY = 0.72;
+        var photos = [];          // { url, name }
+
+        function setMsg(text, state) {
+          msgEl.textContent = text || "";
+          if (state) msgEl.setAttribute("data-state", state); else msgEl.removeAttribute("data-state");
+        }
+
+        function renderThumbs() {
+          thumbs.hidden = photos.length === 0;
+          thumbs.innerHTML = photos.map(function (p, i) {
+            return '<div class="contact-thumb" style="background-image:url(' + JSON.stringify(p.url) + ')">' +
+                   '<button type="button" data-remove="' + i + '" aria-label="Remove photo">&#215;</button></div>';
+          }).join("");
+        }
+
+        function downscale(file) {
+          return new Promise(function (resolve) {
+            if (!file || !/^image\//.test(file.type)) return resolve(null);
+            var img = new Image();
+            var reader = new FileReader();
+            reader.onload = function () {
+              img.onload = function () {
+                var w = img.width, h = img.height;
+                var scale = Math.min(1, MAX_EDGE / Math.max(w, h));
+                var cw = Math.max(1, Math.round(w * scale));
+                var ch = Math.max(1, Math.round(h * scale));
+                var canvas = document.createElement("canvas");
+                canvas.width = cw; canvas.height = ch;
+                canvas.getContext("2d").drawImage(img, 0, 0, cw, ch);
+                var url;
+                try { url = canvas.toDataURL("image/jpeg", JPEG_QUALITY); }
+                catch (e) { url = reader.result; }
+                resolve({ url: url, name: file.name || "photo.jpg" });
+              };
+              img.onerror = function () { resolve(null); };
+              img.src = reader.result;
+            };
+            reader.onerror = function () { resolve(null); };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        async function addFiles(list) {
+          var files = Array.prototype.slice.call(list || []);
+          if (!files.length) return;
+          var room = MAX_PHOTOS - photos.length;
+          if (room <= 0) { setMsg("You can attach up to " + MAX_PHOTOS + " photos.", "error"); return; }
+          var take = files.slice(0, room);
+          setMsg("Adding photos…", null);
+          for (var i = 0; i < take.length; i++) {
+            var p = await downscale(take[i]);
+            if (p) photos.push(p);
+          }
+          renderThumbs();
+          if (files.length > room) setMsg("Added " + room + " photos (limit is " + MAX_PHOTOS + ").", "error");
+          else setMsg("", null);
+        }
+
+        fileInput.addEventListener("change", function () { addFiles(fileInput.files); fileInput.value = ""; });
+        thumbs.addEventListener("click", function (e) {
+          var btn = e.target.closest("[data-remove]");
+          if (!btn) return;
+          photos.splice(Number(btn.getAttribute("data-remove")), 1);
+          renderThumbs();
+        });
+        ["dragenter", "dragover"].forEach(function (ev) {
+          drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("is-over"); });
+        });
+        ["dragleave", "drop"].forEach(function (ev) {
+          drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("is-over"); });
+        });
+        drop.addEventListener("drop", function (e) { if (e.dataTransfer) addFiles(e.dataTransfer.files); });
+
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          var fd = new FormData(form);
+          var name = String(fd.get("name") || "").trim();
+          var email = String(fd.get("email") || "").trim();
+          var phone = String(fd.get("phone") || "").trim();
+          var topic = String(fd.get("topic") || "").trim();
+          var message = String(fd.get("message") || "").trim();
+
+          if (!name || !email || !phone || !topic || !message) {
+            setMsg("Please fill in every required field.", "error");
+            if (!form.reportValidity()) return;
+            return;
+          }
+
+          var btn = document.getElementById("contactSubmit");
+          btn.disabled = true; btn.textContent = "Sending…";
+          setMsg("", null);
+
+          // No dedicated contact backend — route through the feedback store so it
+          // lands in staff Messages. Keep a readable summary plus structured fields.
+          var summary = "Contact form — " + topic + "\n\n" + message +
+            "\n\n— " + name + "\nEmail: " + email + "\nPhone: " + phone +
+            (photos.length ? "\nPhotos attached: " + photos.length : "");
+          try {
+            if (window.lunde && window.lunde.addFeedback) {
+              await window.lunde.addFeedback({
+                message: summary,
+                name: name,
+                email: email,
+                phone: phone,
+                topic: topic,
+                photos: photos.map(function (p) { return p.url; }),
+                page: "contact",
+                kind: "contact"
+              });
+            }
+          } catch (err) { /* offline fallback is handled inside addFeedback */ }
+
+          form.innerHTML = '<div class="acct-empty-state" style="padding:48px 0"><h3 class="display">Thanks, ' +
+            (name.split(" ")[0].replace(/[<>&"]/g, "") || "there") +
+            '.</h3><p style="color:var(--muted);max-width:46ch">We got your message and we\'ll get back to you within one business day. For anything urgent about an active order, email <a href="mailto:orders@lundeflooring.com" style="text-decoration:underline">orders@lundeflooring.com</a>.</p><a class="btn" href="./catalog.html" style="margin-top:20px">Browse the collection</a></div>';
+        });
+      })();
+
+    </script>
+    <script defer src="./reveal.js"></script>
+  </body>
+</html>

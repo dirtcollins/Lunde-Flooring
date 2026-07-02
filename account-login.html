@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script>if(location.pathname.indexOf('/account/')===0)document.write('<base href="/">');</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign In — Lunde Flooring Co.</title>
+    <meta name="description" content="Sign in to your Lunde Flooring account to view orders, saved addresses, favorites, and account details.">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./v6.css">
+    <link rel="stylesheet" href="./interior.css">
+      <meta name="robots" content="noindex, follow">
+  </head>
+  <body>
+    <header class="auth-top">
+      <div class="auth-top-inner">
+        <a class="v6-brand" href="./index.html" aria-label="Lunde Flooring Co."><span class="bw"><span>L</span><span>U</span><span>N</span><span>D</span><span>E</span></span><small>Flooring Co.</small></a>
+        <a class="auth-top-back" href="./index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Back to store
+        </a>
+      </div>
+    </header>
+    <main>
+      <div class="auth">
+        <div class="auth-media">
+          <img src="./media/lifestyle/kitchen-island-light-oak.webp" srcset="./media/lifestyle/kitchen-island-light-oak-800.webp 800w, ./media/lifestyle/kitchen-island-light-oak-1400.webp 1400w, ./media/lifestyle/kitchen-island-light-oak.webp 1448w" sizes="(max-width: 860px) 100vw, 52vw" alt="Bright modern kitchen with a light oak luxury vinyl plank floor">
+          <div class="auth-media-copy">
+            <p class="eyebrow">My account</p>
+            <p class="auth-media-quote">Your floors, your orders, your favorites — all in one place.</p>
+            <div class="auth-media-perks">
+              <span><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"></path><path d="M4 7l8 6 8-6"></path></svg>Track every order</span>
+              <span><svg viewBox="0 0 24 24"><path d="M12 20.5 4.5 13a4.5 4.5 0 0 1 6.4-6.3l1.1 1 1.1-1a4.5 4.5 0 0 1 6.4 6.3Z"></path></svg>Saved favorites</span>
+              <span><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"></path></svg>Faster checkout</span>
+            </div>
+          </div>
+        </div>
+        <div class="auth-panel">
+          <div class="auth-card">
+            <span class="eyebrow">Welcome back</span>
+            <h1 class="display">Sign in.</h1>
+            <p class="sub">Track orders, save addresses, and check out faster.</p>
+            <form class="v6-form" id="loginForm">
+              <label class="v6-field"><span>Email</span><input name="email" type="email" autocomplete="email" required placeholder="you@email.com"></label>
+              <label class="v6-field">
+                <span class="auth-field-head">Password <a class="auth-forgot" href="./account/reset">Forgot password?</a></span>
+                <input name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+              </label>
+              <p class="v6-promo-msg" id="loginStatus" role="status" aria-live="polite"></p>
+              <button class="btn lg" type="submit" id="loginSubmit">Sign in</button>
+            </form>
+            <div class="auth-reassure">
+              <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+              <span>Your details are protected. We never store your password in the browser — only a secure session.</span>
+            </div>
+            <div class="auth-alt">New to Lunde? <a href="./account/register">Create an account</a></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script defer src="./data.js"></script>
+    <script defer src="./store.js"></script>
+    <script defer src="./account-login.js"></script>
+  </body>
+</html>
