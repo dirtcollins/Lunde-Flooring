@@ -16,7 +16,7 @@
     L.customers().forEach(function (c) {
       var key = keyOf(c); if (!key) return;
       if (c.id) byId[c.id] = c;
-      map[key] = { name: c.name || c.email || "Unnamed customer", company: c.company || "", email: c.email || "", phone: c.phone || "", id: c.id || "", account: true, orders: 0, ltv: 0, last: c.createdAt || 0 };
+      map[key] = { name: c.name || c.email || "Unnamed customer", company: c.company || "", email: c.email || "", phone: c.phone || "", avatar: c.avatar || "", id: c.id || "", account: true, orders: 0, ltv: 0, last: c.createdAt || 0 };
     });
     L.orders().forEach(function (o) {
       var cust = o.customer || {};
