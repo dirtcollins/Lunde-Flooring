@@ -25,7 +25,8 @@ const config = {
   fulfillmentEmail: process.env.FULFILLMENT_EMAIL || "dgdenison@gmail.com",
   fromEmail: process.env.FROM_EMAIL || "Lunde Flooring <orders@lundeflooring.com>",
   supabaseUrl: trimSlash(process.env.SUPABASE_URL || ""),
-  supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+  supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+  ipinfoToken: process.env.IPINFO_TOKEN || "" // optional: visitor-city analytics
 };
 
 if (config.authSecret === "change-me-before-launch") {
@@ -248,6 +249,21 @@ async function handleApi(req, res, url) {
     return json(res, body);
   }
 
+  // Anonymous engagement beacon: storefront pages report seconds-on-page on exit.
+  if (parts[0] === "traffic" && parts[1] === "beacon" && method === "POST") {
+    if (rateLimit(res, `beacon:${clientIp(req)}`, 240, 60 * 60 * 1000)) return;
+    const secs = Math.min(1800, Math.max(0, Number(input && input.s) || 0));
+    if (secs >= 1 && !currentStaff(req)) {
+      const days = loadTraffic();
+      const key = trafficDayKey();
+      const day = days[key] || (days[key] = { views: 0, uniques: 0, hashes: [], pages: {} });
+      day.engagedSeconds = (day.engagedSeconds || 0) + secs;
+      day.beacons = (day.beacons || 0) + 1;
+      trafficState.dirty = true;
+    }
+    return json(res, { ok: true });
+  }
+
   if (parts[0] === "traffic" && method === "GET") {
     const denied = requireStaff(req, res);
     if (denied) return;
@@ -258,14 +274,28 @@ async function handleApi(req, res, url) {
       const d = days[key] || {};
       series.push({ date: key, views: d.views || 0, uniques: d.uniques || 0 });
     }
-    const pageTotals = {};
+    const pageTotals = {}, sourceTotals = {}, cityTotals = {};
+    let engaged7 = 0, uniques7 = 0;
     for (let i = 6; i >= 0; i--) {
       const d = days[trafficDayKey(Date.now() - i * 86400000)];
-      if (d && d.pages) for (const [p, n] of Object.entries(d.pages)) pageTotals[p] = (pageTotals[p] || 0) + n;
+      if (!d) continue;
+      if (d.pages) for (const [p, n] of Object.entries(d.pages)) pageTotals[p] = (pageTotals[p] || 0) + n;
+      if (d.sources) for (const [s, n] of Object.entries(d.sources)) sourceTotals[s] = (sourceTotals[s] || 0) + n;
+      if (d.cities) for (const [c, n] of Object.entries(d.cities)) cityTotals[c] = (cityTotals[c] || 0) + n;
+      engaged7 += d.engagedSeconds || 0;
+      uniques7 += d.uniques || 0;
     }
-    const topPages = Object.entries(pageTotals).sort((a, b) => b[1] - a[1]).slice(0, 10)
-      .map(([pagePath, views]) => ({ path: pagePath, views }));
-    return json(res, { ok: true, days: series, topPages });
+    const top = (totals, keyName) => Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, 10)
+      .map(([k, n]) => ({ [keyName]: k, visits: n }));
+    return json(res, {
+      ok: true,
+      days: series,
+      topPages: Object.entries(pageTotals).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([pagePath, views]) => ({ path: pagePath, views })),
+      sources: top(sourceTotals, "source"),
+      cities: top(cityTotals, "city"),
+      avgVisitSeconds: uniques7 ? Math.round(engaged7 / uniques7) : 0,
+      cityLookupConfigured: Boolean(config.ipinfoToken)
+    });
   }
 
   if (parts[0] === "settings" && method === "PATCH") {
@@ -910,6 +940,70 @@ async function handleOrders(req, res, method, parts, input) {
     const email = await sendFulfillmentEmail(order, "manual", user);
     const latest = recordEmailStatus(id, { ...email, source: "manual" });
     return json(res, { ok: true, item: latest, items: readStore("orders", []), email: latest?.fulfillmentEmail || {} });
+  }
+  // Staff emails the customer a secure Stripe payment link for an unpaid order
+  // (the way quoted/invoice orders actually get paid). The webhook marks the
+  // order paid via metadata.order_id, same as normal checkout.
+  if (parts.length === 3 && parts[2] === "payment-link" && method === "POST") {
+    const denied = requireStaff(req, res);
+    if (denied) return;
+    const order = readStore("orders", []).find((row) => row?.id === clean(parts[1], 80));
+    if (!order) return json(res, { ok: false, error: "Order not found." }, 404);
+    if (order.payment?.status === "paid" || order.payment?.paidAt) return json(res, { ok: false, error: "This order is already paid." }, 422);
+    const to = clean(order.customer?.email, 180);
+    if (!to) return json(res, { ok: false, error: "This order has no customer email." }, 422);
+    if (!config.stripeSecretKey) return json(res, { ok: false, error: "Stripe is not configured." }, 503);
+    const total = Number(order.totals?.total || 0);
+    if (!(total > 0)) return json(res, { ok: false, error: "Order total must be greater than zero." }, 422);
+    const base = siteBase(req);
+    const successPath = `/my-order.html?id=${encodeURIComponent(order.id)}`;
+    const stripe = await stripeRequest("POST", "/v1/checkout/sessions", {
+      mode: "payment",
+      payment_method_types: ["card"],
+      client_reference_id: order.id,
+      customer_email: to,
+      success_url: `${base}${successPath}&stripe=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${base}${successPath}`,
+      metadata: { order_id: order.id, customer_email: to, source: "payment-link" },
+      payment_intent_data: { metadata: { order_id: order.id, customer_email: to } },
+      line_items: [{
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: stripeAmount(total),
+          product_data: {
+            name: `Lunde Flooring order ${order.id}`,
+            description: "Flooring materials, freight, and estimated tax."
+          }
+        }
+      }]
+    });
+    if (!stripe.ok) {
+      logOperationalEvent("error", "stripe_payment_link_failed", { orderId: order.id, status: stripe.status, error: stripe.error || "" });
+      return json(res, { ok: false, error: "Could not create the payment link. Check the Stripe configuration." }, stripe.status || 500);
+    }
+    const payUrl = clean(stripe.data.url, 600);
+    savePendingStripeOrder({ ...order, payment: { ...(order.payment || {}), method: "stripe", status: "awaiting_payment", stripeSessionId: clean(stripe.data.id, 180) } }, stripe.data);
+    const settings = getSettings();
+    const template = buildActionEmail({
+      title: `Your ${settings.businessName} order is ready to pay`,
+      intro: `Hi ${order.customer?.name || "there"}, order ${order.id} totals $${total.toFixed(2)}. Use the secure link below to pay by card — Stripe handles the payment, we never see your card details.`,
+      buttonText: `Pay $${total.toFixed(2)} securely`,
+      url: payUrl,
+      footer: `Questions? Reply to this email or call ${settings.businessPhone}.`
+    });
+    const email = await sendTransactionalEmail({
+      to,
+      subject: `Pay for your Lunde Flooring order ${order.id}`,
+      idempotencyKey: `lunde-paylink-${order.id}-${Date.now()}`,
+      ...template
+    });
+    if (email.status !== "sent") return json(res, { ok: false, error: email.error || "Payment link created, but the email failed to send." }, 502);
+    const orders = readStore("orders", []).map((row) => row?.id === order.id
+      ? { ...row, payment: { ...(row.payment || {}), method: "stripe", status: "awaiting_payment", stripeSessionId: clean(stripe.data.id, 180), checkoutUrl: payUrl, linkSentAt: Date.now(), linkSentTo: to } }
+      : row);
+    writeStore("orders", orders);
+    return json(res, { ok: true, url: payUrl, email });
   }
   // Staff re-sends the customer's receipt/confirmation for an order.
   if (parts.length === 3 && parts[2] === "receipt-email" && method === "POST") {
@@ -2957,6 +3051,22 @@ function recordPageView(req, basename) {
     if (day.hashes.length < 5000 && !day.hashes.includes(visitorHash)) {
       day.hashes.push(visitorHash);
       day.uniques += 1;
+      // First page of this visitor's day: attribute the visit to its source
+      // (external referrer hostname, else "direct") and look up their city.
+      let source = "direct";
+      try {
+        const ref = String(req.headers.referer || "");
+        if (ref) {
+          const refHost = new URL(ref).hostname.replace(/^www\./, "");
+          const ownHost = String(req.headers.host || "").toLowerCase().replace(/^www\./, "").split(":")[0];
+          if (refHost && refHost !== ownHost) source = refHost;
+        }
+      } catch { /* malformed referrer -> direct */ }
+      day.sources = day.sources || {};
+      if (Object.keys(day.sources).length < 100 || day.sources[source] !== undefined) {
+        day.sources[source] = (day.sources[source] || 0) + 1;
+      }
+      lookupVisitorCity(clientIp(req), key).catch(() => {});
     }
     const page = basename === "index.html" ? "/" : `/${basename}`;
     if (Object.keys(day.pages).length < 200 || day.pages[page] !== undefined) {
@@ -2973,6 +3083,39 @@ setInterval(() => {
     try { writeStore("traffic", { days: trafficState.days }); } catch { trafficState.dirty = true; }
   }
 }, 30 * 1000).unref();
+
+/* Visitor city via ipinfo.io (optional — needs IPINFO_TOKEN in .env, free tier
+   is plenty). One lookup per new visitor per day; results cached by a salted
+   hash of the IP so raw IPs are never stored. */
+const geoState = { cache: null };
+async function lookupVisitorCity(ip, dayKey) {
+  if (!config.ipinfoToken || !ip) return;
+  if (ip === "127.0.0.1" || ip === "::1" || ip.startsWith("10.") || ip.startsWith("192.168.") || ip.startsWith("172.")) return;
+  if (!geoState.cache) geoState.cache = readStore("geo_cache", {});
+  const cacheKey = crypto.createHash("sha256").update(`${ip}|${config.authSecret}`).digest("hex").slice(0, 16);
+  let city = geoState.cache[cacheKey];
+  if (city === undefined) {
+    try {
+      const response = await fetch(`https://ipinfo.io/${encodeURIComponent(ip)}?token=${encodeURIComponent(config.ipinfoToken)}`, { headers: { Accept: "application/json" } });
+      if (!response.ok) return;
+      const data = await response.json().catch(() => null);
+      city = data && data.city ? [data.city, data.region].filter(Boolean).join(", ") : "";
+    } catch { return; }
+    if (Object.keys(geoState.cache).length < 20000) {
+      geoState.cache[cacheKey] = city;
+      try { writeStore("geo_cache", geoState.cache); } catch {}
+    }
+  }
+  if (!city) return;
+  const days = loadTraffic();
+  const day = days[dayKey];
+  if (!day) return;
+  day.cities = day.cities || {};
+  if (Object.keys(day.cities).length < 200 || day.cities[city] !== undefined) {
+    day.cities[city] = (day.cities[city] || 0) + 1;
+    trafficState.dirty = true;
+  }
+}
 
 function trimSlash(value) {
   return String(value || "").replace(/\/+$/, "");

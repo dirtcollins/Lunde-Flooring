@@ -171,3 +171,26 @@
     if (openDd) { var b = openDd.querySelector("button"); if (b) b.focus(); }
   });
 })();
+
+/* Anonymous time-on-site beacon: reports seconds spent on this page when the
+   visitor leaves. First-party, cookie-free; staff sessions are skipped. */
+(function () {
+  try {
+    if (localStorage.getItem("lunde_staff_session_v1")) return;
+    var start = Date.now(), sent = false;
+    function send() {
+      if (sent) return;
+      var secs = Math.round((Date.now() - start) / 1000);
+      if (secs < 1) return;
+      sent = true;
+      try {
+        navigator.sendBeacon("/api/traffic/beacon",
+          new Blob([JSON.stringify({ s: Math.min(secs, 1800) })], { type: "application/json" }));
+      } catch (e) { /* older browsers: no beacon, no problem */ }
+    }
+    addEventListener("pagehide", send);
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") send();
+    });
+  } catch (e) {}
+})();

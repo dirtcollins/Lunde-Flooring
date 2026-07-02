@@ -478,6 +478,11 @@
     const data = await api(`${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/receipt-email`, { method: "POST" });
     return data || { ok: false, error: "Could not reach the server." };
   }
+  /* Email the customer a secure Stripe payment link for an unpaid order. */
+  async function sendPaymentLink(id) {
+    const data = await api(`${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/payment-link`, { method: "POST" });
+    return data || { ok: false, error: "Could not reach the server." };
+  }
   /* Merge a quote's lines into the live cart. Pricing re-derives from the
      current catalog (carton math is always recomputed), so quotes never
      carry stale prices into checkout. */
@@ -1495,7 +1500,7 @@
     teamNotes, addTeamNote, pullNotes,
     orders, orderById, saveOrder, updateOrder, newOrderId, coerceStaffNotes,
     quotes, quoteById, saveQuoteFromCart, updateQuote, duplicateQuote, deleteQuote, quoteToCart, pullQuotes, reorderToCart,
-    sendQuoteToCustomer, replyToFeedback, resendOrderReceipt,
+    sendQuoteToCustomer, replyToFeedback, resendOrderReceipt, sendPaymentLink,
     activeCartQuote, clearCartQuote, pullMyQuotes,
     signInCustomerRemote, hydrateCustomerSession, accountOrders, saveAccountProfile,
     resendVerificationEmail, verifyCustomerEmail, requestPasswordReset, resetCustomerPassword, updateCustomerPassword,

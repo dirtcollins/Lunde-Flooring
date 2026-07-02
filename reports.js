@@ -109,6 +109,20 @@
     loadTraffic();
   }
 
+  function fmtDur(secs) {
+    if (!secs) return "—";
+    var m = Math.floor(secs / 60), s = secs % 60;
+    return m ? m + "m " + s + "s" : s + "s";
+  }
+  function barList(title, items, unit) {
+    if (!items.length) return '<h3 style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">' + title + '</h3><p class="row-sub">No data yet.</p>';
+    var max = Math.max.apply(null, items.map(function (x) { return x.n; }).concat([1]));
+    return '<h3 style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">' + title + '</h3>' +
+      '<div class="bars">' + items.map(function (x) {
+        return '<div class="bar-row"><span class="lab" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(x.lab) + '</span><span class="bar-track"><span class="bar-fill" style="width:' + Math.max(3, Math.round(x.n / max * 100)) + '%"></span></span><span class="val">' + x.n + '</span></div>';
+      }).join("") + '</div>';
+  }
+
   /* Site traffic: first-party counts from /api/traffic (views + unique visitors). */
   function loadTraffic() {
     var panel = document.getElementById("trafficPanel");
@@ -142,12 +156,19 @@
             '<div class="kpi"><span class="kpi-label">Today</span><span class="kpi-num">' + today.uniques.toLocaleString() + '</span><span class="kpi-sub">' + today.views.toLocaleString() + ' page view' + (today.views === 1 ? "" : "s") + '</span></div>' +
             '<div class="kpi"><span class="kpi-label">Visitors (7 days)</span><span class="kpi-num">' + sum(last7, "uniques").toLocaleString() + '</span><span class="kpi-sub">' + sum(last7, "views").toLocaleString() + ' views</span></div>' +
             '<div class="kpi"><span class="kpi-label">Visitors (30 days)</span><span class="kpi-num">' + sum(last30, "uniques").toLocaleString() + '</span><span class="kpi-sub">' + sum(last30, "views").toLocaleString() + ' views</span></div>' +
-            '<div class="kpi"><span class="kpi-label">Busiest page (7 days)</span><span class="kpi-num" style="font-size:20px">' + esc((d.topPages && d.topPages[0] && d.topPages[0].path) || "—") + '</span><span class="kpi-sub">' + ((d.topPages && d.topPages[0] && d.topPages[0].views) || 0) + ' views</span></div>' +
+            '<div class="kpi"><span class="kpi-label">Avg. time on site (7 days)</span><span class="kpi-num">' + fmtDur(d.avgVisitSeconds || 0) + '</span><span class="kpi-sub">per visitor per day</span></div>' +
           '</div>' +
           '<div class="repchart">' + bars + '</div>' +
-          (pages.length ? '<div class="bars" style="margin-top:20px">' + pages.map(function (p) {
-            return '<div class="bar-row"><span class="lab">' + esc(p.path) + '</span><span class="bar-track"><span class="bar-fill" style="width:' + Math.max(3, Math.round(p.views / pageMax * 100)) + '%"></span></span><span class="val">' + p.views + '</span></div>';
-          }).join("") + '</div>' : '');
+          '<div class="cols-2-even" style="margin-top:20px;gap:24px"><div>' +
+            barList("Top pages", pages.map(function (p) { return { lab: p.path, n: p.views }; }), "views") +
+          '</div><div>' +
+            barList("Where visitors come from", (d.sources || []).map(function (s) { return { lab: s.source === "direct" ? "Direct / typed in" : s.source, n: s.visits }; }), "visits") +
+            '<div style="margin-top:20px">' +
+            (d.cityLookupConfigured
+              ? barList("Visitor cities", (d.cities || []).map(function (c) { return { lab: c.city, n: c.visits }; }), "visits")
+              : '<h3 style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Visitor cities</h3><p class="row-sub">Add a free ipinfo.io token as IPINFO_TOKEN in the server settings to see which cities your visitors are in.</p>') +
+            '</div>' +
+          '</div></div>';
       })
       .catch(function () { panel.innerHTML = '<p class="row-sub">Traffic data unavailable.</p>'; });
   }

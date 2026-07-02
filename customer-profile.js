@@ -260,7 +260,7 @@
     mount.innerHTML =
       '<a class="mo-back" href="./customers.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>All customers</a>' +
       '<div class="app-head"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">' +
-        '<span class="av" style="width:54px;height:54px;font-size:18px;background:var(--accent);color:#fff;display:grid;place-items:center;border-radius:999px">' + initials(c.name) + '</span>' +
+        '<span class="av" style="width:54px;height:54px;font-size:18px;color:#fff;display:grid;place-items:center;border-radius:999px;' + (c.avatar ? 'background-image:url(' + esc(c.avatar) + ');background-size:cover;background-position:center;background-color:var(--stone)' : 'background:var(--accent)') + '">' + (c.avatar ? '' : initials(c.name)) + '</span>' +
         '<div><p class="eyebrow">' + (c.synthesized ? "Guest customer" : "Account customer") + '</p>' +
         '<h1>' + esc(c.name || c.email) + '</h1>' +
         '<p>' + esc(c.email) + (c.phone ? ' · ' + esc(c.phone) : '') + (c.company ? ' · ' + esc(c.company) : '') + '</p></div>' +

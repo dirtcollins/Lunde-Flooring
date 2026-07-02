@@ -59,7 +59,7 @@
       (items.length ? items.map(function (c) {
         var sub = [c.email, c.phone, c.company].filter(Boolean).map(esc).join(" · ");
         return '<a class="tbl-row" href="./customer-profile.html?id=' + encodeURIComponent(c.id || c.email) + '" style="grid-template-columns:44px 1.6fr 0.7fr 0.9fr 0.9fr">' +
-          '<span class="app-user" style="padding:0"><span class="av" style="background:var(--accent)">' + esc(initials(c.name)) + '</span></span>' +
+          '<span class="app-user" style="padding:0"><span class="av" style="' + (c.avatar ? 'background-image:url(' + esc(c.avatar) + ');background-size:cover;background-position:center;background-color:var(--stone)' : 'background:var(--accent)') + '">' + (c.avatar ? '' : esc(initials(c.name))) + '</span></span>' +
           '<span><b>' + esc(c.name) + '</b>' + (c.account ? ' <span class="status-badge" style="padding:2px 7px;font-size:9px">Account</span>' : '') + '<br><span class="row-sub">' + (sub || "No contact details") + '</span></span>' +
           '<span class="tabnum">' + c.orders + '</span>' +
           '<span class="row-sub">' + fmt(c.last) + '</span>' +

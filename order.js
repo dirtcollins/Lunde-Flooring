@@ -61,10 +61,12 @@
       if (netMatch) rows += '<div class="v6-sumrow"><span>Due</span><b>' + fmt(o.createdAt + parseInt(netMatch[1], 10) * 86400000) + '</b></div>';
     }
     if (pay.txnId) rows += '<div class="v6-sumrow"><span>Transaction</span><b style="font-variant-numeric:normal;font-size:12.5px">' + esc(pay.txnId) + '</b></div>';
+    if (pay.linkSentAt && !paid && !refunded) rows += '<div class="v6-sumrow"><span>Payment link</span><b>Sent ' + time(pay.linkSentAt) + (pay.linkSentTo ? ' to ' + esc(pay.linkSentTo) : '') + '</b></div>';
     rows += '<div class="v6-sumrow"><span>' + (refunded ? "Amount refunded" : "Amount") + '</span><b>' + money(t.total) + '</b></div>';
     if (pay.billing) rows += '<div class="v6-sumrow" style="align-items:flex-start"><span>Billing</span><b style="font-weight:600;text-align:right;max-width:62%">' + esc(pay.billing) + '</b></div>';
 
     var actions = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">' +
+      (!paid && !refunded ? '<button class="btn" type="button" id="payLink" style="min-height:40px;padding:0 16px">' + (pay.linkSentAt ? "Resend payment link" : "Email payment link") + '</button>' : '') +
       (!paid && !refunded ? '<button class="btn" type="button" id="payMarkPaid" style="min-height:40px;padding:0 16px">Mark as paid</button>' : '') +
       (paid ? '<button class="btn ghost" type="button" id="payRefund" style="min-height:40px;padding:0 16px">Record refund</button>' : '') +
       '<button class="btn ghost" type="button" id="payReceipt" style="min-height:40px;padding:0 16px">Resend receipt</button>' +
@@ -201,6 +203,19 @@
     });
 
     /* payment actions */
+    var payLink = document.getElementById("payLink");
+    if (payLink) payLink.addEventListener("click", function () {
+      payLink.disabled = true; payLink.textContent = "Sending…";
+      L.sendPaymentLink(o.id).then(function (res) {
+        if (res && res.ok) {
+          if (L.showToast) L.showToast("Payment link emailed to " + ((o.customer && o.customer.email) || "the customer"));
+          L.pullOrders().then(render, render);
+        } else {
+          payLink.disabled = false; payLink.textContent = "Email payment link";
+          if (L.showToast) L.showToast((res && res.error) || "Could not send the payment link");
+        }
+      });
+    });
     var markPaid = document.getElementById("payMarkPaid");
     if (markPaid) markPaid.addEventListener("click", function () {
       var np = Object.assign({}, o.payment || {}, { status: "paid", paidAt: Date.now() });
