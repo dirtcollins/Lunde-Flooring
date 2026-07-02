@@ -83,6 +83,8 @@
         '<div class="panel"><div class="panel-head"><h2>Email notifications</h2><span class="cp-saved" id="savedEmail" hidden>Saved</span></div><div class="panel-pad v6-form">' +
           '<label style="display:flex;gap:10px;align-items:center;font-size:14px;cursor:pointer"><input type="checkbox" id="setEmailConfirm"' + (s.emailOrderConfirmation ? ' checked' : '') + ' style="width:16px;height:16px;accent-color:var(--accent)"> Send order confirmation emails</label>' +
           '<label style="display:flex;gap:10px;align-items:center;font-size:14px;cursor:pointer"><input type="checkbox" id="setEmailDelivered"' + (s.emailDeliveryNotice ? ' checked' : '') + ' style="width:16px;height:16px;accent-color:var(--accent)"> Send “order delivered” emails</label>' +
+          '<label style="display:flex;gap:10px;align-items:center;font-size:14px;cursor:pointer"><input type="checkbox" id="setEmailNewMsg"' + (s.emailNewMessageAlert !== false ? ' checked' : '') + ' style="width:16px;height:16px;accent-color:var(--accent)"> Email me when the contact form is submitted</label>' +
+          field('Send contact-form alerts to', '<input id="setNotifyEmail" type="email" placeholder="dirtcollins@gmail.com" value="' + esc(s.notifyEmail || "") + '">') +
           field('Reply-to address (optional)', '<input id="setReplyTo" type="email" placeholder="replies go to the sending address" value="' + esc(s.emailReplyTo) + '">') +
           '<div><button class="btn" type="button" id="saveEmail" style="min-height:42px">Save email settings</button></div>' +
         '</div></div>' +
@@ -214,6 +216,8 @@
       save({
         emailOrderConfirmation: document.getElementById("setEmailConfirm").checked,
         emailDeliveryNotice: document.getElementById("setEmailDelivered").checked,
+        emailNewMessageAlert: document.getElementById("setEmailNewMsg").checked,
+        notifyEmail: document.getElementById("setNotifyEmail").value.trim(),
         emailReplyTo: document.getElementById("setReplyTo").value
       }, "savedEmail");
     });

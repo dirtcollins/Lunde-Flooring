@@ -309,7 +309,7 @@ async function handleApi(req, res, url) {
     if (patch.taxRate !== undefined) cur.taxRate = num(patch.taxRate, 0, 0.25, cur.taxRate);
     if (patch.freeShipOver !== undefined) cur.freeShipOver = num(patch.freeShipOver, 0, 100000, cur.freeShipOver);
     if (patch.priceMarkupPercent !== undefined) cur.priceMarkupPercent = num(patch.priceMarkupPercent, 0, 500, cur.priceMarkupPercent);
-    for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo"]) {
+    for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo", "notifyEmail"]) {
       if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
     }
     for (const key of ["emailOrderConfirmation", "emailDeliveryNotice", "emailNewMessageAlert"]) {
@@ -1377,7 +1377,7 @@ async function handleListStore(req, res, method, parts, input) {
     if (result.status !== "sent") return json(res, { ok: false, error: result.error || "Could not send the reply." }, 502);
     const reply = { at: Date.now(), author: staff.name || staff.email || "Staff", message: body };
     const items = readStore("feedback", []).map((row) => row?.id === id
-      ? { ...row, replies: [...(Array.isArray(row.replies) ? row.replies : []), reply], status: row.status === "resolved" ? "resolved" : "open" }
+      ? { ...row, replies: [...(Array.isArray(row.replies) ? row.replies : []), reply], status: ["resolved", "archived"].includes(row.status) ? row.status : "replied" }
       : row);
     writeStore("feedback", items);
     return json(res, { ok: true, items, reply });
@@ -2171,7 +2171,7 @@ async function sendCustomerDeliveryEmail(order, staff) {
 
 /* Alert the shop when a customer submits the contact form. */
 async function notifyNewMessage(item) {
-  const to = clean(config.fulfillmentEmail, 180);
+  const to = clean(getSettings().notifyEmail, 180) || clean(config.fulfillmentEmail, 180);
   if (!to || !config.resendApiKey) return { status: "skipped" };
   const adminBase = config.adminBaseUrl || config.siteBaseUrl || "";
   const meta = [item.name, item.email, item.phone, item.topic].filter(Boolean).map((v) => escapeHtml(clean(v, 180))).join(" · ");
@@ -3010,6 +3010,7 @@ function defaultSettings() {
     businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
     businessHours: "",
     emailOrderConfirmation: true, emailDeliveryNotice: true, emailNewMessageAlert: true, emailReplyTo: "",
+    notifyEmail: "dirtcollins@gmail.com", // contact-form alerts go here (editable in Settings)
     promoCodes: {
       LUNDE10: { code: "LUNDE10", label: "LUNDE10", type: "percent", value: 0.10 },
       SAMPLE5: { code: "SAMPLE5", label: "SAMPLE5", type: "fixed", value: 5 }

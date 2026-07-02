@@ -1,7 +1,7 @@
 /* Lunde V6/V7 — staff messages (feedback inbox) */
 (function () {
   var L = window.lunde;
-  var state = { filter: "open", topic: "all", q: "", replyOpen: {} };
+  var state = { filter: "new", topic: "all", q: "", replyOpen: {} };
   var chipsEl = document.getElementById("msgChips"), topicsEl = document.getElementById("msgTopics"), listEl = document.getElementById("msgList");
   var searchEl = document.getElementById("msgSearch"), refreshBtn = document.getElementById("msgRefresh");
 
@@ -11,6 +11,17 @@
 
   function items() { return (L.feedbackItems ? L.feedbackItems() : []).slice().sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); }); }
   function itemById(id) { return items().find(function (x) { return x.id === id; }); }
+
+  /* Status model: New -> Read -> Replied, plus Archived. Older items map over:
+     "resolved" was the old archive; "open" items are New (or Replied if a
+     reply is already on file). */
+  function msgStatus(f) {
+    var s = String(f.status || "");
+    if (s === "read" || s === "replied" || s === "archived" || s === "new") return s;
+    if (s === "resolved") return "archived";
+    if (Array.isArray(f.replies) && f.replies.length) return "replied";
+    return "new";
+  }
 
   function matchesTopic(f) { return state.topic === "all" || String(f.topic || "").trim() === state.topic; }
   function matchesQuery(f) {
@@ -23,9 +34,8 @@
   function baseFiltered() { return items().filter(matchesTopic).filter(matchesQuery); }
   function filtered() {
     var all = baseFiltered();
-    if (state.filter === "open") return all.filter(function (f) { return f.status !== "resolved"; });
-    if (state.filter === "resolved") return all.filter(function (f) { return f.status === "resolved"; });
-    return all;
+    if (state.filter === "all") return all;
+    return all.filter(function (f) { return msgStatus(f) === state.filter; });
   }
 
   /* Match a message to a customer record by email (case-insensitive). */
@@ -49,9 +59,8 @@
 
   function renderChips() {
     var all = baseFiltered();
-    var open = all.filter(function (f) { return f.status !== "resolved"; }).length;
-    var res = all.length - open;
-    chipsEl.innerHTML = [["open", "Open", open], ["resolved", "Resolved", res], ["all", "All", all.length]].map(function (f) {
+    var count = function (s) { return all.filter(function (f) { return msgStatus(f) === s; }).length; };
+    chipsEl.innerHTML = [["new", "New", count("new")], ["read", "Read", count("read")], ["replied", "Replied", count("replied")], ["archived", "Archived", count("archived")], ["all", "All", all.length]].map(function (f) {
       return '<button class="chip" type="button" data-filter="' + f[0] + '" aria-pressed="' + (state.filter === f[0]) + '">' + f[1] + ' <b>' + f[2] + '</b></button>';
     }).join("");
   }
@@ -107,7 +116,7 @@
       if (cust) bits.push('<a href="./customer-profile.html?id=' + encodeURIComponent(cust.email || cust.id) + '">View customer</a>');
       if (f.page && f.kind !== "contact") bits.push(esc(f.page));
     }
-    if (f.createdAt) bits.push(ago(f.createdAt));
+    if (f.createdAt) bits.push(new Date(f.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) + ' (' + ago(f.createdAt) + ')');
     var html = '<span class="row-sub msg-meta">' + bits.join(" · ") + '</span>';
     if (f.source !== "staff" && !f.email && f.phone) {
       html += '<span class="msg-hint">No email on this message — call or text <a href="tel:' + escAttr(String(f.phone).replace(/[^\d+]/g, "")) + '">' + esc(f.phone) + '</a> to follow up.</span>';
@@ -122,7 +131,8 @@
 
     var msgs = filtered();
     listEl.innerHTML = msgs.length ? msgs.map(function (f) {
-      var resolved = f.status === "resolved";
+      var st = msgStatus(f);
+      var stBadge = { "new": ["placed", "New"], read: ["shipped", "Read"], replied: ["delivered", "Replied"], archived: ["cancelled", "Archived"] }[st];
       var badges = (f.source === "staff" ? '<span class="status-badge" data-status="placed" style="margin-right:8px;vertical-align:2px"><i></i>Staff note</span>' : '') +
         (f.topic ? '<span class="msg-topic">' + esc(f.topic) + '</span>' : '');
       return '<div class="row msg-row" style="grid-template-columns:1fr auto;align-items:flex-start;gap:16px">' +
@@ -135,9 +145,10 @@
           replyBoxHtml(f) +
         '</div>' +
         '<div class="msg-actions">' +
-          '<span class="status-badge" data-status="' + (resolved ? "delivered" : "shipped") + '"><i></i>' + (resolved ? "Resolved" : "Open") + '</span>' +
+          '<span class="status-badge" data-status="' + stBadge[0] + '"><i></i>' + stBadge[1] + '</span>' +
+          (st === "new" ? '<button class="chip" type="button" data-mark-read="' + escAttr(f.id) + '" style="height:34px;padding:0 12px">Mark read</button>' : '') +
           (f.email && L.replyToFeedback ? '<button class="chip" type="button" data-reply="' + escAttr(f.id) + '" aria-pressed="' + Boolean(state.replyOpen[f.id]) + '" style="height:34px;padding:0 12px">Reply</button>' : '') +
-          '<button class="chip" type="button" data-resolve="' + escAttr(f.id) + '" style="height:34px;padding:0 12px">' + (resolved ? "Reopen" : "Resolve") + '</button>' +
+          '<button class="chip" type="button" data-resolve="' + escAttr(f.id) + '" style="height:34px;padding:0 12px">' + (st === "archived" ? "Restore" : "Archive") + '</button>' +
           '<button class="chip" type="button" data-del="' + escAttr(f.id) + '" style="height:34px;padding:0 12px">Delete</button>' +
         '</div></div>';
     }).join("") : '<div class="app-empty"><h3>No messages</h3><p>' + (state.q || state.topic !== "all" ? "Nothing matches this search or topic filter." : "Customer feedback will show up here.") + '</p></div>';
@@ -198,8 +209,14 @@
       }
       return;
     }
+    var mr = e.target.closest("[data-mark-read]");
+    if (mr && L.updateFeedback) { await L.updateFeedback(mr.getAttribute("data-mark-read"), { status: "read" }); renderAll(); return; }
     var r = e.target.closest("[data-resolve]");
-    if (r && L.updateFeedback) { var cur = itemById(r.dataset.resolve); await L.updateFeedback(r.dataset.resolve, { status: cur && cur.status === "resolved" ? "open" : "resolved" }); renderAll(); return; }
+    if (r && L.updateFeedback) {
+      var cur = itemById(r.dataset.resolve);
+      await L.updateFeedback(r.dataset.resolve, { status: cur && msgStatus(cur) === "archived" ? "read" : "archived" });
+      renderAll(); return;
+    }
     var d = e.target.closest("[data-del]");
     if (d && L.deleteFeedback && confirm("Delete this message?")) { delete state.replyOpen[d.dataset.del]; await L.deleteFeedback(d.dataset.del); renderAll(); }
   });

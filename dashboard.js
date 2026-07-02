@@ -90,7 +90,7 @@
     var notCancelled = orders.filter(function (o) { return o.status !== "cancelled"; });
     var lifetimeRev = notCancelled.reduce(function (s, o) { return s + (o.totals && o.totals.total || 0); }, 0);
     var openOrders = orders.filter(function (o) { return o.status !== "delivered" && o.status !== "cancelled"; });
-    var openMsgs = feedback.filter(function (f) { return f.status !== "resolved"; });
+    var openMsgs = feedback.filter(function (f) { return ["resolved", "archived", "replied"].indexOf(f.status || "") === -1 && !(Array.isArray(f.replies) && f.replies.length); });
 
     // Today
     var dayStart = new Date(); dayStart.setHours(0, 0, 0, 0); dayStart = dayStart.getTime();

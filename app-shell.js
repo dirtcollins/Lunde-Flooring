@@ -122,7 +122,7 @@
     try {
       var fb = (typeof L.feedbackItems === "function" ? L.feedbackItems() : []) || [];
       for (var i = 0; i < fb.length; i++) {
-        if (fb[i] && fb[i].status !== "resolved") openMsgs++;
+        if (fb[i] && ["resolved", "archived", "replied"].indexOf(fb[i].status || "") === -1 && !(Array.isArray(fb[i].replies) && fb[i].replies.length)) openMsgs++;
       }
       var ords = (typeof L.orders === "function" ? L.orders() : []) || [];
       for (var j = 0; j < ords.length; j++) {
