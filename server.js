@@ -1541,7 +1541,7 @@ async function serveStatic(req, res, url) {
   const cacheControl = longCache
     ? "public, max-age=31536000, immutable"
     : softCache
-      ? "public, max-age=60, stale-while-revalidate=600"
+      ? "public, max-age=60, stale-while-revalidate=120"
       : "no-cache";
   const ifNoneMatch = req.headers["if-none-match"];
   const ifModifiedSince = Date.parse(req.headers["if-modified-since"] || "");

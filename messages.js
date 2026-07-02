@@ -60,7 +60,10 @@
       // Older notes have no snapshot: fall back to the viewer's own photo when
       // they authored it, then to a customer account matching the author email
       // (staff often have one on the same address).
-      if (!photo && me.avatar && (f.authorEmail ? f.authorEmail === me.email : f.name === me.name)) photo = me.avatar;
+      var sameAuthor = f.authorEmail
+        ? f.authorEmail === me.email
+        : (function (a, b) { a = String(a || "").toLowerCase(); b = String(b || "").toLowerCase(); return a && b && (a === b || a.indexOf(b) === 0 || b.indexOf(a) === 0); })(f.name, me.name);
+      if (!photo && me.avatar && sameAuthor) photo = me.avatar;
       if (!photo && f.authorEmail && L.customers) {
         var rec = (L.customers() || []).find(function (c) { return String(c.email || "").toLowerCase() === String(f.authorEmail).toLowerCase(); });
         photo = (rec && rec.avatar) || "";
