@@ -14,14 +14,34 @@
   var IMAGE = SITE + "/media/new-site/hostinger-v7/web/hero-living.webp";
   var INSTAGRAM = "https://www.instagram.com/lundeflooring/";
 
-  /* Kern County service area. Kept in one place so every page and the sitemap
-     describe the same footprint. */
-  var CITIES = [
-    "Bakersfield", "Oildale", "Rosedale", "Seven Oaks", "Lamont", "Shafter",
-    "Wasco", "Delano", "McFarland", "Arvin", "Tehachapi", "Taft",
-    "Frazier Park", "Lake Isabella", "Ridgecrest"
-  ];
-  window.LUNDE_SERVICE_AREA = { cities: CITIES, county: "Kern County", region: "CA" };
+  /* Central California service area. Kept in one place so every page and the
+     sitemap describe the same footprint. */
+  var COUNTIES = {
+    "Kern County": [
+      "Bakersfield", "Oildale", "Rosedale", "Seven Oaks", "Lamont", "Shafter",
+      "Wasco", "Delano", "McFarland", "Arvin", "Taft", "Tehachapi",
+      "Frazier Park", "Lake Isabella", "Kernville", "Ridgecrest",
+      "California City", "Mojave", "Rosamond", "Buttonwillow"
+    ],
+    "Tulare County": [
+      "Visalia", "Tulare", "Porterville", "Dinuba", "Exeter", "Farmersville",
+      "Lindsay", "Woodlake", "Pixley", "Earlimart", "Tipton", "Springville",
+      "Three Rivers"
+    ],
+    "Kings County": [
+      "Hanford", "Lemoore", "Corcoran", "Avenal", "Armona", "Kettleman City",
+      "Stratford"
+    ],
+    "San Luis Obispo County": [
+      "San Luis Obispo", "Paso Robles", "Atascadero", "Arroyo Grande",
+      "Pismo Beach", "Grover Beach", "Morro Bay", "Los Osos", "Nipomo",
+      "Templeton", "Cambria", "Cayucos", "Santa Margarita", "Oceano", "San Miguel"
+    ]
+  };
+  var CITIES = Object.keys(COUNTIES).reduce(function (all, county) {
+    return all.concat(COUNTIES[county]);
+  }, []);
+  window.LUNDE_SERVICE_AREA = { cities: CITIES, counties: Object.keys(COUNTIES), byCounty: COUNTIES, region: "CA" };
 
   var head = document.head || document.getElementsByTagName("head")[0];
 
@@ -103,7 +123,9 @@
   var areaServed = CITIES.map(function (c) {
     return { "@type": "City", name: c + ", CA" };
   });
-  areaServed.push({ "@type": "AdministrativeArea", name: "Kern County, California" });
+  Object.keys(COUNTIES).forEach(function (county) {
+    areaServed.push({ "@type": "AdministrativeArea", name: county + ", California" });
+  });
 
   var business = {
     "@context": "https://schema.org",
@@ -116,9 +138,10 @@
     image: IMAGE,
     logo: IMAGE,
     description:
-      "Local luxury vinyl plank flooring supplier serving Bakersfield and Kern County, " +
-      "California. Waterproof LVP, SPC and rigid core floors sold by the carton with " +
-      "local delivery for homeowners and contractors.",
+      "Local luxury vinyl plank flooring supplier serving Central California — " +
+      "Bakersfield and Kern County, plus Tulare, Kings, and San Luis Obispo counties. " +
+      "Waterproof LVP, SPC and rigid core floors sold by the carton with local " +
+      "delivery for homeowners and contractors.",
     areaServed: areaServed,
     address: { "@type": "PostalAddress", addressLocality: "Bakersfield", addressRegion: "CA", addressCountry: "US" },
     priceRange: "$$",

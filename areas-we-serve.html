@@ -3,16 +3,59 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Areas We Serve — Bakersfield &amp; Kern County | Lunde Flooring Co.</title>
-    <meta name="description" content="Lunde Flooring Co. delivers luxury vinyl plank flooring across Bakersfield and Kern County — from Southwest and Northwest Bakersfield to Oildale, Shafter, Delano, Tehachapi, and the mountain and desert communities.">
+    <title>Areas We Serve — Kern, Tulare, Kings &amp; San Luis Obispo Counties | Lunde Flooring Co.</title>
+    <meta name="description" content="Lunde Flooring Co. delivers waterproof luxury vinyl plank flooring across Central California — Bakersfield and all of Kern County, plus Tulare, Kings, and San Luis Obispo counties. Free samples and free local delivery on orders over $1,200.">
     <link rel="icon" href="./favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./v6.css">
     <link rel="stylesheet" href="./interior.css">
-    <meta property="og:title" content="Areas We Serve — Bakersfield &amp; Kern County | Lunde Flooring Co.">
-    <meta property="og:description" content="Local luxury vinyl plank flooring delivery across Bakersfield and all of Kern County.">
+    <meta property="og:title" content="Areas We Serve — Central California | Lunde Flooring Co.">
+    <meta property="og:description" content="Luxury vinyl plank flooring delivered across Kern, Tulare, Kings, and San Luis Obispo counties. Free local delivery on orders over $1,200.">
     <script defer src="./seo.js"></script>
+    <style>
+      /* Areas page — scoped styles (kept out of the shared sheets) */
+
+      /* delivery-promise intro */
+      .aw-promise { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 4.5vw, 64px); align-items: center; }
+      .aw-promise-copy { display: grid; gap: 16px; max-width: 34em; }
+      .aw-promise-copy h2 { font-size: clamp(28px, 3.4vw, 48px); line-height: 1.03; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+      .aw-promise-copy p { color: var(--muted); font-size: clamp(15.5px, 1.15vw, 17px); line-height: 1.6; text-wrap: pretty; }
+      .aw-promise-copy p a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+      .aw-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 1.2vw, 16px); }
+      .aw-tile { border: 1px solid var(--line); background: var(--panel); padding: clamp(18px, 2vw, 26px); display: grid; gap: 8px; align-content: start; transition: border-color .2s var(--ease); }
+      .aw-tile:hover { border-color: var(--ink); }
+      .aw-tile svg { width: 26px; height: 26px; fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .aw-tile b { font-family: var(--font-display); font-weight: 600; font-size: 17px; line-height: 1.2; letter-spacing: -0.01em; }
+      .aw-tile span { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+      .aw-tile a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+      /* county jump nav */
+      .aw-jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(22px, 2.6vw, 34px); }
+      .aw-jump a { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line-2); background: var(--panel); padding: 10px 16px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); transition: border-color .2s var(--ease); }
+      .aw-jump a:hover { border-color: var(--ink); }
+      .aw-jump a i { font-style: normal; color: var(--accent); }
+
+      /* county blocks */
+      .aw-county { scroll-margin-top: 96px; }
+      .aw-county-head { display: grid; gap: 10px; margin-bottom: clamp(22px, 2.8vw, 36px); max-width: 46em; }
+      .aw-county-head p { color: var(--muted); font-size: clamp(15px, 1.1vw, 16.5px); line-height: 1.6; text-wrap: pretty; }
+      .aw-cities { display: flex; flex-wrap: wrap; gap: 8px; }
+      .aw-city { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line-2); background: var(--panel); padding: 8px 13px; font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+      .aw-city::before { content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--accent); flex: none; }
+      .aw-cities-label { width: 100%; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 14px 0 2px; }
+      .aw-county .feat-grid { margin-bottom: clamp(18px, 2.2vw, 28px); }
+
+      @media (max-width: 900px) {
+        .aw-promise { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 640px) {
+        .aw-tiles { grid-template-columns: 1fr 1fr; }
+        .aw-tile { padding: 16px 14px; }
+        .aw-city { padding: 8px 11px; font-size: 13px; }
+        .aw-jump a { flex: 1 1 calc(50% - 5px); justify-content: center; padding: 12px 10px; }
+      }
+    </style>
   </head>
   <body data-nav="resources"
         data-breadcrumb='[["Home","/"],["Areas We Serve"]]'>
@@ -20,32 +63,71 @@
       <!-- hero -->
       <section class="pg-hero">
         <div class="pg-hero-media">
-          <img src="./media/lifestyle/open-plan-dining-vinyl-plank.webp" srcset="./media/lifestyle/open-plan-dining-vinyl-plank-800.webp 800w, ./media/lifestyle/open-plan-dining-vinyl-plank.webp 1214w" sizes="100vw" alt="Open-plan Bakersfield home with light oak luxury vinyl plank flooring" fetchpriority="high">
+          <img src="./media/lifestyle/open-plan-dining-vinyl-plank.webp" srcset="./media/lifestyle/open-plan-dining-vinyl-plank-800.webp 800w, ./media/lifestyle/open-plan-dining-vinyl-plank.webp 1214w" sizes="100vw" alt="Open-plan Central California home with light oak luxury vinyl plank flooring" fetchpriority="high">
         </div>
         <div class="pg-hero-inner">
-          <p class="eyebrow">Bakersfield &amp; Kern County</p>
+          <p class="eyebrow">Central California</p>
           <h1 class="display">Areas we serve.</h1>
-          <p>We're a local supplier, so we know the county isn't one place — the light, the homes, and the drive all change from Southwest Bakersfield to the mountains. Here's where we deliver, corner by corner.</p>
+          <p>Based in Bakersfield, delivering across four counties — Kern, Tulare, Kings, and San Luis Obispo. From valley farm towns to the Central Coast, we bring waterproof luxury vinyl plank to your door.</p>
           <div class="pg-hero-cta">
             <a class="btn on-dark lg" href="./catalog.html">Shop the floors</a>
             <a class="btn ghost on-dark lg" href="./contact.html">Ask about your area</a>
           </div>
+          <div class="pg-hero-meta">
+            <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>4 counties</span>
+            <span><svg viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>55+ communities</span>
+            <span><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Free delivery over $1,200</span>
+          </div>
         </div>
       </section>
 
-      <!-- intro -->
+      <!-- delivery promise (redesigned intro) -->
       <section class="section wrap">
-        <div class="measure reveal">
-          <p class="lede">Lunde Flooring Co. delivers waterproof luxury vinyl plank to homes and job sites throughout Bakersfield and Kern County. Order online, get free samples, and we'll bring your floors to your door — free on orders over $1,200. If you're anywhere in the county we can most likely reach you; when in doubt, <a href="./contact.html" style="text-decoration:underline;text-underline-offset:3px">send your ZIP</a> and we'll confirm.</p>
+        <div class="aw-promise reveal">
+          <div class="aw-promise-copy">
+            <p class="eyebrow">How local delivery works</p>
+            <h2 class="display">Your floors, brought to your door.</h2>
+            <p>Lunde Flooring Co. delivers waterproof luxury vinyl plank to homes and job sites throughout Central California. Shop the whole collection online, feel the floor first with free samples, and we&rsquo;ll bring the cartons to your driveway or garage — no showroom trip, no freight terminal.</p>
+            <p>If you&rsquo;re in one of the four counties below, we can most likely reach you. When in doubt, <a href="./contact.html">send us your ZIP</a> and we&rsquo;ll confirm delivery before you order.</p>
+          </div>
+          <div class="aw-tiles">
+            <div class="aw-tile">
+              <svg viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
+              <b>Free local delivery</b>
+              <span>Free on orders over $1,200 — scheduled around your project, not ours.</span>
+            </div>
+            <div class="aw-tile">
+              <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg>
+              <b>Free samples first</b>
+              <span>Full-size swatches shipped to your door, so you order with confidence.</span>
+            </div>
+            <div class="aw-tile">
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M3 4h2l2.4 12h10.2L20 8H6"/></svg>
+              <b>Order 100% online</b>
+              <span>Honest carton pricing, live sq.&nbsp;ft. math, and secure checkout.</span>
+            </div>
+            <div class="aw-tile">
+              <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <b>Outside the map?</b>
+              <span><a href="./contact.html">Send your ZIP</a> — if we can reach you, we will.</span>
+            </div>
+          </div>
         </div>
+        <nav class="aw-jump reveal" aria-label="Jump to a county">
+          <a href="#kern-county"><i>01</i> Kern County</a>
+          <a href="#tulare-county"><i>02</i> Tulare County</a>
+          <a href="#kings-county"><i>03</i> Kings County</a>
+          <a href="#slo-county"><i>04</i> San Luis Obispo</a>
+        </nav>
       </section>
 
-      <!-- within the city -->
-      <section class="section band-2">
+      <!-- Kern County -->
+      <section class="section band-2 aw-county" id="kern-county">
         <div class="wrap">
-          <div class="section-head reveal" style="margin-bottom:clamp(28px,3.5vw,44px)">
-            <p class="eyebrow">Within the city</p>
-            <h2 class="display">Bakersfield, neighborhood by neighborhood.</h2>
+          <div class="aw-county-head reveal">
+            <p class="eyebrow">01 · Home county</p>
+            <h2 class="display">Kern County.</h2>
+            <p>Bakersfield is home base, so Kern County gets same-week delivery on most orders. We know the county isn&rsquo;t one place — the light, the homes, and the drive all change from Southwest Bakersfield to the mountains — and we deliver to every corner of it.</p>
           </div>
           <div class="feat-grid four reveal">
             <div class="feat-card"><span class="eyebrow" style="color:var(--accent)">Southwest</span><h3>SW Bakersfield</h3><p>Newer master-planned neighborhoods where waterproof LVP is a popular whole-home upgrade over builder carpet and tile.</p></div>
@@ -53,25 +135,107 @@
             <div class="feat-card"><span class="eyebrow" style="color:var(--accent)">Northeast</span><h3>NE Bakersfield &amp; Oildale</h3><p>Established homes and rentals where durable, easy-turn flooring earns its keep.</p></div>
             <div class="feat-card"><span class="eyebrow" style="color:var(--accent)">East &amp; Central</span><h3>East Bakersfield &amp; Downtown</h3><p>Older character homes and remodels where a warm wide-plank look modernizes a space fast.</p></div>
           </div>
+          <div class="aw-cities reveal">
+            <span class="aw-cities-label">Kern County communities we deliver to</span>
+            <span class="aw-city">Bakersfield</span>
+            <span class="aw-city">Oildale</span>
+            <span class="aw-city">Rosedale</span>
+            <span class="aw-city">Shafter</span>
+            <span class="aw-city">Wasco</span>
+            <span class="aw-city">Delano</span>
+            <span class="aw-city">McFarland</span>
+            <span class="aw-city">Lamont</span>
+            <span class="aw-city">Arvin</span>
+            <span class="aw-city">Taft</span>
+            <span class="aw-city">Tehachapi</span>
+            <span class="aw-city">Frazier Park</span>
+            <span class="aw-city">Lake Isabella</span>
+            <span class="aw-city">Kernville</span>
+            <span class="aw-city">Ridgecrest</span>
+            <span class="aw-city">California City</span>
+            <span class="aw-city">Mojave</span>
+            <span class="aw-city">Rosamond</span>
+            <span class="aw-city">Buttonwillow</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tulare County -->
+      <section class="section wrap aw-county" id="tulare-county">
+        <div class="aw-county-head reveal">
+          <p class="eyebrow">02 · North on Highway 99</p>
+          <h2 class="display">Tulare County.</h2>
+          <p>From Visalia and Tulare up Highway 99 and out to the foothills, we deliver waterproof luxury vinyl plank to homes, rentals, and job sites across Tulare County — a straight run north from our Bakersfield warehouse.</p>
+        </div>
+        <div class="aw-cities reveal">
+          <span class="aw-cities-label">Tulare County communities we deliver to</span>
+          <span class="aw-city">Visalia</span>
+          <span class="aw-city">Tulare</span>
+          <span class="aw-city">Porterville</span>
+          <span class="aw-city">Dinuba</span>
+          <span class="aw-city">Exeter</span>
+          <span class="aw-city">Farmersville</span>
+          <span class="aw-city">Lindsay</span>
+          <span class="aw-city">Woodlake</span>
+          <span class="aw-city">Pixley</span>
+          <span class="aw-city">Earlimart</span>
+          <span class="aw-city">Tipton</span>
+          <span class="aw-city">Springville</span>
+          <span class="aw-city">Three Rivers</span>
         </div>
       </section>
 
       <!-- photo band -->
       <section class="img-band reveal">
-        <img src="./media/lifestyle/great-room-blue-island.webp" srcset="./media/lifestyle/great-room-blue-island-800.webp 800w, ./media/lifestyle/great-room-blue-island-1400.webp 1400w, ./media/lifestyle/great-room-blue-island.webp 1425w" sizes="100vw" alt="Spacious Kern County great room and kitchen with warm luxury vinyl plank flooring" loading="lazy">
-        <div class="img-band-cap"><p>From starter homes to full remodels — one honest floor, delivered locally.</p></div>
+        <img src="./media/lifestyle/great-room-blue-island.webp" srcset="./media/lifestyle/great-room-blue-island-800.webp 800w, ./media/lifestyle/great-room-blue-island-1400.webp 1400w, ./media/lifestyle/great-room-blue-island.webp 1425w" sizes="100vw" alt="Spacious Central California great room and kitchen with warm luxury vinyl plank flooring" loading="lazy">
+        <div class="img-band-cap"><p>From valley farm towns to the Central Coast — one honest floor, delivered locally.</p></div>
       </section>
 
-      <!-- across the county -->
-      <section class="section wrap">
-        <div class="section-head reveal" style="margin-bottom:clamp(28px,3.5vw,44px)">
-          <p class="eyebrow">Across the county</p>
-          <h2 class="display">Kern County communities.</h2>
+      <!-- Kings County -->
+      <section class="section wrap aw-county" id="kings-county">
+        <div class="aw-county-head reveal">
+          <p class="eyebrow">03 · Heart of the valley</p>
+          <h2 class="display">Kings County.</h2>
+          <p>Hanford, Lemoore, and the communities around them sit an easy drive from Bakersfield. Homeowners, landlords, and contractors across Kings County get the same free-over-$1,200 local delivery as our hometown customers.</p>
         </div>
-        <div class="feat-grid reveal">
-          <div class="feat-card"><span class="eyebrow" style="color:var(--accent)">North valley</span><h3>Shafter, Wasco, Delano &amp; McFarland</h3><p>Agricultural communities north of the city — we deliver to homes and rental properties throughout the north valley.</p></div>
-          <div class="feat-card"><span class="eyebrow" style="color:var(--accent)">South &amp; east</span><h3>Lamont, Arvin &amp; Taft</h3><p>From the southeast farm towns to the oilfields around Taft, local delivery keeps projects moving.</p></div>
-          <div class="feat-card"><span class="eyebrow" style="color:var(--accent)">Mountain &amp; desert</span><h3>Tehachapi, Frazier Park, Lake Isabella &amp; Ridgecrest</h3><p>Higher-elevation and desert communities where a stable, waterproof rigid core handles real temperature swings.</p></div>
+        <div class="aw-cities reveal">
+          <span class="aw-cities-label">Kings County communities we deliver to</span>
+          <span class="aw-city">Hanford</span>
+          <span class="aw-city">Lemoore</span>
+          <span class="aw-city">Corcoran</span>
+          <span class="aw-city">Avenal</span>
+          <span class="aw-city">Armona</span>
+          <span class="aw-city">Kettleman City</span>
+          <span class="aw-city">Stratford</span>
+        </div>
+      </section>
+
+      <!-- San Luis Obispo County -->
+      <section class="section band-2 aw-county" id="slo-county">
+        <div class="wrap">
+          <div class="aw-county-head reveal">
+            <p class="eyebrow">04 · Over the grade to the coast</p>
+            <h2 class="display">San Luis Obispo County.</h2>
+            <p>We run deliveries over to the Central Coast — from Paso Robles wine country down through San Luis Obispo and the Five Cities. Waterproof rigid-core LVP is a natural fit for coastal humidity, beach houses, and busy vacation rentals.</p>
+          </div>
+          <div class="aw-cities reveal">
+            <span class="aw-cities-label">San Luis Obispo County communities we deliver to</span>
+            <span class="aw-city">San Luis Obispo</span>
+            <span class="aw-city">Paso Robles</span>
+            <span class="aw-city">Atascadero</span>
+            <span class="aw-city">Arroyo Grande</span>
+            <span class="aw-city">Pismo Beach</span>
+            <span class="aw-city">Grover Beach</span>
+            <span class="aw-city">Morro Bay</span>
+            <span class="aw-city">Los Osos</span>
+            <span class="aw-city">Nipomo</span>
+            <span class="aw-city">Templeton</span>
+            <span class="aw-city">Cambria</span>
+            <span class="aw-city">Cayucos</span>
+            <span class="aw-city">Santa Margarita</span>
+            <span class="aw-city">Oceano</span>
+            <span class="aw-city">San Miguel</span>
+          </div>
         </div>
       </section>
 
@@ -79,8 +243,8 @@
       <section class="section band-ink">
         <div class="wrap measure reveal">
           <p class="eyebrow">Not sure if we reach you?</p>
-          <h2 class="display" style="font-size:clamp(30px,4vw,54px)">If it's Kern County, just ask.</h2>
-          <p class="lede">Tell us your delivery ZIP and what you're working on, and we'll confirm delivery and help you pick the right floor. Homeowners and contractors both welcome.</p>
+          <h2 class="display" style="font-size:clamp(30px,4vw,54px)">If it&rsquo;s Central California, just ask.</h2>
+          <p class="lede">Tell us your delivery ZIP and what you&rsquo;re working on, and we&rsquo;ll confirm delivery and help you pick the right floor. Homeowners and contractors both welcome.</p>
           <div class="v6-hero-cta" style="margin-top:26px">
             <a class="btn on-dark lg" href="./catalog.html">Browse all floors</a>
             <a class="btn ghost on-dark lg" href="./samples.html">Order free samples</a>

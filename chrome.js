@@ -66,7 +66,7 @@
       '<div class="v6-fcol"><h4>Help</h4><a href="./shipping-returns.html">Shipping &amp; returns</a><a href="./install.html">Installation</a><a href="./care-maintenance.html">Care &amp; maintenance</a><a href="./faq.html">FAQ</a><a href="./warranty.html">Warranty</a><a href="./contact.html">Contact us</a></div>' +
       '<div class="v6-fcol"><h4>Company</h4><a href="./our-story.html">Our story</a><a href="./contact.html">Contact</a><a href="https://www.instagram.com/lundeflooring/" target="_blank" rel="noopener">Instagram</a></div>' +
     '</div>' +
-    '<div class="wrap" style="padding-top:8px"><p style="font-size:12px;letter-spacing:.02em;color:var(--muted);max-width:none">Lunde Flooring Co. proudly serves Bakersfield, Oildale, Rosedale, Seven Oaks, Shafter, Wasco, Delano, McFarland, Lamont, Arvin, Taft, Tehachapi, Frazier Park, Lake Isabella, Ridgecrest, and all of Kern County, California.</p></div>' +
+    '<div class="wrap" style="padding-top:8px"><p style="font-size:12px;letter-spacing:.02em;color:var(--muted);max-width:none">Lunde Flooring Co. proudly serves Central California — Bakersfield, Shafter, Wasco, Delano, Arvin, Taft, Tehachapi, Lake Isabella, and Ridgecrest in Kern County; Visalia, Tulare, and Porterville in Tulare County; Hanford, Lemoore, and Corcoran in Kings County; and San Luis Obispo, Paso Robles, Atascadero, and the Five Cities in San Luis Obispo County.</p></div>' +
     '<div class="v6-footer-base"><span>© 2026 Lunde Flooring Co. All rights reserved.</span><span><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="./accessibility.html">Accessibility</a></span></div></footer>';
 
   if (!hasInlineChrome) {
