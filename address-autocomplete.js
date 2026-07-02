@@ -1,6 +1,6 @@
 /* Lunde — shared address autocomplete widget.
    Usage: window.lundeAddressAutocomplete(input, { onSelect: function (parts) {} })
-   - Suggestions come from the free, keyless Photon geocoder (photon.komoot.io),
+   - Suggestions come from Geoapify's geocoder (building-level house numbers),
      biased toward Bakersfield, CA. US results only.
    - parts = { line1, city, state, zip, full }. Without onSelect, the input is
      set to parts.full ("line1, city, state zip").
@@ -10,8 +10,10 @@
   "use strict";
   if (window.lundeAddressAutocomplete) return;
 
-  var API = "https://photon.komoot.io/api/";
-  var BIAS = "&lat=35.3733&lon=-119.0187"; /* Bakersfield, CA */
+  var API = "https://api.geoapify.com/v1/geocode/autocomplete";
+  /* Public client key — restrict it to lundeflooring.com in the Geoapify dashboard. */
+  var API_KEY = "d1e253f7dace4866b96427a61edd4ab0";
+  var BIAS = "&filter=countrycode:us&bias=proximity:-119.0187,35.3733"; /* US only, Bakersfield first */
   var MIN_CHARS = 4;
   var DEBOUNCE_MS = 250;
 
@@ -53,10 +55,11 @@
 
   /* Build {line1, city, state, zip, full} from a Photon feature's properties. */
   function partsFrom(p) {
-    var line1 = [p.housenumber, p.street].filter(Boolean).join(" ").trim();
+    var line1 = String(p.address_line1 || "").trim();
+    if (!line1) line1 = [p.housenumber, p.street].filter(Boolean).join(" ").trim();
     if (!line1) line1 = String(p.name || "").trim();
     var city = String(p.city || p.town || p.village || "").trim();
-    var state = stateAbbr(p.state);
+    var state = String(p.state_code || "").trim().toUpperCase() || stateAbbr(p.state);
     var zip = String(p.postcode || "").trim().split(";")[0];
     var full = line1;
     if (city) full += ", " + city;
@@ -165,7 +168,7 @@
       function search(q) {
         if (controller && controller.abort) controller.abort(); /* drop stale request */
         controller = (typeof AbortController === "function") ? new AbortController() : null;
-        var url = API + "?q=" + encodeURIComponent(q) + "&limit=5&lang=en" + BIAS;
+        var url = API + "?text=" + encodeURIComponent(q) + "&limit=5&lang=en&apiKey=" + API_KEY + BIAS;
         fetch(url, controller ? { signal: controller.signal } : undefined)
           .then(function (r) { return r.ok ? r.json() : null; })
           .then(function (data) {
@@ -175,7 +178,7 @@
             var seen = {};
             for (var i = 0; i < feats.length; i++) {
               var p = (feats[i] && feats[i].properties) || {};
-              if (String(p.countrycode || "").toUpperCase() !== "US") continue; /* US only */
+              if (String(p.country_code || p.countrycode || "").toUpperCase() !== "US") continue; /* US only */
               var parts = partsFrom(p);
               if (!parts.line1 || seen[parts.full]) continue;
               seen[parts.full] = 1;
