@@ -586,7 +586,9 @@
     activeCustomer = { ...acc };
     const list = customers();
     const existing = list.find((c) => c.id === acc.id);
-    const display = { id: acc.id, createdAt: acc.createdAt || Date.now(), name: acc.name || "", company: acc.company || "", email: acc.email || "", phone: acc.phone || "", addresses: Array.isArray(acc.addresses) ? acc.addresses : [] };
+    const display = { id: acc.id, createdAt: acc.createdAt || Date.now(), name: acc.name || "", company: acc.company || "", email: acc.email || "", phone: acc.phone || "", addresses: Array.isArray(acc.addresses) ? acc.addresses : [], favorites: Array.isArray(acc.favorites) ? acc.favorites : [] };
+    // Server account is the source of truth for a signed-in customer's favorites.
+    if (Array.isArray(acc.favorites)) writeJson(FAVORITES_KEY, acc.favorites);
     if (existing) {
       saveCustomers(list.map((c) => c.id === acc.id ? { ...c, ...display } : c));
     } else {
@@ -825,6 +827,13 @@
     const list = favorites();
     const next = list.includes(id) ? list.filter((f) => f !== id) : [...list, id];
     writeJson(FAVORITES_KEY, next);
+    // Mirror the saveAddresses pattern: keep the customer record (staff view)
+    // and the server account (cross-device) in sync for signed-in customers.
+    const active = currentCustomer();
+    if (active) {
+      updateCustomerProfile(active.id, { favorites: next });
+      if (typeof saveAccountProfile === "function") saveAccountProfile({ favorites: next }).catch(() => {});
+    }
     return next.includes(id);
   }
 
