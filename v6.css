@@ -907,6 +907,23 @@ a.acct-card:active { transform: translateY(1px); }
 @media (prefers-reduced-motion: reduce) { .mo-banner i { animation: none; } }
 .mo-banner strong { display: block; font-weight: 700; }
 .mo-banner span { font-size: 14px; color: var(--muted); }
+/* delivered = green, settled state (no pulse) */
+.mo-banner.is-delivered { background: #eaf4ec; border-color: #cfe5d4; border-left-color: #34a05f; }
+.mo-banner.is-delivered i { background: #34a05f; animation: none; }
+.mo-banner.is-delivered strong { color: #1f6b3d; }
+/* order stepper: stage colors matching the staff console */
+.mo-step[data-st="placed"].done::before { background: #ef8e3c; border-color: #ef8e3c; }
+.mo-step[data-st="placed"].done::after { background: #ef8e3c; }
+.mo-step[data-st="processing"].done::before { background: #e8b53a; border-color: #e8b53a; }
+.mo-step[data-st="processing"].done::after { background: #e8b53a; }
+.mo-step[data-st="shipped"].done::before { background: #3a82e0; border-color: #3a82e0; }
+.mo-step[data-st="shipped"].done::after { background: #3a82e0; }
+.mo-step[data-st="delivered"].done::before { background: #34a05f; border-color: #34a05f; }
+.mo-step[data-st="delivered"].done::after { background: #34a05f; }
+.mo-step[data-st="placed"].now::before { box-shadow: 0 0 0 4px rgba(239,142,60,0.22); }
+.mo-step[data-st="processing"].now::before { box-shadow: 0 0 0 4px rgba(232,181,58,0.25); }
+.mo-step[data-st="shipped"].now::before { box-shadow: 0 0 0 4px rgba(58,130,224,0.2); }
+.mo-step[data-st="delivered"].now::before { box-shadow: 0 0 0 4px rgba(52,160,95,0.22); }
 .mo-section-h { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 26px 0 6px; letter-spacing: -0.01em; }
 .mo-info { display: grid; gap: 12px; position: sticky; top: 92px; }
 .mo-info-card { border: 1px solid var(--line); padding: 20px 22px; background: var(--panel); }

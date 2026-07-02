@@ -64,14 +64,17 @@
   (order.history || []).forEach(function (h) { if (!historyAt[h.status]) historyAt[h.status] = h.at; });
   var stepper = cancelled ? '' : '<div class="mo-stepper">' + STATUSES.map(function (s, i) {
     var done = i <= activeIdx;
-    return '<div class="mo-step' + (done ? " done" : "") + (i === activeIdx ? " now" : "") + '">' + STATUS_LABELS[s] +
+    return '<div class="mo-step' + (done ? " done" : "") + (i === activeIdx ? " now" : "") + '" data-st="' + s + '">' + STATUS_LABELS[s] +
       (done && historyAt[s] ? '<small>' + fmtShort(historyAt[s]) + '</small>' : '<small>&nbsp;</small>') + '</div>';
   }).join("") + '</div>';
 
   var nextStatus = STATUSES[activeIdx + 1];
+  var deliveredTs = historyAt.delivered;
   var banner = cancelled
     ? '<div class="mo-banner" style="border-left-color:#9a4a2e"><i style="background:#9a4a2e;animation:none"></i><div><strong>Cancelled</strong><span>' + NOTIFY.cancelled + '</span></div></div>'
-    : '<div class="mo-banner"><i></i><div><strong>Right now · ' + STATUS_LABELS[order.status] + '</strong><span>' + (nextStatus ? "Next up: " + STATUS_LABELS[nextStatus] + " — we’ll email you the moment it moves." : "All done — thanks for your business.") + '</span></div></div>';
+    : order.status === "delivered"
+      ? '<div class="mo-banner is-delivered"><i></i><div><strong>Delivered' + (deliveredTs ? ' · ' + fmtDateTime(deliveredTs) : '') + '</strong><span>All done — thanks for your business. Enjoy your new floor!</span></div></div>'
+      : '<div class="mo-banner"><i></i><div><strong>Right now · ' + STATUS_LABELS[order.status] + '</strong><span>' + (nextStatus ? "Next up: " + STATUS_LABELS[nextStatus] + " — we’ll email you the moment it moves." : "All done — thanks for your business.") + '</span></div></div>';
 
   var timeline = (order.history || []).slice().reverse().map(function (h) {
     return '<div class="mo-tl"><span><b>' + STATUS_LABELS[h.status] + '</b> · ' + (NOTIFY[h.status] || "") + '</span><span class="when" title="' + ago(h.at) + '">' + fmtShortTime(h.at) + '</span></div>';
