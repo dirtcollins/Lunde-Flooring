@@ -285,6 +285,18 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
   .v6-footer-brand { grid-column: 1 / -1; }
 }
 @media (max-width: 860px) {
+  /* footer: two balanced columns — Help (long) fills the right column while
+     Shop + Company stack on the left; brand spans the top. */
+  .v6-footer-grid { grid-template-columns: 1fr 1fr; align-items: start; gap: 8px clamp(20px, 6vw, 40px); }
+  .v6-footer-brand { grid-column: 1 / -1; margin-bottom: 18px; }
+  .v6-footer-grid .v6-fcol:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .v6-footer-grid .v6-fcol:nth-child(3) { grid-column: 2; grid-row: 2 / span 2; }
+  .v6-footer-grid .v6-fcol:nth-child(4) { grid-column: 1; grid-row: 3; }
+  .v6-fcol { margin-bottom: 18px; }
+  .v6-fcol a { padding: 11px 0; font-size: 15px; }
+  .v6-fcol h4 { margin-bottom: 8px; }
+  .v6-footer-base { flex-direction: column; gap: 10px; }
+  .v6-footer-base a { padding: 2px 4px; }
   .v6-nav { display: none; }
   .v6-burger { display: inline-grid; }
   .v6-header-inner { grid-template-columns: auto 1fr auto; min-height: 64px; }
@@ -298,7 +310,6 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
   .v6-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
   .v6-rooms { grid-template-columns: 1fr 1fr; }
   .v6-assure { grid-template-columns: 1fr; }
-  .v6-footer-grid { grid-template-columns: 1fr 1fr; }
   .v6-card-sample, .v6-card-fav { opacity: 1; transform: none; }
   .btn { width: 100%; }
   .v6-hero-cta .btn { width: auto; flex: 1; }
