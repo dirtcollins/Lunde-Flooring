@@ -861,16 +861,23 @@ async function handleOrders(req, res, method, parts, input) {
   if (parts.length === 1 && method === "POST") {
     const denied = requireStaff(req, res);
     if (denied) return;
-    const order = normalizeOrder(input);
+    // {order, silent} envelope: the console uses silent uploads to sync an
+    // order that only exists in a browser cache, without firing the
+    // "payment successful" confirmation emails a fresh order would send.
+    const envelope = input && input.order && typeof input.order === "object" ? input : { order: input };
+    const order = normalizeOrder(envelope.order);
+    const silent = Boolean(envelope.silent);
     if (!Object.keys(order.items).length) return json(res, { ok: false, error: "Order has no line items." }, 422);
     const account = currentAccount(req);
     if (account) attachAccountToOrder(order, account);
     const orders = [order, ...readStore("orders", []).filter((row) => row?.id !== order.id)];
     writeStore("orders", orders);
     markQuoteConverted(order);
-    const email = await sendFulfillmentEmail(order, "automatic");
-    recordEmailStatus(order.id, { ...email, source: "automatic" });
-    await sendCustomerConfirmation(order, "order-placed");
+    if (!silent) {
+      const email = await sendFulfillmentEmail(order, "automatic");
+      recordEmailStatus(order.id, { ...email, source: "automatic" });
+      await sendCustomerConfirmation(order, "order-placed");
+    }
     const fresh = readStore("orders", []);
     return json(res, { ok: true, item: fresh.find((row) => row.id === order.id) || order, items: fresh });
   }
@@ -984,14 +991,9 @@ async function handleOrders(req, res, method, parts, input) {
     }
     const payUrl = clean(stripe.data.url, 600);
     savePendingStripeOrder({ ...order, payment: { ...(order.payment || {}), method: "stripe", status: "awaiting_payment", stripeSessionId: clean(stripe.data.id, 180) } }, stripe.data);
-    const settings = getSettings();
-    const template = buildActionEmail({
-      title: `Your ${settings.businessName} order is ready to pay`,
-      intro: `Hi ${order.customer?.name || "there"}, order ${order.id} totals $${total.toFixed(2)}. Use the secure link below to pay by card — Stripe handles the payment, we never see your card details.`,
-      buttonText: `Pay $${total.toFixed(2)} securely`,
-      url: payUrl,
-      footer: `Questions? Reply to this email or call ${settings.businessPhone}.`
-    });
+    // Full receipt-style email: items with thumbnails, per-line pricing,
+    // subtotal/discount/shipping/tax/total, and a prominent pay button.
+    const template = buildCustomerEmail(order, "", { payUrl });
     const email = await sendTransactionalEmail({
       to,
       subject: `Pay for your Lunde Flooring order ${order.id}`,
@@ -2284,7 +2286,7 @@ function buildActionEmail({ title, intro, buttonText, url, footer }) {
   return { html, text };
 }
 
-function buildCustomerEmail(order, trackUrl) {
+function buildCustomerEmail(order, trackUrl, payment) {
   const products = productsById();
   const money = (n) => `$${(Number(n) || 0).toFixed(2)}`;
   const date = new Date(Number(order.createdAt || Date.now())).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
@@ -2320,18 +2322,28 @@ function buildCustomerEmail(order, trackUrl) {
   const fulfillment = pickup
     ? "Pickup — Lunde warehouse, Bakersfield, CA"
     : `Shipping to: ${escapeHtml(order.delivery?.address || "the address on file")}`;
-  const cta = trackUrl
-    ? `<tr><td style="padding:4px 28px 28px"><a href="${escapeHtml(trackUrl)}" style="display:inline-block;background:#17211b;color:#fff;text-decoration:none;border-radius:6px;padding:13px 22px;font-weight:700">Track your order</a></td></tr>`
-    : "";
+  // Payment-request variant: same receipt layout (items, thumbnails, totals),
+  // but the heading/intro ask for payment and the CTA is a big pay button.
+  const isPayRequest = payment && payment.payUrl;
+  const heading = isPayRequest ? "Your order is ready to pay" : "Thank you for your order";
+  const intro = isPayRequest
+    ? `Here's your order from Lunde Flooring — review the items and totals below, and pay securely by card whenever you're ready. Stripe handles the payment; we never see your card details.`
+    : `We've received your order and your payment was successful. ${whatsNext}`;
+  const cta = isPayRequest
+    ? `<tr><td style="padding:4px 28px 28px"><a href="${escapeHtml(payment.payUrl)}" style="display:inline-block;background:#17211b;color:#fff;text-decoration:none;border-radius:6px;padding:15px 26px;font-weight:700;font-size:16px">Pay ${escapeHtml(money(order.totals?.total))} securely</a>`
+      + `<div style="margin-top:10px;color:#8a8478;font-size:12px">Secure checkout powered by Stripe.</div></td></tr>`
+    : trackUrl
+      ? `<tr><td style="padding:4px 28px 28px"><a href="${escapeHtml(trackUrl)}" style="display:inline-block;background:#17211b;color:#fff;text-decoration:none;border-radius:6px;padding:13px 22px;font-weight:700">Track your order</a></td></tr>`
+      : "";
   const html = `<!doctype html><html><body style="margin:0;background:#f3efe7;font-family:Arial,Helvetica,sans-serif;color:#201e1a">`
     + `<table width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:28px 12px">`
     + `<table width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#fff;border:1px solid #e5e1d8;border-radius:10px;overflow:hidden">`
     + `<tr><td style="padding:30px 28px;background:#201e1a;color:#f3efe7">`
     + `<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.8">Lunde Flooring Co.</div>`
-    + `<div style="font-size:24px;font-weight:800;margin-top:8px">Thank you for your order</div>`
+    + `<div style="font-size:24px;font-weight:800;margin-top:8px">${heading}</div>`
     + `<div style="margin-top:6px;opacity:.85">Order ${escapeHtml(order.id)} · ${escapeHtml(date)}</div></td></tr>`
     + `<tr><td style="padding:24px 28px 6px"><p style="margin:0 0 4px;font-size:15px">Hi ${escapeHtml(order.customer?.name || "there")},</p>`
-    + `<p style="margin:0;color:#5c5750;font-size:14px;line-height:1.6">We've received your order and your payment was successful. ${whatsNext}</p></td></tr>`
+    + `<p style="margin:0;color:#5c5750;font-size:14px;line-height:1.6">${intro}</p></td></tr>`
     + `<tr><td style="padding:18px 28px 4px"><div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8a8478;font-weight:700">Your items</div>`
     + `<table width="100%" cellspacing="0" cellpadding="0" style="margin-top:6px">${rows}</table></td></tr>`
     + `<tr><td style="padding:8px 28px"><table width="100%" cellspacing="0" cellpadding="0">${totalsRows}</table></td></tr>`
@@ -2341,11 +2353,11 @@ function buildCustomerEmail(order, trackUrl) {
     + `<tr><td style="padding:6px 28px 30px;border-top:1px solid #efebe2;color:#8a8478;font-size:12px;line-height:1.6">`
     + `Questions about your order? Just reply to this email and our team will help.</td></tr>`
     + `</table></td></tr></table></body></html>`;
-  const text = `Thank you for your order, ${order.customer?.name || "there"}!\n\n`
-    + `Order ${order.id} · ${date}\nYour payment was successful. ${whatsNext}\n\nItems:\n${textItems}\n`
+  const text = `${isPayRequest ? `Your order is ready to pay, ${order.customer?.name || "there"}.` : `Thank you for your order, ${order.customer?.name || "there"}!`}\n\n`
+    + `Order ${order.id} · ${date}\n${isPayRequest ? "Review your order below and pay securely by card." : `Your payment was successful. ${whatsNext}`}\n\nItems:\n${textItems}\n`
     + `Subtotal: ${money(t.subtotal)}\n${Number(t.discount) > 0 ? `Discount: -${money(t.discount)}\n` : ""}`
     + `${pickup ? "Pickup" : "Shipping"}: ${Number(t.freight) > 0 ? money(t.freight) : "Free"}\nEstimated tax: ${money(t.tax)}\nTotal: ${money(t.total)}\n\n`
-    + `${fulfillment}\n${trackUrl ? `\nTrack your order: ${trackUrl}\n` : ""}\nQuestions? Reply to this email.\n— Lunde Flooring Co.`;
+    + `${fulfillment}\n${isPayRequest ? `\nPay securely: ${payment.payUrl}\n` : trackUrl ? `\nTrack your order: ${trackUrl}\n` : ""}\nQuestions? Reply to this email.\n— Lunde Flooring Co.`;
   return { html, text };
 }
 

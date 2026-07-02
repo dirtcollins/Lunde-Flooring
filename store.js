@@ -461,27 +461,53 @@
     push(`${QUOTES_ENDPOINT}/${encodeURIComponent(id)}`, "DELETE");
     return true;
   }
+  /* Like api(), but preserves the server's JSON error body on 4xx/5xx so the
+     UI can show the REAL reason instead of a generic network message. */
+  async function jsonRequest(pathname, { method = "GET", body } = {}) {
+    try {
+      const opts = { method, headers: { Accept: "application/json" }, credentials: "same-origin" };
+      if (body !== undefined) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+      const response = await fetch(pathname, opts);
+      apiOnline = true;
+      return await response.json().catch(() => ({ ok: false, error: "Unexpected server response." }));
+    } catch {
+      apiOnline = false;
+      return null;
+    }
+  }
+  const OFFLINE_ERROR = { ok: false, error: "Could not reach the server. Check your connection and try again." };
+
   /* Email the quote to its customer (server sends via Resend, marks it sent). */
   async function sendQuoteToCustomer(id) {
-    const data = await api(`${QUOTES_ENDPOINT}/${encodeURIComponent(id)}/send`, { method: "POST" });
+    const data = await jsonRequest(`${QUOTES_ENDPOINT}/${encodeURIComponent(id)}/send`, { method: "POST" });
     if (data && data.ok && Array.isArray(data.items)) saveQuotes(data.items);
-    return data || { ok: false, error: "Could not reach the server." };
+    return data || OFFLINE_ERROR;
   }
   /* Reply to an inbox message by email (server sends + logs the reply). */
   async function replyToFeedback(id, message) {
-    const data = await api(`${FEEDBACK_ENDPOINT}/${encodeURIComponent(id)}/reply`, { method: "POST", body: { message } });
+    const data = await jsonRequest(`${FEEDBACK_ENDPOINT}/${encodeURIComponent(id)}/reply`, { method: "POST", body: { message } });
     if (data && data.ok && Array.isArray(data.items)) saveFeedbackItems(data.items);
-    return data || { ok: false, error: "Could not reach the server." };
+    return data || OFFLINE_ERROR;
   }
   /* Re-send the customer's receipt email for an order. */
   async function resendOrderReceipt(id) {
-    const data = await api(`${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/receipt-email`, { method: "POST" });
-    return data || { ok: false, error: "Could not reach the server." };
+    const data = await jsonRequest(`${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/receipt-email`, { method: "POST" });
+    return data || OFFLINE_ERROR;
   }
-  /* Email the customer a secure Stripe payment link for an unpaid order. */
+  /* Email the customer a secure Stripe payment link for an unpaid order.
+     Self-healing: if this order only exists in this browser (a background
+     upload once failed), silently sync it to the server and retry. */
   async function sendPaymentLink(id) {
-    const data = await api(`${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/payment-link`, { method: "POST" });
-    return data || { ok: false, error: "Could not reach the server." };
+    const url = `${ORDERS_ENDPOINT}/${encodeURIComponent(id)}/payment-link`;
+    let data = await jsonRequest(url, { method: "POST" });
+    if (data && data.ok === false && /not found/i.test(data.error || "")) {
+      const order = orderById(id);
+      if (order) {
+        const synced = await jsonRequest(ORDERS_ENDPOINT, { method: "POST", body: { order, silent: true } });
+        if (synced && synced.ok) data = await jsonRequest(url, { method: "POST" });
+      }
+    }
+    return data || OFFLINE_ERROR;
   }
   /* Merge a quote's lines into the live cart. Pricing re-derives from the
      current catalog (carton math is always recomputed), so quotes never
