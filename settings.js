@@ -54,14 +54,16 @@
       var v = cfg[r.key] || {};
       var pay = v.pay != null ? v.pay : r.pay;
       var sell = v.sell != null ? v.sell : r.sell;
-      return '<div style="display:grid;grid-template-columns:minmax(0,1fr) 108px 108px;gap:12px;align-items:end;padding:12px 0;border-top:1px solid var(--line)">' +
+      var on = v.enabled !== false;
+      return '<div class="v6-series-row' + (on ? "" : " off") + '" data-series="' + r.key + '" style="display:grid;grid-template-columns:minmax(0,1fr) auto 100px 100px;gap:12px;align-items:end;padding:12px 0;border-top:1px solid var(--line)">' +
           '<div><strong style="display:block">' + r.name + '</strong><span class="row-sub">' + r.sub + ' · ' + r.note + '</span></div>' +
-          '<label class="v6-field"><span>Pay $/sqft</span><input id="setPay_' + r.key + '" type="number" min="0" step="0.01" value="' + pay + '"></label>' +
-          '<label class="v6-field"><span>Sell $/sqft</span><input id="setSell_' + r.key + '" type="number" min="0" step="0.01" value="' + sell + '"></label>' +
+          '<label class="v6-field" style="align-items:center;text-align:center"><span>Series&nbsp;price</span><span class="v6-switch"><input type="checkbox" id="setOn_' + r.key + '"' + (on ? " checked" : "") + '><span class="slider"></span></span></label>' +
+          '<label class="v6-field v6-num"><span>Pay $/sqft</span><input id="setPay_' + r.key + '" type="number" min="0" step="0.01" value="' + pay + '"></label>' +
+          '<label class="v6-field v6-num"><span>Sell $/sqft</span><input id="setSell_' + r.key + '" type="number" min="0" step="0.01" value="' + sell + '"></label>' +
         '</div>';
     }).join("");
     return '<div class="panel"><div class="panel-head"><h2>Series pricing</h2><span class="cp-saved" id="savedSeries" hidden>Saved</span></div><div class="panel-pad v6-form">' +
-      '<p class="row-sub" style="margin:0"><b>Sell</b> is the retail $/sqft customers pay for that series — it drives catalog, quotes, cart, and checkout. <b>Pay</b> is your cost (used for margin). Series pricing overrides the default markup for those products; a manual price edit on a product still wins.</p>' +
+      '<p class="row-sub" style="margin:0"><b>Sell</b> is the retail $/sqft customers pay for that series — it drives catalog, quotes, cart, and checkout. <b>Pay</b> is your cost (used for margin). Flip <b>Series price</b> off to ignore that row and fall back to the default markup instead. A manual price edit on a product still wins.</p>' +
       '<div>' + rows + '</div>' +
       '<div style="margin-top:6px"><button class="btn" type="button" id="saveSeries" style="min-height:42px">Save series pricing</button></div>' +
     '</div></div>';
@@ -236,12 +238,21 @@
         priceMarkupPercent: Number(document.getElementById("setMarkup").value)
       }, "savedPricing");
     });
+    SERIES_UI.forEach(function (r) {
+      var toggle = document.getElementById("setOn_" + r.key);
+      if (!toggle) return;
+      toggle.addEventListener("change", function () {
+        var row = document.querySelector('.v6-series-row[data-series="' + r.key + '"]');
+        if (row) row.classList.toggle("off", !toggle.checked);
+      });
+    });
     document.getElementById("saveSeries").addEventListener("click", function () {
       var ps = {};
       SERIES_UI.forEach(function (r) {
         ps[r.key] = {
           pay: Number(document.getElementById("setPay_" + r.key).value),
-          sell: Number(document.getElementById("setSell_" + r.key).value)
+          sell: Number(document.getElementById("setSell_" + r.key).value),
+          enabled: document.getElementById("setOn_" + r.key).checked
         };
       });
       save({ priceSeries: ps }, "savedSeries");

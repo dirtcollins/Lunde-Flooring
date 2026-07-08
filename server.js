@@ -317,7 +317,8 @@ async function handleApi(req, res, url) {
         const prev = next[key] || {};
         next[key] = {
           pay: num(val.pay, 0, 1000, prev.pay || 0),
-          sell: num(val.sell, 0, 1000, prev.sell || 0)
+          sell: num(val.sell, 0, 1000, prev.sell || 0),
+          enabled: val.enabled === undefined ? (prev.enabled !== false) : Boolean(val.enabled)
         };
       }
       cur.priceSeries = next;
@@ -1623,7 +1624,9 @@ function seriesKeyForSku(sku) {
 function seriesConfigFor(product, settings) {
   const key = seriesKeyForSku(product.sku);
   const cfg = key && settings.priceSeries ? settings.priceSeries[key] : null;
-  return cfg && typeof cfg === "object" ? cfg : null;
+  if (!cfg || typeof cfg !== "object") return null;
+  if (cfg.enabled === false) return null; // series toggled off → fall back to markup
+  return cfg;
 }
 // Retail $/sqft for a raw catalog product (whose pricePerSqft in data.js is cost).
 function retailPricePerSqft(product, settings) {
@@ -3098,14 +3101,14 @@ function defaultSettings() {
     priceMarkupPercent: 0, // fallback for products not in a priced series (cost + this markup)
     // Per-series Pay (cost) and Sell (retail $/sqft), seeded from the SpecialFX sheet.
     priceSeries: {
-      s560:  { pay: 2.25, sell: 4.25 },
-      s562:  { pay: 2.00, sell: 4.00 },
-      hy:    { pay: 2.25, sell: 4.25 },
-      g00:   { pay: 2.25, sell: 4.25 },
-      y80:   { pay: 2.50, sell: 4.50 },
-      wy365: { pay: 2.50, sell: 4.50 },
-      y90:   { pay: 2.50, sell: 4.50 },
-      ge:    { pay: 2.25, sell: 4.25 }
+      s560:  { pay: 2.25, sell: 4.25, enabled: true },
+      s562:  { pay: 2.00, sell: 4.00, enabled: true },
+      hy:    { pay: 2.25, sell: 4.25, enabled: true },
+      g00:   { pay: 2.25, sell: 4.25, enabled: true },
+      y80:   { pay: 2.50, sell: 4.50, enabled: true },
+      wy365: { pay: 2.50, sell: 4.50, enabled: true },
+      y90:   { pay: 2.50, sell: 4.50, enabled: true },
+      ge:    { pay: 2.25, sell: 4.25, enabled: true }
     },
     businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
     businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
