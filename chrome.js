@@ -61,7 +61,7 @@
   var footer =
     '<footer class="v6-footer"><div class="wrap v6-footer-grid">' +
       '<div class="v6-footer-brand"><span class="v6-brand">Lunde<small>Flooring Co.</small></span>' +
-        '<p>Luxury Vinyl Plank Flooring for Bakersfield &amp; Kern County.</p></div>' +
+        '<p>Luxury Vinyl Plank Flooring for Central California.</p></div>' +
       '<div class="v6-fcol"><h4>Shop</h4><a href="./catalog.html">All floors</a><a href="./samples.html">Samples</a><a href="./areas-we-serve.html">Areas we serve</a></div>' +
       '<div class="v6-fcol"><h4>Help</h4><a href="./shipping-returns.html">Shipping &amp; returns</a><a href="./install.html">Installation</a><a href="./care-maintenance.html">Care &amp; maintenance</a><a href="./faq.html">FAQ</a><a href="./warranty.html">Warranty</a><a href="./contact.html">Contact us</a></div>' +
       '<div class="v6-fcol"><h4>Company</h4><a href="./our-story.html">Our story</a><a href="./contact.html">Contact</a><a href="https://www.instagram.com/lundeflooring/" target="_blank" rel="noopener">Instagram</a></div>' +
