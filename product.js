@@ -199,7 +199,7 @@
 
     '<section class="section"><div class="wrap pdp-details">' +
       '<div class="section-head"><p class="eyebrow">Bakersfield &amp; Kern County</p><h2 class="display">Local delivery &amp; availability</h2>' +
-        '<p class="lede">' + product.title + ' is ' + (product.availability || 'available by the carton') + ', delivered locally across Bakersfield and Kern County. Free local delivery on orders over $1,200 — to your home or job site — with pickup available in Bakersfield. Order free samples first to see it in your own light.</p>' +
+        '<p class="lede">' + product.title + ' is ' + (product.availability || 'available by the carton') + ', delivered locally across Bakersfield and Kern County. Free local delivery within 10 miles of Bakersfield — to your home or job site — with pickup available in town. Order free samples first to see it in your own light.</p>' +
         '<p style="margin-top:14px">Serving Bakersfield, Oildale, Rosedale, Shafter, Wasco, Delano, McFarland, Lamont, Arvin, Taft, Tehachapi, Frazier Park, Lake Isabella, Ridgecrest, and all of Kern County. ' +
         '<a class="link-underline" href="./areas-we-serve.html">See the areas we serve<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></p>' +
       '</div>' +

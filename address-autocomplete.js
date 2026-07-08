@@ -53,7 +53,7 @@
     document.head.appendChild(tag);
   }
 
-  /* Build {line1, city, state, zip, full} from a Photon feature's properties. */
+  /* Build {line1, city, state, zip, full, lat, lon} from a Geoapify feature's properties. */
   function partsFrom(p) {
     var line1 = String(p.address_line1 || "").trim();
     if (!line1) line1 = [p.housenumber, p.street].filter(Boolean).join(" ").trim();
@@ -65,7 +65,9 @@
     if (city) full += ", " + city;
     if (state) full += ", " + state;
     if (zip) full += " " + zip;
-    return { line1: line1, city: city, state: state, zip: zip, full: full };
+    var lat = Number(p.lat), lon = Number(p.lon);
+    return { line1: line1, city: city, state: state, zip: zip, full: full,
+      lat: isFinite(lat) ? lat : null, lon: isFinite(lon) ? lon : null };
   }
 
   window.lundeAddressAutocomplete = function (input, opts) {
@@ -116,7 +118,7 @@
         if (parts.city) full += ", " + parts.city;
         if (parts.state) full += ", " + parts.state;
         if (parts.zip) full += " " + parts.zip;
-        return { line1: line1, city: parts.city, state: parts.state, zip: parts.zip, full: full };
+        return { line1: line1, city: parts.city, state: parts.state, zip: parts.zip, full: full, lat: parts.lat, lon: parts.lon };
       }
 
       function select(i) {

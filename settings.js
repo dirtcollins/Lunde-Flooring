@@ -48,6 +48,22 @@
     { key: "y90",   name: "Y90 Series",   sub: "SPC 6.5mm · 20 mil EIR · Y9001–Y9006", note: "6 products",      pay: 2.50, sell: 4.50 },
     { key: "ge",    name: "GE Series",    sub: "QPC 7mm · GE001–GE012",                note: "not on site yet", pay: 2.25, sell: 4.25 }
   ];
+  var TIER_LABELS = ["Within 10 mi ($)", "10–30 mi ($)", "30–50 mi ($)", "50–80 mi ($)", "80–100 mi ($)"];
+  var TIER_DEFAULT = [0, 150, 200, 250, 310];
+  function deliveryZoneFields(s) {
+    var d = (s && s.delivery) || {};
+    var tiers = (d.tiers && d.tiers.length) ? d.tiers : null;
+    var fallback = d.fallbackFee != null ? d.fallbackFee : 200;
+    function feeInput(i) {
+      var fee = tiers && tiers[i] ? tiers[i].fee : TIER_DEFAULT[i];
+      return field(TIER_LABELS[i], '<input id="setTier' + i + '" type="number" min="0" step="5" value="' + fee + '">');
+    }
+    return '<div class="v6-field-row three">' + feeInput(0) + feeInput(1) + feeInput(2) + '</div>' +
+      '<div class="v6-field-row three">' + feeInput(3) + feeInput(4) +
+        field('If address can’t be located ($)', '<input id="setFallbackFee" type="number" min="0" step="5" value="' + fallback + '">') +
+      '</div>';
+  }
+
   function seriesPricingPanel(s) {
     var cfg = (s && s.priceSeries) || {};
     var rows = SERIES_UI.map(function (r) {
@@ -83,17 +99,16 @@
       '<div class="cols-2-even" style="align-items:start"><div style="display:grid;gap:18px">' +
 
         '<div class="panel"><div class="panel-head"><h2>Delivery &amp; pricing</h2><span class="cp-saved" id="savedPricing" hidden>Saved</span></div><div class="panel-pad v6-form">' +
+          '<p class="row-sub" style="margin:0"><b>Delivery zone</b> — fees by straight-line (&ldquo;crow flies&rdquo;) distance from Hwy&nbsp;99 &amp; Hwy&nbsp;58, Bakersfield. Within 10 mi is free; beyond 100 mi is pickup/contact only.</p>' +
+          deliveryZoneFields(s) +
           '<div class="v6-field-row">' +
-            field('Flat delivery fee ($)', '<input id="setFreight" type="number" min="0" step="1" value="' + s.freightFlat + '">') +
-            field('Free delivery over ($)', '<input id="setFreeOver" type="number" min="0" step="50" value="' + s.freeShipOver + '">') +
-          '</div><div class="v6-field-row">' +
             field('Tax rate (%)', '<input id="setTax" type="number" min="0" max="25" step="0.05" value="' + (s.taxRate * 100).toFixed(2) + '">') +
             field('Garage placement ($/carton)', '<input id="setGarage" type="number" min="0" step="0.5" value="' + s.garagePerCarton + '">') +
           '</div><div class="v6-field-row">' +
             field('Default markup — other products (%)', '<input id="setMarkup" type="number" min="0" max="500" step="1" value="' + (s.priceMarkupPercent || 0) + '">') +
             '<div class="v6-field"><span>&nbsp;</span><p class="row-sub" style="margin:10px 0 0">Fallback for products <b>not</b> in a priced series below — their retail = cost + this markup. Series products use their Sell price instead.</p></div>' +
           '</div>' +
-          '<p class="row-sub">Used everywhere totals are shown — cart, checkout, Stripe, and staff orders. Update the advertised “free delivery over $1,200” copy if you change that threshold.</p>' +
+          '<p class="row-sub">Delivery is calculated at checkout from the customer’s address; the fallback fee applies only when an address can’t be located.</p>' +
           '<div><button class="btn" type="button" id="savePricing" style="min-height:42px">Save pricing</button></div>' +
         '</div></div>' +
 
@@ -230,12 +245,15 @@
     if (avRemove) avRemove.addEventListener("click", function () { saveAvatar(""); });
 
     document.getElementById("savePricing").addEventListener("click", function () {
+      var boundaries = [10, 30, 50, 80, 100];
+      var tiers = TIER_LABELS.map(function (_, i) {
+        return { max: boundaries[i], fee: Number(document.getElementById("setTier" + i).value) };
+      });
       save({
-        freightFlat: Number(document.getElementById("setFreight").value),
-        freeShipOver: Number(document.getElementById("setFreeOver").value),
         taxRate: Number(document.getElementById("setTax").value) / 100,
         garagePerCarton: Number(document.getElementById("setGarage").value),
-        priceMarkupPercent: Number(document.getElementById("setMarkup").value)
+        priceMarkupPercent: Number(document.getElementById("setMarkup").value),
+        delivery: { tiers: tiers, fallbackFee: Number(document.getElementById("setFallbackFee").value) }
       }, "savedPricing");
     });
     SERIES_UI.forEach(function (r) {

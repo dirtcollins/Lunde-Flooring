@@ -14,6 +14,7 @@
   }
 
   var appliedPromo = "";
+  var deliveryGeo = null; // {lat,lng} of the selected delivery address, for distance pricing
   var PROFILE_KEY = "lunde_profile_v1";
   var CHECKOUT_PENDING_KEY = "lunde_pending_checkout_v1";
   function profile() { try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; } catch (e) { return {}; } }
@@ -42,16 +43,43 @@
   }
 
   function renderTotals() {
-    var t = cartTotals(cart(), delivery(), placement(), appliedPromo);
+    var isPickup = delivery() === "pickup";
+    var t = cartTotals(cart(), delivery(), placement(), appliedPromo, isPickup ? null : deliveryGeo);
     document.getElementById("sumMaterial").textContent = money(t.material);
     document.getElementById("sumSamples").textContent = money(t.samples);
     var dRow = document.getElementById("sumDiscountRow");
     dRow.hidden = !t.discount;
     document.getElementById("sumDiscountLabel").textContent = t.promo ? "Discount (" + t.promo.label + ")" : "Discount";
     document.getElementById("sumDiscount").textContent = "−" + money(t.discount);
-    document.getElementById("sumFreightLabel").textContent = delivery() === "pickup" ? "Warehouse pickup" :
-      (t.garagePlacement ? "Freight + garage (" + t.cartons + " ctn)" : "Curbside freight");
-    document.getElementById("sumFreight").textContent = t.freight ? money(t.freight) : "Free";
+
+    var note = document.getElementById("sumDeliveryNote");
+    var freightLabel = document.getElementById("sumFreightLabel");
+    var freightVal = document.getElementById("sumFreight");
+    var button = document.getElementById("placeOrder");
+    note.hidden = true; note.dataset.state = "";
+    button.disabled = false;
+
+    if (isPickup) {
+      freightLabel.textContent = "Warehouse pickup";
+      freightVal.textContent = "Free";
+    } else if (t.outOfArea) {
+      // Beyond the delivery zone — block delivery, steer to pickup/contact.
+      freightLabel.textContent = "Delivery";
+      freightVal.textContent = "Unavailable";
+      note.hidden = false; note.dataset.state = "error";
+      note.textContent = "This address is ~" + Math.round(t.deliveryMiles) + " mi out — outside our 100-mile delivery area. Choose warehouse pickup, or contact us for a freight quote.";
+      button.disabled = true;
+    } else if (!t.deliveryLocated) {
+      // No coordinates yet (address not selected from suggestions).
+      freightLabel.textContent = t.garagePlacement ? "Delivery + garage (est.)" : "Delivery (estimated)";
+      freightVal.textContent = t.freight ? money(t.freight) : "Free";
+      note.hidden = false;
+      note.textContent = "Pick your address from the suggestions to calculate exact delivery. Shown as an estimate for now.";
+    } else {
+      var miles = Math.max(1, Math.round(t.deliveryMiles));
+      freightLabel.textContent = (t.garagePlacement ? "Delivery + garage" : "Delivery") + " (" + miles + " mi)";
+      freightVal.textContent = t.freight ? money(t.freight) : "Free";
+    }
     document.getElementById("sumTax").textContent = money(t.tax);
     document.getElementById("sumTotal").textContent = money(t.total);
   }
@@ -130,6 +158,15 @@
     var data = new FormData(form);
     var method = delivery();
     var orderItems = cart();
+    var geo = method === "pickup" ? null : deliveryGeo;
+    var totals = cartTotals(orderItems, method, String(data.get("deliveryPlacement") || ""), appliedPromo, geo);
+    if (method !== "pickup" && totals.outOfArea) {
+      promoMessage.textContent = "That address is outside our 100-mile delivery area. Choose warehouse pickup or contact us for a freight quote.";
+      promoMessage.dataset.state = "error";
+      button.disabled = false;
+      button.textContent = "Continue to secure payment";
+      return;
+    }
     var cust = L.currentCustomer && L.currentCustomer();
     var order = {
       id: L.newOrderId(),
@@ -137,14 +174,16 @@
       status: "placed",
       history: [{ status: "placed", at: Date.now() }],
       items: orderItems,
-      totals: cartTotals(orderItems, method, String(data.get("deliveryPlacement") || ""), appliedPromo),
+      totals: totals,
       checkout: { mode: cust ? "account" : "guest", customerId: cust ? cust.id : "", promoCode: appliedPromo || "" },
       delivery: {
         method: method,
         address: method === "pickup" ? "Lunde warehouse, Bakersfield, CA" : (data.get("address") + ", " + data.get("city") + ", " + data.get("state") + " " + data.get("zip")),
         window: method === "pickup" ? "" : String(data.get("deliveryWindow") || ""),
         placement: method === "pickup" ? "" : String(data.get("deliveryPlacement") || ""),
-        notes: String(data.get("deliveryNotes") || "").trim()
+        notes: String(data.get("deliveryNotes") || "").trim(),
+        lat: geo ? geo.lat : null,
+        lng: geo ? geo.lng : null
       },
       customer: {
         name: String(data.get("name") || "").trim(), company: String(data.get("company") || "").trim(),
@@ -181,8 +220,16 @@
       if (parts.city) form.elements.city.value = parts.city;
       if (parts.state) form.elements.state.value = parts.state;
       if (parts.zip) form.elements.zip.value = parts.zip;
+      deliveryGeo = (parts.lat != null && parts.lon != null) ? { lat: parts.lat, lng: parts.lon } : null;
+      renderTotals();
     } });
   }
+  // Editing any address field by hand invalidates the geocoded point — fall back
+  // to an estimate until they re-pick from suggestions.
+  ["address", "city", "state", "zip"].forEach(function (name) {
+    var el = form.elements[name];
+    if (el) el.addEventListener("input", function () { deliveryGeo = null; renderTotals(); });
+  });
 
   toggleAddress();
   prefill();

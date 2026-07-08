@@ -246,7 +246,7 @@
           '<div class="k"><h3>Latest order</h3></div>' +
           '<div style="margin:auto 0;display:grid;gap:10px;justify-items:start">' +
             '<strong style="font-family:var(--font-display);font-size:21px;font-weight:600">Your first floor is waiting.</strong>' +
-            '<span style="font-size:14px;color:var(--muted);max-width:44ch">Order free samples, see them in your own light, then order by the carton — delivered free over $1,200 across Kern County.</span>' +
+            '<span style="font-size:14px;color:var(--muted);max-width:44ch">Order free samples, see them in your own light, then order by the carton — delivered free within 10 miles of Bakersfield.</span>' +
             '<a class="link-underline" href="./catalog.html" style="margin-top:6px">Start shopping <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>' +
           '</div>' +
         '</div>';

@@ -35,7 +35,7 @@
             <fieldset class="v6-fieldset">
               <h3>Delivery</h3>
               <div class="v6-choice two">
-                <label class="v6-opt"><input type="radio" name="delivery" value="delivery" checked><span class="v6-opt-t"><strong>Curbside delivery</strong><span>Freight from $149 · free over $1,200</span></span></label>
+                <label class="v6-opt"><input type="radio" name="delivery" value="delivery" checked><span class="v6-opt-t"><strong>Curbside delivery</strong><span>Priced by distance · free within 10 mi</span></span></label>
                 <label class="v6-opt"><input type="radio" name="delivery" value="pickup"><span class="v6-opt-t"><strong>Warehouse pickup</strong><span>Free · Bakersfield, CA</span></span></label>
               </div>
               <div id="addrFields" class="v6-field-row three" style="margin-top:4px">
@@ -66,7 +66,8 @@
             <div class="v6-sumrow"><span>Material</span><b id="sumMaterial">$0.00</b></div>
             <div class="v6-sumrow"><span>Samples</span><b id="sumSamples">$0.00</b></div>
             <div class="v6-sumrow" id="sumDiscountRow" hidden><span id="sumDiscountLabel">Discount</span><b id="sumDiscount">$0.00</b></div>
-            <div class="v6-sumrow"><span id="sumFreightLabel">Curbside freight</span><b id="sumFreight">Free</b></div>
+            <div class="v6-sumrow"><span id="sumFreightLabel">Delivery</span><b id="sumFreight">Free</b></div>
+            <p id="sumDeliveryNote" class="v6-sum-note" style="margin:2px 0 0" hidden></p>
             <div class="v6-sumrow"><span>Estimated tax</span><b id="sumTax">$0.00</b></div>
             <div class="v6-sumtotal"><span>Total</span><b id="sumTotal">$0.00</b></div>
             <button class="btn lg" type="submit" form="coForm" id="placeOrder">Continue to secure payment</button>

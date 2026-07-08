@@ -3070,9 +3070,9 @@ function toneWord(text) {
 function buildDescription(name, collection, color, index) {
   const tone = toneWord(name + " " + color);
   const variants = [
-    `${name} brings a ${tone} wide-plank look to the ${collection}. Built on a 100% waterproof rigid core with a commercial-grade wear layer, it is engineered for everyday Bakersfield living and sold by the full carton with free local delivery across Kern County.`,
+    `${name} brings a ${tone} wide-plank look to the ${collection}. Built on a 100% waterproof rigid core with a commercial-grade wear layer, it is engineered for everyday Bakersfield living and sold by the full carton with free local delivery within 10 miles of Bakersfield.`,
     `A ${tone} floor from the ${collection}, ${name} pairs realistic oak grain with a waterproof rigid core that shrugs off spills, pets, and Central Valley dust. Priced honestly by the carton and delivered locally throughout Bakersfield and Kern County.`,
-    `${name} is a ${tone} luxury vinyl plank in the ${collection}. Its rigid, 100% waterproof construction and tough wear layer stand up to busy homes and job sites — sold by the carton with free delivery over $1,200 across Kern County.`,
+    `${name} is a ${tone} luxury vinyl plank in the ${collection}. Its rigid, 100% waterproof construction and tough wear layer stand up to busy homes and job sites — sold by the carton with free local delivery within 10 miles of Bakersfield.`,
     `Part of the ${collection}, ${name} offers a ${tone} wide plank with a waterproof core and low-maintenance finish. A dependable, good-looking floor for Bakersfield homeowners and contractors, priced by the carton with local delivery.`
   ];
   return variants[index % variants.length];

@@ -222,7 +222,7 @@ async function handleApi(req, res, url) {
     // email/notification prefs are staff-only.
     const publicSettings = {
       freightFlat: all.freightFlat, garagePerCarton: all.garagePerCarton,
-      taxRate: all.taxRate, freeShipOver: all.freeShipOver,
+      taxRate: all.taxRate, freeShipOver: all.freeShipOver, delivery: all.delivery,
       businessName: all.businessName, businessPhone: all.businessPhone,
       businessEmail: all.businessEmail, businessAddress: all.businessAddress,
       businessHours: all.businessHours,
@@ -323,6 +323,24 @@ async function handleApi(req, res, url) {
       }
       cur.priceSeries = next;
     }
+    if (patch.delivery && typeof patch.delivery === "object" && !Array.isArray(patch.delivery)) {
+      const base = cur.delivery || defaultSettings().delivery;
+      const d = { origin: { ...base.origin }, tiers: base.tiers.map((t) => ({ ...t })), maxMiles: base.maxMiles, fallbackFee: base.fallbackFee };
+      const pd = patch.delivery;
+      if (pd.origin && typeof pd.origin === "object") {
+        d.origin = { lat: num(pd.origin.lat, -90, 90, d.origin.lat), lng: num(pd.origin.lng, -180, 180, d.origin.lng) };
+      }
+      if (Array.isArray(pd.tiers) && pd.tiers.length) {
+        const tiers = pd.tiers.slice(0, 12)
+          .map((t) => ({ max: num(t && t.max, 0, 100000, 0), fee: num(t && t.fee, 0, 100000, 0) }))
+          .filter((t) => t.max > 0)
+          .sort((a, b) => a.max - b.max);
+        if (tiers.length) d.tiers = tiers;
+      }
+      if (pd.maxMiles !== undefined) d.maxMiles = num(pd.maxMiles, 1, 100000, d.maxMiles);
+      if (pd.fallbackFee !== undefined) d.fallbackFee = num(pd.fallbackFee, 0, 100000, d.fallbackFee);
+      cur.delivery = d;
+    }
     for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo", "notifyEmail"]) {
       if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
     }
@@ -362,7 +380,8 @@ async function handleApi(req, res, url) {
       if (!Object.keys(order.items).length) return json(res, { ok: false, error: "Order has no line items." }, 422);
       const account = currentAccount(req);
       if (account) attachAccountToOrder(order, account);
-      order.totals = computeOrderTotals(order.items, order.delivery.method, order.delivery.placement, order.checkout.promoCode || "", order.checkout.quoteId || "");
+      order.totals = computeOrderTotals(order.items, order.delivery.method, order.delivery.placement, order.checkout.promoCode || "", order.checkout.quoteId || "", order.delivery);
+      if (order.totals.outOfArea) return json(res, { ok: false, error: "That address is outside our 100-mile delivery area. Please choose warehouse pickup or contact us." }, 422);
       if (order.totals.total <= 0) return json(res, { ok: false, error: "Order total must be greater than zero." }, 422);
       order.payment = { ...(order.payment || {}), method: "stripe", status: "awaiting_payment", amount: order.totals.total };
       const base = siteBase(req);
@@ -1882,7 +1901,31 @@ function markQuoteConverted(order) {
   if (changed) writeStore("quotes", next);
 }
 
-function computeOrderTotals(items, delivery, placement, promoCode, quoteId) {
+// Straight-line ("as the crow flies") distance in miles between two lat/lng points.
+function crowMiles(lat1, lng1, lat2, lng2) {
+  const R = 3958.7613; // mean earth radius, miles
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+// Resolve a delivery point to { miles, fee, outOfArea, located } using the
+// configured origin/tiers. geo = { lat, lng } or null when we couldn't geocode.
+function deliveryQuote(geo, settings) {
+  const cfg = (settings && settings.delivery) || {};
+  const origin = cfg.origin || { lat: 35.3526, lng: -119.0417 };
+  const tiers = Array.isArray(cfg.tiers) && cfg.tiers.length ? cfg.tiers : [{ max: 10, fee: 0 }];
+  const lat = geo && Number(geo.lat);
+  const lng = geo && Number(geo.lng);
+  const located = Number.isFinite(lat) && Number.isFinite(lng) && !(lat === 0 && lng === 0);
+  if (!located) return { miles: null, fee: Number(cfg.fallbackFee) || 0, outOfArea: false, located: false };
+  const miles = crowMiles(origin.lat, origin.lng, lat, lng);
+  for (const t of tiers) if (miles <= Number(t.max)) return { miles, fee: Number(t.fee) || 0, outOfArea: false, located: true };
+  return { miles, fee: 0, outOfArea: true, located: true };
+}
+
+function computeOrderTotals(items, delivery, placement, promoCode, quoteId, geo) {
   const products = productsById();
   let material = 0;
   let samples = 0;
@@ -1912,12 +1955,18 @@ function computeOrderTotals(items, delivery, placement, promoCode, quoteId) {
   const discountedSubtotal = Math.max(0, subtotal - discount);
   // Pricing knobs come from staff Settings (with the historical values as defaults).
   const pricing = getSettings();
-  const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * pricing.garagePerCarton;
-  const freeDelivery = discountedSubtotal >= pricing.freeShipOver;
-  const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : pricing.freightFlat;
+  const isPickup = delivery === "pickup";
+  const garagePlacement = isPickup || placement !== "garage" ? 0 : cartons * pricing.garagePerCarton;
+  // Distance-based delivery fee (straight-line from origin); pickup & empty carts are free.
+  const dq = isPickup || material <= 0 ? { miles: null, fee: 0, outOfArea: false, located: true } : deliveryQuote(geo, pricing);
+  const baseFreight = dq.fee;
   const freight = baseFreight + garagePlacement;
   const tax = discountedSubtotal * pricing.taxRate;
-  return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
+  return {
+    material, samples, cartons, subtotal, discount, discountedSubtotal, promo,
+    freight, garagePlacement, tax, total: discountedSubtotal + freight + tax,
+    deliveryMiles: dq.miles, deliveryLocated: dq.located, outOfArea: dq.outOfArea
+  };
 }
 
 function normalizeOrder(order, base = {}) {
@@ -1960,7 +2009,9 @@ function normalizeOrder(order, base = {}) {
       label: clean(delivery.label || "", 80),
       window: clean(delivery.window || "", 80),
       placement: clean(delivery.placement || "", 80),
-      notes: clean(delivery.notes || "", 1200)
+      notes: clean(delivery.notes || "", 1200),
+      lat: Number.isFinite(Number(delivery.lat)) ? Number(delivery.lat) : null,
+      lng: Number.isFinite(Number(delivery.lng)) ? Number(delivery.lng) : null
     },
     customer: {
       name: clean(customer.name || "", 180),
@@ -3098,6 +3149,20 @@ function siteBase(req) {
 function defaultSettings() {
   return {
     freightFlat: 149, garagePerCarton: 3, taxRate: 0.065, freeShipOver: 1200,
+    // Distance-based delivery: straight-line ("crow flies") miles from origin.
+    // ≤10mi free, then tiers; beyond maxMiles = pickup/contact only.
+    delivery: {
+      origin: { lat: 35.3526, lng: -119.0417 }, // Hwy 99 & Hwy 58, Bakersfield
+      tiers: [
+        { max: 10, fee: 0 },
+        { max: 30, fee: 150 },
+        { max: 50, fee: 200 },
+        { max: 80, fee: 250 },
+        { max: 100, fee: 310 }
+      ],
+      maxMiles: 100,
+      fallbackFee: 200 // used when a delivery address couldn't be geocoded
+    },
     priceMarkupPercent: 0, // fallback for products not in a priced series (cost + this markup)
     // Per-series Pay (cost) and Sell (retail $/sqft), seeded from the SpecialFX sheet.
     priceSeries: {

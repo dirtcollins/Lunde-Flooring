@@ -3,7 +3,7 @@
   var hasInlineChrome = !!document.getElementById("v6Header");
 
   var topbar =
-    '<div class="v6-topbar"><span class="tb-full">Free samples, delivered to your door &nbsp;·&nbsp; Free local delivery on orders over $1,200 across Bakersfield &amp; Kern County &nbsp;·&nbsp; <a href="./samples.html">Order swatches</a></span><span class="tb-short">Free local delivery $1,200+ &nbsp;·&nbsp; <a href="./samples.html">Free samples</a></span></div>';
+    '<div class="v6-topbar"><span class="tb-full">Free samples, delivered to your door &nbsp;·&nbsp; Free local delivery within 10 mi of Bakersfield &nbsp;·&nbsp; <a href="./samples.html">Order swatches</a></span><span class="tb-short">Free delivery within 10 mi &nbsp;·&nbsp; <a href="./samples.html">Free samples</a></span></div>';
 
   var mobileMenu =
     '<div class="v6-mobile-menu" id="v6MobileMenu" hidden>' +
