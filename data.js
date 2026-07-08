@@ -3107,16 +3107,23 @@ products.forEach((product) => {
   ];
 });
 
-// Catalog prices above are COST. When the server injects a staff-set markup
-// (window.LUNDE_PRICE_MARKUP, from Settings), convert to retail before any
-// page script reads a price. basePricePerSqft keeps the cost for staff views.
+// Catalog prices above are COST. The server injects retail pricing from Settings:
+// window.LUNDE_PRICE_MAP holds each product's series Sell price ($/sqft); anything
+// not in the map falls back to cost × (1 + window.LUNDE_PRICE_MARKUP). Applied
+// before any page script reads a price. basePricePerSqft keeps the cost for staff views.
 window.__lundeApplyMarkup = function (pct) {
   pct = Number(pct) || 0;
+  var map = window.LUNDE_PRICE_MAP || null;
   products.forEach((product) => {
     var cost = Number(product.basePricePerSqft != null ? product.basePricePerSqft : product.pricePerSqft);
     if (!(cost > 0)) return;
     product.basePricePerSqft = cost;
-    product.pricePerSqft = pct > 0 ? Math.round(cost * (1 + pct / 100) * 100) / 100 : cost;
+    var sell = map && map[product.id];
+    if (sell != null && Number(sell) > 0) {
+      product.pricePerSqft = Math.round(Number(sell) * 100) / 100;
+    } else {
+      product.pricePerSqft = pct > 0 ? Math.round(cost * (1 + pct / 100) * 100) / 100 : cost;
+    }
   });
   window.LUNDE_PRICE_MARKUP = pct;
 };

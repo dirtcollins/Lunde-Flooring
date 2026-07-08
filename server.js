@@ -309,6 +309,19 @@ async function handleApi(req, res, url) {
     if (patch.taxRate !== undefined) cur.taxRate = num(patch.taxRate, 0, 0.25, cur.taxRate);
     if (patch.freeShipOver !== undefined) cur.freeShipOver = num(patch.freeShipOver, 0, 100000, cur.freeShipOver);
     if (patch.priceMarkupPercent !== undefined) cur.priceMarkupPercent = num(patch.priceMarkupPercent, 0, 500, cur.priceMarkupPercent);
+    if (patch.priceSeries && typeof patch.priceSeries === "object" && !Array.isArray(patch.priceSeries)) {
+      const valid = new Set(PRICE_SERIES.map((s) => s.key));
+      const next = { ...(cur.priceSeries || {}) };
+      for (const [key, val] of Object.entries(patch.priceSeries)) {
+        if (!valid.has(key) || !val || typeof val !== "object") continue;
+        const prev = next[key] || {};
+        next[key] = {
+          pay: num(val.pay, 0, 1000, prev.pay || 0),
+          sell: num(val.sell, 0, 1000, prev.sell || 0)
+        };
+      }
+      cur.priceSeries = next;
+    }
     for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo", "notifyEmail"]) {
       if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
     }
@@ -1525,9 +1538,9 @@ async function serveStatic(req, res, url) {
   }
   const stat = fs.statSync(filePath);
   const lastModified = stat.mtime.toUTCString();
-  // data.js carries the injected price markup, so its ETag must change when
-  // the markup setting does — otherwise browsers keep 304-ing the old price.
-  const markupTag = basename === "data.js" ? `-m${Number(getSettings().priceMarkupPercent) || 0}` : "";
+  // data.js carries injected prices (markup + per-series Sell), so its ETag must
+  // change when any pricing setting does — otherwise browsers keep 304-ing stale prices.
+  const markupTag = basename === "data.js" ? `-p${priceSignature(getSettings())}` : "";
   const etag = `"${stat.size.toString(36)}-${Math.floor(stat.mtimeMs).toString(36)}${markupTag}"`;
   // Hard-cache static media (stable filenames); revalidate code/markup so updates
   // reach returning visitors immediately after a deploy.
@@ -1554,11 +1567,15 @@ async function serveStatic(req, res, url) {
     res.writeHead(304, { ETag: etag, "Last-Modified": lastModified, "Cache-Control": cacheControl });
     return res.end();
   }
-  // Catalog prices in data.js are cost — inject the staff-set markup so the
-  // client applies retail pricing before any page script reads a price.
+  // Catalog prices in data.js are cost — inject the staff-set markup plus a
+  // per-product retail map (series Sell prices) so the client prices every
+  // product before any page script reads it.
   if (basename === "data.js") {
-    const markup = Number(getSettings().priceMarkupPercent) || 0;
-    const body = `window.LUNDE_PRICE_MARKUP=${markup};\n` + fs.readFileSync(filePath, "utf8");
+    const settings = getSettings();
+    const markup = Number(settings.priceMarkupPercent) || 0;
+    const priceMap = catalogRetailMap(settings);
+    const body = `window.LUNDE_PRICE_MARKUP=${markup};\nwindow.LUNDE_PRICE_MAP=${JSON.stringify(priceMap)};\n`
+      + fs.readFileSync(filePath, "utf8");
     res.writeHead(200, { "Content-Type": MIME[".js"], "Cache-Control": cacheControl, ETag: etag });
     if (req.method === "HEAD") return res.end();
     return res.end(body);
@@ -1583,19 +1600,78 @@ async function serveStatic(req, res, url) {
   fs.createReadStream(filePath).pipe(res);
 }
 
-function productsById() {
+// ── Series-based pricing ─────────────────────────────────────────────
+// Staff set a Pay (cost) and Sell (retail $/sqft) per product series in
+// Settings. A product's retail = its series Sell; products in no configured
+// series fall back to cost × (1 + priceMarkupPercent). SKU prefixes map to
+// the eight series from the SpecialFX spec/price sheet.
+const PRICE_SERIES = [
+  { key: "s560",  label: "560 Series — SPC 5.5mm, 12 mil (551–554)",         match: /^55\d/i },
+  { key: "s562",  label: "562 Series — SPC 5.5mm, 20 mil (561–566)",         match: /^56\d/i },
+  { key: "hy",    label: "HY Series — SPC 5.5mm 4+1.5, 12 mil (HY001–008)",  match: /^HY/i },
+  { key: "g00",   label: "G00 Series — SPC 6mm, 22 mil (G001–G006)",         match: /^G0/i },
+  { key: "y80",   label: "Y80 Series — SPC 6.5mm, 20 mil (Y8001–Y8009)",     match: /^Y80/i },
+  { key: "wy365", label: "WY365 Series — SPC 6.5mm, 20 mil (WY365-1–6)",     match: /^WY365/i },
+  { key: "y90",   label: "Y90 Series — SPC 6.5mm, 20 mil EIR (Y9001–Y9006)", match: /^Y90/i },
+  { key: "ge",    label: "GE Series — QPC 7mm (GE001–GE012)",                match: /^GE/i }
+];
+function seriesKeyForSku(sku) {
+  const s = String(sku || "");
+  for (const def of PRICE_SERIES) if (def.match.test(s)) return def.key;
+  return null;
+}
+function seriesConfigFor(product, settings) {
+  const key = seriesKeyForSku(product.sku);
+  const cfg = key && settings.priceSeries ? settings.priceSeries[key] : null;
+  return cfg && typeof cfg === "object" ? cfg : null;
+}
+// Retail $/sqft for a raw catalog product (whose pricePerSqft in data.js is cost).
+function retailPricePerSqft(product, settings) {
+  const cfg = seriesConfigFor(product, settings);
+  if (cfg && Number(cfg.sell) > 0) return Math.round(Number(cfg.sell) * 100) / 100;
+  const cost = Number(product.pricePerSqft) || 0;
+  const markup = Number(settings.priceMarkupPercent) || 0;
+  return cost > 0 ? Math.round(cost * (1 + markup / 100) * 100) / 100 : cost;
+}
+// Cost $/sqft: the series Pay when set, else the data.js cost.
+function costPricePerSqft(product, settings) {
+  const cfg = seriesConfigFor(product, settings);
+  if (cfg && Number(cfg.pay) > 0) return Math.round(Number(cfg.pay) * 100) / 100;
+  return Number(product.pricePerSqft) || 0;
+}
+// Short signature of everything that affects displayed prices, for data.js ETags.
+function priceSignature(settings) {
+  const s = JSON.stringify({ m: settings.priceMarkupPercent || 0, ps: settings.priceSeries || {} });
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+function rawCatalogProducts() {
   const raw = fs.readFileSync(path.join(__dirname, "data.js"), "utf8");
   const match = raw.match(/const products = (\[[\s\S]*?\]);\s*const productGalleries/);
-  const products = match ? JSON.parse(match[1]) : [];
-  // Catalog prices in data.js are COST. Retail = cost + the staff-set markup,
-  // except where staff overrode a product's price directly (override = retail).
-  const markup = Number(getSettings().priceMarkupPercent) || 0;
+  return match ? JSON.parse(match[1]) : [];
+}
+// Public storefront price map {id: retail} — mirrors data.js's markup behavior
+// per series, so the client can price each product without leaking cost logic.
+function catalogRetailMap(settings) {
+  const map = {};
+  for (const p of rawCatalogProducts()) {
+    if (Number(p.pricePerSqft) > 0) map[String(p.id)] = retailPricePerSqft(p, settings);
+  }
+  return map;
+}
+
+function productsById() {
+  const products = rawCatalogProducts();
+  // Catalog prices in data.js are COST. Retail = the product's series Sell price
+  // (or cost + markup when unmapped); a direct staff override still wins (= retail).
+  const settings = getSettings();
   const overrides = readStore("products", {});
   return Object.fromEntries(products.map((p) => {
     const out = { ...p };
-    if (markup > 0 && Number(out.pricePerSqft) > 0) {
-      out.basePricePerSqft = out.pricePerSqft;
-      out.pricePerSqft = Math.round(out.pricePerSqft * (1 + markup / 100) * 100) / 100;
+    if (Number(out.pricePerSqft) > 0) {
+      out.basePricePerSqft = costPricePerSqft(p, settings);
+      out.pricePerSqft = retailPricePerSqft(p, settings);
     }
     const ov = overrides && overrides[p.id];
     if (ov && typeof ov === "object") {
@@ -3019,7 +3095,18 @@ function siteBase(req) {
 function defaultSettings() {
   return {
     freightFlat: 149, garagePerCarton: 3, taxRate: 0.065, freeShipOver: 1200,
-    priceMarkupPercent: 0, // catalog price = cost in data.js + this markup
+    priceMarkupPercent: 0, // fallback for products not in a priced series (cost + this markup)
+    // Per-series Pay (cost) and Sell (retail $/sqft), seeded from the SpecialFX sheet.
+    priceSeries: {
+      s560:  { pay: 2.25, sell: 4.25 },
+      s562:  { pay: 2.00, sell: 4.00 },
+      hy:    { pay: 2.25, sell: 4.25 },
+      g00:   { pay: 2.25, sell: 4.25 },
+      y80:   { pay: 2.50, sell: 4.50 },
+      wy365: { pay: 2.50, sell: 4.50 },
+      y90:   { pay: 2.50, sell: 4.50 },
+      ge:    { pay: 2.25, sell: 4.25 }
+    },
     businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
     businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
     businessHours: "",

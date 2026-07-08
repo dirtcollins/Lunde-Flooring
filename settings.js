@@ -36,6 +36,37 @@
       '</div><div><button class="btn" type="button" id="promoAdd" style="min-height:42px">Add code</button></div></div></div>';
   }
 
+  // Eight product series from the SpecialFX sheet. Defaults render the fields
+  // even before settings are pulled; the server holds the source of truth.
+  var SERIES_UI = [
+    { key: "s560",  name: "560 Series",   sub: "SPC 5.5mm · 12 mil · 551–554",         note: "4 products",      pay: 2.25, sell: 4.25 },
+    { key: "s562",  name: "562 Series",   sub: "SPC 5.5mm · 20 mil · 561–566",         note: "1 of 6 loaded",   pay: 2.00, sell: 4.00 },
+    { key: "hy",    name: "HY Series",    sub: "SPC 5.5mm 4+1.5 · 12 mil · HY001–008", note: "not on site yet", pay: 2.25, sell: 4.25 },
+    { key: "g00",   name: "G00 Series",   sub: "SPC 6mm · 22 mil · G001–G006",         note: "6 products",      pay: 2.25, sell: 4.25 },
+    { key: "y80",   name: "Y80 Series",   sub: "SPC 6.5mm · 20 mil · Y8001–Y8009",     note: "9 products",      pay: 2.50, sell: 4.50 },
+    { key: "wy365", name: "WY365 Series", sub: "SPC 6.5mm · 20 mil · WY365-1–6",       note: "6 products",      pay: 2.50, sell: 4.50 },
+    { key: "y90",   name: "Y90 Series",   sub: "SPC 6.5mm · 20 mil EIR · Y9001–Y9006", note: "6 products",      pay: 2.50, sell: 4.50 },
+    { key: "ge",    name: "GE Series",    sub: "QPC 7mm · GE001–GE012",                note: "not on site yet", pay: 2.25, sell: 4.25 }
+  ];
+  function seriesPricingPanel(s) {
+    var cfg = (s && s.priceSeries) || {};
+    var rows = SERIES_UI.map(function (r) {
+      var v = cfg[r.key] || {};
+      var pay = v.pay != null ? v.pay : r.pay;
+      var sell = v.sell != null ? v.sell : r.sell;
+      return '<div style="display:grid;grid-template-columns:minmax(0,1fr) 108px 108px;gap:12px;align-items:end;padding:12px 0;border-top:1px solid var(--line)">' +
+          '<div><strong style="display:block">' + r.name + '</strong><span class="row-sub">' + r.sub + ' · ' + r.note + '</span></div>' +
+          '<label class="v6-field"><span>Pay $/sqft</span><input id="setPay_' + r.key + '" type="number" min="0" step="0.01" value="' + pay + '"></label>' +
+          '<label class="v6-field"><span>Sell $/sqft</span><input id="setSell_' + r.key + '" type="number" min="0" step="0.01" value="' + sell + '"></label>' +
+        '</div>';
+    }).join("");
+    return '<div class="panel"><div class="panel-head"><h2>Series pricing</h2><span class="cp-saved" id="savedSeries" hidden>Saved</span></div><div class="panel-pad v6-form">' +
+      '<p class="row-sub" style="margin:0"><b>Sell</b> is the retail $/sqft customers pay for that series — it drives catalog, quotes, cart, and checkout. <b>Pay</b> is your cost (used for margin). Series pricing overrides the default markup for those products; a manual price edit on a product still wins.</p>' +
+      '<div>' + rows + '</div>' +
+      '<div style="margin-top:6px"><button class="btn" type="button" id="saveSeries" style="min-height:42px">Save series pricing</button></div>' +
+    '</div></div>';
+  }
+
   function render() {
     var s = L.siteSettings();
     var integrationRows = integrations ? (
@@ -57,12 +88,14 @@
             field('Tax rate (%)', '<input id="setTax" type="number" min="0" max="25" step="0.05" value="' + (s.taxRate * 100).toFixed(2) + '">') +
             field('Garage placement ($/carton)', '<input id="setGarage" type="number" min="0" step="0.5" value="' + s.garagePerCarton + '">') +
           '</div><div class="v6-field-row">' +
-            field('Product markup (%)', '<input id="setMarkup" type="number" min="0" max="500" step="1" value="' + (s.priceMarkupPercent || 0) + '">') +
-            '<div class="v6-field"><span>&nbsp;</span><p class="row-sub" style="margin:10px 0 0">Catalog prices are your <b>cost</b> — customers see cost + this markup everywhere (catalog, quotes, cart, checkout). A manual price edit on a product overrides it.</p></div>' +
+            field('Default markup — other products (%)', '<input id="setMarkup" type="number" min="0" max="500" step="1" value="' + (s.priceMarkupPercent || 0) + '">') +
+            '<div class="v6-field"><span>&nbsp;</span><p class="row-sub" style="margin:10px 0 0">Fallback for products <b>not</b> in a priced series below — their retail = cost + this markup. Series products use their Sell price instead.</p></div>' +
           '</div>' +
           '<p class="row-sub">Used everywhere totals are shown — cart, checkout, Stripe, and staff orders. Update the advertised “free delivery over $1,200” copy if you change that threshold.</p>' +
           '<div><button class="btn" type="button" id="savePricing" style="min-height:42px">Save pricing</button></div>' +
         '</div></div>' +
+
+        seriesPricingPanel(s) +
 
         '<div class="panel"><div class="panel-head"><h2>Business info</h2><span class="cp-saved" id="savedBiz" hidden>Saved</span></div><div class="panel-pad v6-form">' +
           '<div class="v6-field-row">' +
@@ -202,6 +235,16 @@
         garagePerCarton: Number(document.getElementById("setGarage").value),
         priceMarkupPercent: Number(document.getElementById("setMarkup").value)
       }, "savedPricing");
+    });
+    document.getElementById("saveSeries").addEventListener("click", function () {
+      var ps = {};
+      SERIES_UI.forEach(function (r) {
+        ps[r.key] = {
+          pay: Number(document.getElementById("setPay_" + r.key).value),
+          sell: Number(document.getElementById("setSell_" + r.key).value)
+        };
+      });
+      save({ priceSeries: ps }, "savedSeries");
     });
     document.getElementById("saveBiz").addEventListener("click", function () {
       save({
