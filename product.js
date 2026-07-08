@@ -282,7 +282,7 @@
   });
 
   function toast(msg) {
-    if (L.showToast) { try { L.showToast(msg, "View cart", L.openDrawer); return; } catch (e) {} }
+    if (L.showToast) { try { L.showToast(msg, "View cart", function () { location.href = "./cart.html"; }); return; } catch (e) {} }
   }
   function addCart() {
     var cartons = currentCartons();
