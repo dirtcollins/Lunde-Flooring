@@ -3465,6 +3465,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/562-562/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/562-562/plank-bar.webp"
     }
   ],
   "G001": [
@@ -3549,6 +3553,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank-bar.webp"
     }
   ],
   "Y8003": [
@@ -3563,6 +3571,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank-bar.webp"
     }
   ],
   "Y8004": [
@@ -3587,6 +3599,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank-bar.webp"
     }
   ],
   "Y8006": [
@@ -3601,6 +3617,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank-bar.webp"
     }
   ],
   "Y8007": [
@@ -3615,6 +3635,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank-bar.webp"
     }
   ],
   "Y8008": [
@@ -3629,6 +3653,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank-bar.webp"
     }
   ],
   "Y8009": [
@@ -3643,6 +3671,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank-bar.webp"
     }
   ],
   "WY365_1": [
@@ -3717,6 +3749,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank-bar.webp"
     }
   ],
   "Y9002": [
@@ -3731,6 +3767,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank-bar.webp"
     }
   ],
   "Y9003": [
@@ -3745,6 +3785,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank-bar.webp"
     }
   ],
   "Y9004": [
@@ -3759,6 +3803,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank-bar.webp"
     }
   ],
   "Y9005": [
@@ -4183,6 +4231,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank-bar.webp"
     }
   ],
   "HL812": [
@@ -4197,6 +4249,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank-bar.webp"
     }
   ],
   "HL813": [
@@ -4211,6 +4267,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank-bar.webp"
     }
   ],
   "HL814": [
@@ -4225,6 +4285,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank-bar.webp"
     }
   ],
   "K851": [
@@ -4239,6 +4303,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank-bar.webp"
     }
   ],
   "K852": [
@@ -4253,6 +4321,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank-bar.webp"
     }
   ],
   "K853": [
@@ -4267,6 +4339,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank-bar.webp"
     }
   ],
   "K855": [
@@ -4281,6 +4357,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank-bar.webp"
     }
   ],
   "K856": [
@@ -4295,6 +4375,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank-bar.webp"
     }
   ],
   "K857": [
@@ -4309,6 +4393,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank-bar.webp"
     }
   ],
   "K858": [
@@ -4323,6 +4411,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank-bar.webp"
     }
   ],
   "K859": [
@@ -4337,6 +4429,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank-bar.webp"
     }
   ],
   "K860": [
@@ -4351,6 +4447,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank-bar.webp"
     }
   ],
   "K861": [
@@ -4365,6 +4465,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank-bar.webp"
     }
   ],
   "K862": [
@@ -4379,6 +4483,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank-bar.webp"
     }
   ],
   "K863": [
@@ -4393,6 +4501,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank-bar.webp"
     }
   ],
   "K864": [
@@ -4407,6 +4519,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank-bar.webp"
     }
   ],
   "K865": [
@@ -4421,6 +4537,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank-bar.webp"
     }
   ],
   "K866": [
@@ -4435,6 +4555,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank-bar.webp"
     }
   ],
   "K868": [
@@ -4449,6 +4573,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank-bar.webp"
     }
   ],
   "WY103": [
@@ -4463,6 +4591,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank-bar.webp"
     }
   ],
   "WY104": [
@@ -4477,6 +4609,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank-bar.webp"
     }
   ],
   "WY105": [
@@ -4491,6 +4627,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank-bar.webp"
     }
   ],
   "WY107": [
@@ -4505,6 +4645,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank-bar.webp"
     }
   ],
   "WY108": [
@@ -4519,6 +4663,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank-bar.webp"
     }
   ],
   "WY109": [
@@ -4533,6 +4681,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank-bar.webp"
     }
   ],
   "WY801": [
@@ -4547,6 +4699,10 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank-bar.webp"
     }
   ],
   "WY804": [
@@ -4561,9 +4717,13 @@ const productGalleries = {
     {
       "label": "Product sample",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank.webp"
+    },
+    {
+      "label": "Plank detail",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank-bar.webp"
     }
   ]
-};;
+};;;
 
 const customerSeries = {
   K850: { collection: "Cascade Series", style: "Cascade Series", names: ["Cascade White Oak", "Aspen Ridge Oak", "Timber Falls Oak", "Cedar Mill Oak", "Granite Peak Oak", "Alpine Natural", "Frostwood Oak", "Basalt Grey Oak", "Riverstone Oak", "Glacier Oak", "Sierra Brushed Oak", "Slate Canyon Oak", "Evergreen Oak", "Boulder Oak", "Snowmelt Oak", "Highland Mist Oak"] },
