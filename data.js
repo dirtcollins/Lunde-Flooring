@@ -272,7 +272,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/room-furniture.webp",
     "description": "Y 8002 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -309,7 +309,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/room-furniture.webp",
     "description": "Y 8003 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -383,7 +383,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/room-furniture.webp",
     "description": "Y 8005 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -420,7 +420,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/room-furniture.webp",
     "description": "Y 8006 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -457,7 +457,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/room-furniture.webp",
     "description": "Y 8007 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -494,7 +494,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/room-furniture.webp",
     "description": "Y 8008 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -531,7 +531,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/room-furniture.webp",
     "description": "Y 8009 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -778,7 +778,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/room-furniture.webp",
     "description": "Y 9001 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -815,7 +815,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/room-furniture.webp",
     "description": "Y 9002 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -852,7 +852,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/room-furniture.webp",
     "description": "Y 9003 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -889,7 +889,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/room-furniture.webp",
     "description": "Y 9004 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
@@ -2428,7 +2428,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2465,7 +2465,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2502,7 +2502,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2539,7 +2539,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2576,7 +2576,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2613,7 +2613,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2650,7 +2650,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2687,7 +2687,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2724,7 +2724,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2761,7 +2761,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2798,7 +2798,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2835,7 +2835,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2872,7 +2872,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2909,7 +2909,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2946,7 +2946,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/room-furniture.webp",
     "description": "",
     "specs": {
@@ -2983,7 +2983,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3020,7 +3020,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3057,7 +3057,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3094,7 +3094,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3131,7 +3131,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3168,7 +3168,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3205,7 +3205,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3242,7 +3242,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3279,7 +3279,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3316,7 +3316,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3353,7 +3353,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3390,7 +3390,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3427,7 +3427,7 @@ const products = [
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank-hd.webp",
     "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/room-furniture.webp",
     "description": "",
     "specs": {
@@ -3552,7 +3552,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3570,7 +3570,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3598,7 +3598,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3616,7 +3616,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3634,7 +3634,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3652,7 +3652,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3670,7 +3670,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3748,7 +3748,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3766,7 +3766,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3784,7 +3784,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -3802,7 +3802,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4230,7 +4230,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4248,7 +4248,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4266,7 +4266,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4284,7 +4284,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4302,7 +4302,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4320,7 +4320,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4338,7 +4338,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4356,7 +4356,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4374,7 +4374,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4392,7 +4392,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4410,7 +4410,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4428,7 +4428,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4446,7 +4446,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4464,7 +4464,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4482,7 +4482,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4500,7 +4500,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4518,7 +4518,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4536,7 +4536,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4554,7 +4554,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4572,7 +4572,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4590,7 +4590,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4608,7 +4608,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4626,7 +4626,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4644,7 +4644,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4662,7 +4662,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4680,7 +4680,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4698,7 +4698,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank-hd.webp"
     },
     {
       "label": "Plank detail",
@@ -4716,7 +4716,7 @@ const productGalleries = {
     },
     {
       "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank-hd.webp"
     },
     {
       "label": "Plank detail",
