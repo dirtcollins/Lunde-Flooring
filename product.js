@@ -87,17 +87,16 @@
     product.specs.finish + " with " + (product.specs.edgeProfile || "bevel") + " edge detail."
   ];
 
-  /* format diagram sizing */
+  /* format diagram: a plank-bar photo of the actual floor under the "Plank size" heading */
   var formatHtml = "";
   if (dims.w && dims.l) {
-    var scale = Math.min(280 / dims.l, 64 / dims.w);
-    var barW = Math.round(dims.l * scale), barH = Math.max(14, Math.round(dims.w * scale));
     var feet = dims.l % 12 === 0 ? (dims.l / 12) + " ft" : (dims.l / 12).toFixed(1) + " ft";
+    var barUrl = product.barImage || (product.mainImage || "").replace(/[^/]+$/, "plank-bar.webp");
     formatHtml =
       '<div class="pdp-format">' +
         '<div class="pdp-format-h"><p>Plank size</p><span>' + product.specs.thickness + ' thick</span></div>' +
-        '<div class="pdp-bar" style="width:' + barW + 'px;height:' + barH + 'px"><span class="pdp-bar-tex" style="background-image:url(\'' + (product.barImage || product.mainImage) + '\')' + (product.barImage ? ';background-size:cover' : '') + '"></span></div>' +
-        '<div class="pdp-dim-h" style="width:' + barW + 'px"><i></i><span>' + dims.l + '″ · ' + feet + '</span><i></i></div>' +
+        '<div class="pdp-plankbar"><img src="' + barUrl + '" alt="' + product.title + ' plank detail" loading="lazy" onerror="this.onerror=null;this.src=\'' + product.mainImage + '\'"></div>' +
+        '<div class="pdp-dim-h"><i></i><span>' + dims.l + '″ × ' + dims.w + '″ · ' + feet + '</span><i></i></div>' +
       '</div>';
   }
 
