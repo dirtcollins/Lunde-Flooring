@@ -1626,13 +1626,17 @@ async function serveStatic(req, res, url) {
 // series fall back to cost × (1 + priceMarkupPercent). SKU prefixes map to
 // the eight series from the SpecialFX spec/price sheet.
 const PRICE_SERIES = [
+  { key: "lut",   label: "L240 Laminate — LUT 2.4mm, 12 mil (L241–248)",     match: /^L2/i },
   { key: "s560",  label: "560 Series — SPC 5.5mm, 12 mil (551–554)",         match: /^55\d/i },
   { key: "s562",  label: "562 Series — SPC 5.5mm, 20 mil (561–566)",         match: /^56\d/i },
   { key: "hy",    label: "HY Series — SPC 5.5mm 4+1.5, 12 mil (HY001–008)",  match: /^HY/i },
   { key: "g00",   label: "G00 Series — SPC 6mm, 22 mil (G001–G006)",         match: /^G0/i },
   { key: "y80",   label: "Y80 Series — SPC 6.5mm, 20 mil (Y8001–Y8009)",     match: /^Y80/i },
   { key: "wy365", label: "WY365 Series — SPC 6.5mm, 20 mil (WY365-1–6)",     match: /^WY365/i },
+  { key: "wy8",   label: "WY800 Series — SPC 8mm, 20 mil (WY102–109, 801–804)", match: /^WY(10|80)/i },
   { key: "y90",   label: "Y90 Series — SPC 6.5mm, 20 mil EIR (Y9001–Y9006)", match: /^Y90/i },
+  { key: "hl",    label: "HL800 Series — SPC 8mm, 22 mil (HL811–814)",       match: /^HL/i },
+  { key: "k85",   label: "K850 Series — SPC 8mm, 22 mil (K851–868)",         match: /^K8/i },
   { key: "ge",    label: "GE Series — QPC 7mm (GE001–GE012)",                match: /^GE/i }
 ];
 function seriesKeyForSku(sku) {
@@ -3166,13 +3170,17 @@ function defaultSettings() {
     priceMarkupPercent: 0, // fallback for products not in a priced series (cost + this markup)
     // Per-series Pay (cost) and Sell (retail $/sqft), seeded from the SpecialFX sheet.
     priceSeries: {
-      s560:  { pay: 2.25, sell: 4.25, enabled: true },
-      s562:  { pay: 2.00, sell: 4.00, enabled: true },
-      hy:    { pay: 2.25, sell: 4.25, enabled: true },
-      g00:   { pay: 2.25, sell: 4.25, enabled: true },
-      y80:   { pay: 2.50, sell: 4.50, enabled: true },
+      lut:   { pay: 2.00, sell: 4.00, enabled: true },
+      s560:  { pay: 2.00, sell: 4.50, enabled: true },
+      s562:  { pay: 2.00, sell: 4.50, enabled: true },
+      hy:    { pay: 2.25, sell: 4.75, enabled: true },
+      g00:   { pay: 2.25, sell: 4.75, enabled: true },
+      y80:   { pay: 2.50, sell: 5.00, enabled: true },
       wy365: { pay: 2.50, sell: 4.50, enabled: true },
-      y90:   { pay: 2.50, sell: 4.50, enabled: true },
+      wy8:   { pay: 2.50, sell: 5.00, enabled: true },
+      y90:   { pay: 2.50, sell: 5.00, enabled: true },
+      hl:    { pay: 2.75, sell: 5.25, enabled: true },
+      k85:   { pay: 2.75, sell: 5.25, enabled: true },
       ge:    { pay: 2.25, sell: 4.25, enabled: true }
     },
     businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
