@@ -8,8 +8,8 @@ const products = [
     "color": "Greige",
     "sku": "G001",
     "url": "#",
-    "pricePerSqft": 2.79,
-    "priceDisplay": "$66.96 carton",
+    "pricePerSqft": 2.25,
+    "priceDisplay": "$114.00 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -21,17 +21,19 @@ const products = [
       "sku": "G001",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "22 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "6 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "24.00 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "8 planks",
+      "weightPerCarton": "41 lbs"
     }
   },
   {
@@ -43,8 +45,8 @@ const products = [
     "color": "Greige",
     "sku": "G002",
     "url": "#",
-    "pricePerSqft": 2.79,
-    "priceDisplay": "$66.96 carton",
+    "pricePerSqft": 2.25,
+    "priceDisplay": "$114.00 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -56,17 +58,19 @@ const products = [
       "sku": "G002",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "22 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "6 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "24.00 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "8 planks",
+      "weightPerCarton": "41 lbs"
     }
   },
   {
@@ -78,8 +82,8 @@ const products = [
     "color": "Greige",
     "sku": "G003",
     "url": "#",
-    "pricePerSqft": 2.79,
-    "priceDisplay": "$66.96 carton",
+    "pricePerSqft": 2.25,
+    "priceDisplay": "$114.00 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -91,17 +95,19 @@ const products = [
       "sku": "G003",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "22 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "6 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "24.00 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "8 planks",
+      "weightPerCarton": "41 lbs"
     }
   },
   {
@@ -113,8 +119,8 @@ const products = [
     "color": "Greige",
     "sku": "G004",
     "url": "#",
-    "pricePerSqft": 2.79,
-    "priceDisplay": "$66.96 carton",
+    "pricePerSqft": 2.25,
+    "priceDisplay": "$114.00 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -126,17 +132,19 @@ const products = [
       "sku": "G004",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "22 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "6 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "24.00 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "8 planks",
+      "weightPerCarton": "41 lbs"
     }
   },
   {
@@ -148,8 +156,8 @@ const products = [
     "color": "Greige",
     "sku": "G005",
     "url": "#",
-    "pricePerSqft": 2.79,
-    "priceDisplay": "$66.96 carton",
+    "pricePerSqft": 2.25,
+    "priceDisplay": "$114.00 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -161,17 +169,19 @@ const products = [
       "sku": "G005",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "22 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "6 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "24.00 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "8 planks",
+      "weightPerCarton": "41 lbs"
     }
   },
   {
@@ -183,8 +193,8 @@ const products = [
     "color": "Greige",
     "sku": "G006",
     "url": "#",
-    "pricePerSqft": 2.79,
-    "priceDisplay": "$66.96 carton",
+    "pricePerSqft": 2.25,
+    "priceDisplay": "$114.00 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -196,17 +206,19 @@ const products = [
       "sku": "G006",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "22 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "6 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "24.00 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "8 planks",
+      "weightPerCarton": "41 lbs"
     }
   },
   {
@@ -218,8 +230,8 @@ const products = [
     "color": "Blonde",
     "sku": "Y8001",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -231,17 +243,19 @@ const products = [
       "sku": "Y8001",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -253,30 +267,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8002",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/1-20231218-110630.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/2-20231218-110636.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/room-furniture.webp",
     "description": "Y 8002 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8002",
       "sku": "Y8002",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -288,30 +304,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8003",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/1-20231218-110655.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/2-20231218-110659.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/room-furniture.webp",
     "description": "Y 8003 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8003",
       "sku": "Y8003",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -323,8 +341,8 @@ const products = [
     "color": "Blonde",
     "sku": "Y8004",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -336,17 +354,19 @@ const products = [
       "sku": "Y8004",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -358,30 +378,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8005",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/1-20231218-110743.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/2-20231218-110748.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/room-furniture.webp",
     "description": "Y 8005 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8005",
       "sku": "Y8005",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -393,30 +415,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8006",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/1-20231218-110821.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/2-20231218-110828.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/room-furniture.webp",
     "description": "Y 8006 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8006",
       "sku": "Y8006",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -428,30 +452,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8007",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/1-20231218-110853.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/2-20231218-110858.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/room-furniture.webp",
     "description": "Y 8007 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8007",
       "sku": "Y8007",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -463,30 +489,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8008",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/1-20231218-110915.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/2-20231218-110921.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/room-furniture.webp",
     "description": "Y 8008 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8008",
       "sku": "Y8008",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -498,30 +526,32 @@ const products = [
     "color": "Blonde",
     "sku": "Y8009",
     "url": "#",
-    "pricePerSqft": 3.03,
-    "priceDisplay": "$68.11 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$112.40 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8001-y8001/1-20231218-110537.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-8001-y8001/2-20231218-110542.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/room-furniture.webp",
     "description": "Y 8009 is part of the Y800 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 8009",
       "sku": "Y8009",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.48 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "49 lbs"
     }
   },
   {
@@ -743,30 +773,32 @@ const products = [
     "color": "Warm",
     "sku": "Y9001",
     "url": "#",
-    "pricePerSqft": 3.27,
-    "priceDisplay": "$72.82 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$111.35 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/1-20231218-110145.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/2-20231218-110230.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/room-furniture.webp",
     "description": "Y 9001 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 9001",
       "sku": "Y9001",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.27 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "48 lbs"
     }
   },
   {
@@ -778,30 +810,32 @@ const products = [
     "color": "Warm",
     "sku": "Y9002",
     "url": "#",
-    "pricePerSqft": 3.27,
-    "priceDisplay": "$72.82 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$111.35 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/1-20231218-110259.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/2-20231218-110308.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/room-furniture.webp",
     "description": "Y 9002 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 9002",
       "sku": "Y9002",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.27 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "48 lbs"
     }
   },
   {
@@ -813,30 +847,32 @@ const products = [
     "color": "Warm",
     "sku": "Y9003",
     "url": "#",
-    "pricePerSqft": 3.27,
-    "priceDisplay": "$72.82 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$111.35 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/1-20231218-110357.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/2-20231218-110403.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/room-furniture.webp",
     "description": "Y 9003 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 9003",
       "sku": "Y9003",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.27 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "48 lbs"
     }
   },
   {
@@ -848,30 +884,32 @@ const products = [
     "color": "Warm",
     "sku": "Y9004",
     "url": "#",
-    "pricePerSqft": 3.27,
-    "priceDisplay": "$72.82 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$111.35 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
-    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/1-20231218-110421.webp",
-    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/2-20231218-110427.webp",
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/room-furniture.webp",
     "description": "Y 9004 is part of the Y900 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "Y 9004",
       "sku": "Y9004",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.27 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "48 lbs"
     }
   },
   {
@@ -883,8 +921,8 @@ const products = [
     "color": "Warm",
     "sku": "Y9005",
     "url": "#",
-    "pricePerSqft": 3.27,
-    "priceDisplay": "$72.82 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$111.35 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -896,17 +934,19 @@ const products = [
       "sku": "Y9005",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.27 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "48 lbs"
     }
   },
   {
@@ -918,8 +958,8 @@ const products = [
     "color": "Warm",
     "sku": "Y9006",
     "url": "#",
-    "pricePerSqft": 3.27,
-    "priceDisplay": "$72.82 carton",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$111.35 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -931,17 +971,19 @@ const products = [
       "sku": "Y9006",
       "collection": "AdoFloor Blue Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 60\"",
+      "thickness": "6.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "22.27 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "48 lbs"
     }
   },
   {
@@ -1583,8 +1625,8 @@ const products = [
     "color": "Blonde",
     "sku": "L241",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1596,17 +1638,19 @@ const products = [
       "sku": "L241",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1618,8 +1662,8 @@ const products = [
     "color": "Blonde",
     "sku": "L242",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1631,17 +1675,19 @@ const products = [
       "sku": "L242",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1653,8 +1699,8 @@ const products = [
     "color": "Blonde",
     "sku": "L243",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1666,17 +1712,19 @@ const products = [
       "sku": "L243",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1688,8 +1736,8 @@ const products = [
     "color": "Blonde",
     "sku": "L244",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1701,17 +1749,19 @@ const products = [
       "sku": "L244",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1723,8 +1773,8 @@ const products = [
     "color": "Blonde",
     "sku": "L245",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1736,17 +1786,19 @@ const products = [
       "sku": "L245",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1758,8 +1810,8 @@ const products = [
     "color": "Blonde",
     "sku": "L246",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1771,17 +1823,19 @@ const products = [
       "sku": "L246",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1793,8 +1847,8 @@ const products = [
     "color": "Blonde",
     "sku": "L247",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1806,17 +1860,19 @@ const products = [
       "sku": "L247",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -1828,8 +1884,8 @@ const products = [
     "color": "Blonde",
     "sku": "L248",
     "url": "#",
-    "pricePerSqft": 1.86,
-    "priceDisplay": "$67.48 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$145.12 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -1841,17 +1897,19 @@ const products = [
       "sku": "L248",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "High-density laminate core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7.5\" x 48\"",
-      "thickness": "8 mm",
+      "dimensions": "7.25\" x 48\"",
+      "thickness": "2.4 mm",
       "construction": "Laminate plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "36.28 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "15 planks",
+      "weightPerCarton": "33 lbs"
     }
   },
   {
@@ -2073,8 +2131,8 @@ const products = [
     "color": "Greige",
     "sku": "551",
     "url": "#",
-    "pricePerSqft": 2.33,
-    "priceDisplay": "$63.89 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$123.39 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -2086,17 +2144,19 @@ const products = [
       "sku": "551",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "5.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "27.42 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "9 planks",
+      "weightPerCarton": "50 lbs"
     }
   },
   {
@@ -2106,10 +2166,10 @@ const products = [
     "collection": "AdoFloor Yellow Label",
     "style": "560 Series",
     "color": "Greige",
-    "sku": "551",
+    "sku": "552",
     "url": "#",
-    "pricePerSqft": 2.33,
-    "priceDisplay": "$63.89 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$123.39 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -2118,20 +2178,22 @@ const products = [
     "description": "560 Series 551 Option 2 is part of the 560 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "560 SERIES 551 OPTION 2",
-      "sku": "551_2",
+      "sku": "552",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "5.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "27.42 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "9 planks",
+      "weightPerCarton": "50 lbs"
     }
   },
   {
@@ -2141,10 +2203,10 @@ const products = [
     "collection": "AdoFloor Yellow Label",
     "style": "560 Series",
     "color": "Greige",
-    "sku": "551",
+    "sku": "553",
     "url": "#",
-    "pricePerSqft": 2.33,
-    "priceDisplay": "$63.89 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$123.39 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -2153,20 +2215,22 @@ const products = [
     "description": "560 Series 551 Option 3 is part of the 560 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "560 SERIES 551 OPTION 3",
-      "sku": "551_3",
+      "sku": "553",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "5.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "27.42 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "9 planks",
+      "weightPerCarton": "50 lbs"
     }
   },
   {
@@ -2176,10 +2240,10 @@ const products = [
     "collection": "AdoFloor Yellow Label",
     "style": "560 Series",
     "color": "Greige",
-    "sku": "551",
+    "sku": "554",
     "url": "#",
-    "pricePerSqft": 2.33,
-    "priceDisplay": "$63.89 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$123.39 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -2188,20 +2252,22 @@ const products = [
     "description": "560 Series 551 Option 4 is part of the 560 Series offering, priced and sold by full carton. This listing was built from the supplied product order sheet and local sample photography.",
     "specs": {
       "productName": "560 SERIES 551 OPTION 4",
-      "sku": "551_4",
+      "sku": "554",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "Commercial-grade wear layer",
+      "wearLayer": "12 mil",
       "core": "Rigid waterproof core",
       "edgeProfile": "Painted bevel",
       "underlayment": "Pad attached where applicable",
-      "dimensions": "7\" x 48\"",
-      "thickness": "5 mm",
+      "dimensions": "9\" x 48\"",
+      "thickness": "5.5 mm",
       "construction": "LVT / SPC resilient plank",
       "installationMethod": "Floating / direct glue where applicable",
       "installationGrade": "Above, On, Below",
       "squareFootagePerCarton": "27.42 sq. ft.",
-      "countryOfOrigin": "Imported"
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "9 planks",
+      "weightPerCarton": "50 lbs"
     }
   },
   {
@@ -2320,8 +2386,8 @@ const products = [
     "url": "#",
     "imageFit": "cover",
     "barImage": "./media/new-site/hostinger-v7/web/adore-floors/562-562/plank-bar.webp",
-    "pricePerSqft": 2.33,
-    "priceDisplay": "$56.04 carton",
+    "pricePerSqft": 2.0,
+    "priceDisplay": "$108.18 carton",
     "samplePrice": 2.99,
     "availability": "Product available by carton",
     "sampleCount": 24,
@@ -2333,16 +2399,1054 @@ const products = [
       "sku": "562",
       "collection": "AdoFloor Yellow Label",
       "finish": "Matte wear surface",
-      "wearLayer": "20 mil wear layer",
+      "wearLayer": "20 mil",
       "core": "Rigid 100% waterproof SPC core",
       "edgeProfile": "Painted bevel",
       "underlayment": "1.5 mm attached IXPE pad",
-      "dimensions": "7.21\" x 48.04\"",
+      "dimensions": "7\" x 48\"",
       "thickness": "5.5 mm",
       "construction": "SPC rigid-core vinyl plank",
       "installationMethod": "Floating click-lock",
       "installationGrade": "Above, On, Below",
-      "squareFootagePerCarton": "24.05 sq. ft.",
+      "squareFootagePerCarton": "24.04 sq. ft.",
+      "countryOfOrigin": "Imported",
+      "piecesPerCarton": "10 planks",
+      "weightPerCarton": "43 lbs"
+    }
+  },
+  {
+    "id": "HL811",
+    "slug": "hl811-hl811",
+    "title": "HL811",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "HL811",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$98.33 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "HL811",
+      "sku": "HL811",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.73 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "53 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "HL812",
+    "slug": "hl812-hl812",
+    "title": "HL812",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "HL812",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$98.33 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "HL812",
+      "sku": "HL812",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.73 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "53 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "HL813",
+    "slug": "hl813-hl813",
+    "title": "HL813",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "HL813",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$98.33 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "HL813",
+      "sku": "HL813",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.73 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "53 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "HL814",
+    "slug": "hl814-hl814",
+    "title": "HL814",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "HL814",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$98.33 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "HL814",
+      "sku": "HL814",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.73 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "53 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K851",
+    "slug": "k851-k851",
+    "title": "K851",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K851",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K851",
+      "sku": "K851",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K852",
+    "slug": "k852-k852",
+    "title": "K852",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K852",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K852",
+      "sku": "K852",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K853",
+    "slug": "k853-k853",
+    "title": "K853",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K853",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K853",
+      "sku": "K853",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K855",
+    "slug": "k855-k855",
+    "title": "K855",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K855",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K855",
+      "sku": "K855",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K856",
+    "slug": "k856-k856",
+    "title": "K856",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K856",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K856",
+      "sku": "K856",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K857",
+    "slug": "k857-k857",
+    "title": "K857",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K857",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K857",
+      "sku": "K857",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K858",
+    "slug": "k858-k858",
+    "title": "K858",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K858",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K858",
+      "sku": "K858",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K859",
+    "slug": "k859-k859",
+    "title": "K859",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K859",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K859",
+      "sku": "K859",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K860",
+    "slug": "k860-k860",
+    "title": "K860",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K860",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K860",
+      "sku": "K860",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K861",
+    "slug": "k861-k861",
+    "title": "K861",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K861",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K861",
+      "sku": "K861",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K862",
+    "slug": "k862-k862",
+    "title": "K862",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K862",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K862",
+      "sku": "K862",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K863",
+    "slug": "k863-k863",
+    "title": "K863",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K863",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K863",
+      "sku": "K863",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K864",
+    "slug": "k864-k864",
+    "title": "K864",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K864",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K864",
+      "sku": "K864",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K865",
+    "slug": "k865-k865",
+    "title": "K865",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K865",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K865",
+      "sku": "K865",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K866",
+    "slug": "k866-k866",
+    "title": "K866",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K866",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K866",
+      "sku": "K866",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "K868",
+    "slug": "k868-k868",
+    "title": "K868",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "K868",
+    "url": "#",
+    "pricePerSqft": 2.75,
+    "priceDisplay": "$99.44 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "K868",
+      "sku": "K868",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "22 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "18.94 sq. ft.",
+      "piecesPerCarton": "5 planks",
+      "weightPerCarton": "54 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY103",
+    "slug": "wy103-wy103",
+    "title": "WY103",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY103",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY103",
+      "sku": "WY103",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY104",
+    "slug": "wy104-wy104",
+    "title": "WY104",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY104",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY104",
+      "sku": "WY104",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY105",
+    "slug": "wy105-wy105",
+    "title": "WY105",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY105",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY105",
+      "sku": "WY105",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY107",
+    "slug": "wy107-wy107",
+    "title": "WY107",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY107",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY107",
+      "sku": "WY107",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY108",
+    "slug": "wy108-wy108",
+    "title": "WY108",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY108",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY108",
+      "sku": "WY108",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY109",
+    "slug": "wy109-wy109",
+    "title": "WY109",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY109",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY109",
+      "sku": "WY109",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY801",
+    "slug": "wy801-wy801",
+    "title": "WY801",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY801",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY801",
+      "sku": "WY801",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
+      "countryOfOrigin": "Imported"
+    }
+  },
+  {
+    "id": "WY804",
+    "slug": "wy804-wy804",
+    "title": "WY804",
+    "collection": "",
+    "style": "",
+    "color": "Natural Oak",
+    "sku": "WY804",
+    "url": "#",
+    "pricePerSqft": 2.5,
+    "priceDisplay": "$113.60 carton",
+    "samplePrice": 2.99,
+    "availability": "Product available by carton",
+    "sampleCount": 24,
+    "mainImage": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank.webp",
+    "roomImage": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/room-furniture.webp",
+    "description": "",
+    "specs": {
+      "productName": "WY804",
+      "sku": "WY804",
+      "collection": "",
+      "finish": "Matte wear surface",
+      "wearLayer": "20 mil",
+      "core": "Rigid waterproof SPC core",
+      "edgeProfile": "Painted micro-bevel",
+      "underlayment": "Attached IXPE acoustic pad",
+      "dimensions": "9\" x 60\"",
+      "thickness": "8 mm",
+      "construction": "Crafted Luxury Vinyl Plank",
+      "installationMethod": "Floating click (angle-tap)",
+      "installationGrade": "Above, On, Below",
+      "squareFootagePerCarton": "22.72 sq. ft.",
+      "piecesPerCarton": "6 planks",
+      "weightPerCarton": "65 lbs",
       "countryOfOrigin": "Imported"
     }
   }
@@ -2435,22 +3539,30 @@ const productGalleries = {
   ],
   "Y8002": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/1-20231218-110630.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/2-20231218-110636.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8002-y8002/plank.webp"
     }
   ],
   "Y8003": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/1-20231218-110655.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/2-20231218-110659.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8003-y8003/plank.webp"
     }
   ],
   "Y8004": [
@@ -2465,52 +3577,72 @@ const productGalleries = {
   ],
   "Y8005": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/1-20231218-110743.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/2-20231218-110748.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8005-y8005/plank.webp"
     }
   ],
   "Y8006": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/1-20231218-110821.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/2-20231218-110828.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8006-y8006/plank.webp"
     }
   ],
   "Y8007": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/1-20231218-110853.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/2-20231218-110858.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8007-y8007/plank.webp"
     }
   ],
   "Y8008": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/1-20231218-110915.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/2-20231218-110921.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8008-y8008/plank.webp"
     }
   ],
   "Y8009": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8001-y8001/1-20231218-110537.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-8001-y8001/2-20231218-110542.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y8009-y8009/plank.webp"
     }
   ],
   "WY365_1": [
@@ -2575,42 +3707,58 @@ const productGalleries = {
   ],
   "Y9001": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/1-20231218-110145.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/2-20231218-110230.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9001-y9001/plank.webp"
     }
   ],
   "Y9002": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/1-20231218-110259.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/2-20231218-110308.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9002-y9002/plank.webp"
     }
   ],
   "Y9003": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/1-20231218-110357.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/2-20231218-110403.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9003-y9003/plank.webp"
     }
   ],
   "Y9004": [
     {
-      "label": "Product sample",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/1-20231218-110421.webp"
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/room-furniture.webp"
     },
     {
       "label": "Room scene",
-      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/2-20231218-110427.webp"
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/y-9004-y9004/plank.webp"
     }
   ],
   "Y9005": [
@@ -3022,10 +4170,405 @@ const productGalleries = {
       "label": "Room scene",
       "url": "./media/new-site/hostinger-v7/web/adore-floors/ge000-e010-e010/2-20231218-112613.webp"
     }
+  ],
+  "HL811": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl811-hl811/plank.webp"
+    }
+  ],
+  "HL812": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl812-hl812/plank.webp"
+    }
+  ],
+  "HL813": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl813-hl813/plank.webp"
+    }
+  ],
+  "HL814": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/hl814-hl814/plank.webp"
+    }
+  ],
+  "K851": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k851-k851/plank.webp"
+    }
+  ],
+  "K852": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k852-k852/plank.webp"
+    }
+  ],
+  "K853": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k853-k853/plank.webp"
+    }
+  ],
+  "K855": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k855-k855/plank.webp"
+    }
+  ],
+  "K856": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k856-k856/plank.webp"
+    }
+  ],
+  "K857": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k857-k857/plank.webp"
+    }
+  ],
+  "K858": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k858-k858/plank.webp"
+    }
+  ],
+  "K859": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k859-k859/plank.webp"
+    }
+  ],
+  "K860": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k860-k860/plank.webp"
+    }
+  ],
+  "K861": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k861-k861/plank.webp"
+    }
+  ],
+  "K862": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k862-k862/plank.webp"
+    }
+  ],
+  "K863": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k863-k863/plank.webp"
+    }
+  ],
+  "K864": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k864-k864/plank.webp"
+    }
+  ],
+  "K865": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k865-k865/plank.webp"
+    }
+  ],
+  "K866": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k866-k866/plank.webp"
+    }
+  ],
+  "K868": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/k868-k868/plank.webp"
+    }
+  ],
+  "WY103": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy103-wy103/plank.webp"
+    }
+  ],
+  "WY104": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy104-wy104/plank.webp"
+    }
+  ],
+  "WY105": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy105-wy105/plank.webp"
+    }
+  ],
+  "WY107": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy107-wy107/plank.webp"
+    }
+  ],
+  "WY108": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy108-wy108/plank.webp"
+    }
+  ],
+  "WY109": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy109-wy109/plank.webp"
+    }
+  ],
+  "WY801": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy801-wy801/plank.webp"
+    }
+  ],
+  "WY804": [
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/room-furniture.webp"
+    },
+    {
+      "label": "Room scene",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/room-fireplace.webp"
+    },
+    {
+      "label": "Product sample",
+      "url": "./media/new-site/hostinger-v7/web/adore-floors/wy804-wy804/plank.webp"
+    }
   ]
-};
+};;
 
 const customerSeries = {
+  K850: { collection: "Cascade Series", style: "Cascade Series", names: ["Cascade White Oak", "Aspen Ridge Oak", "Timber Falls Oak", "Cedar Mill Oak", "Granite Peak Oak", "Alpine Natural", "Frostwood Oak", "Basalt Grey Oak", "Riverstone Oak", "Glacier Oak", "Sierra Brushed Oak", "Slate Canyon Oak", "Evergreen Oak", "Boulder Oak", "Snowmelt Oak", "Highland Mist Oak"] },
+  HL800: { collection: "Vantage Series", style: "Vantage Series", names: ["Vantage Natural Oak", "Summit White Oak", "Crestline Oak", "Overlook Greige Oak"] },
+  WY800: { collection: "Meridian Series", style: "Meridian Series", names: ["Meridian Natural", "Solstice Oak", "Meridian Sand Oak", "Equinox Oak", "Meridian Greige", "Daybreak Oak", "Meridian Warm Oak", "Twilight Oak"] },
   G00: { collection: "Grove Series", style: "Grove Series", names: ["Soft Linen Oak", "Pale Hearth Oak", "Ashen Grove Oak", "Washed Elm", "Quiet Taupe Oak", "Silvered Field Oak"] },
   Y800: { collection: "Harbor Series", style: "Harbor Series", names: ["Driftwood Blonde", "Sunlit Pier Oak", "Sandbar Maple", "Coastal Natural", "Tidewashed Oak", "Boardwalk Beige", "Light Dune Oak", "Shellbank Maple", "Morning Harbor Oak"] },
   Y900: { collection: "Atelier Series", style: "Atelier Series", names: ["Gallery White Oak", "Limestone Oak", "Warm Canvas Oak", "Studio Natural", "Fawn Brushed Oak", "Soft Umber Oak"] },
@@ -3049,7 +4592,10 @@ function customerSeriesKey(product) {
   if (sku.startsWith("GE000") || /^E\d+/.test(sku)) return "GE000";
   if (sku.startsWith("WL98")) return "WL980";
   if (sku.startsWith("K57")) return "K570";
-  if (sku === "551" || sku === "562") return "560";
+  if (sku.startsWith("K8")) return "K850";
+  if (sku.startsWith("HL")) return "HL800";
+  if (sku.startsWith("WY10") || sku.startsWith("WY80")) return "WY800";
+  if (sku === "562" || /^55\d/.test(sku)) return "560";
   if (sku.startsWith("G")) return "G00";
   return "G00";
 }
