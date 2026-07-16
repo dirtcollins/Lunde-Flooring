@@ -186,8 +186,17 @@
         if (!g || !all.length) return;
         function money(n){ return "$" + Number(n).toFixed(2); }
         function carton(p){ var s = parseFloat((p.specs && p.specs.squareFootagePerCarton) || 0) || 0; return p.pricePerSqft * s; }
-        g.innerHTML = all.slice(0, 8).map(function (p) {
-          var img = (window.lunde && window.lunde.img) ? window.lunde.img(p.mainImage) : p.mainImage;
+        // Curated featured floors: ones with finished lifestyle photography, a spread of tones.
+        var FEATURED = ["Y8007", "Y9001", "K852", "HL811", "Y9003", "WY801", "Y8005", "K851"];
+        function hasRoom(p){ return /room-furniture/.test(p.roomImage || ""); }
+        var bySku = {}; all.forEach(function (p) { bySku[p.sku] = p; });
+        var feat = FEATURED.map(function (s) { return bySku[s]; }).filter(Boolean);
+        all.forEach(function (p) { if (feat.length < 8 && feat.indexOf(p) < 0 && hasRoom(p)) feat.push(p); });
+        all.forEach(function (p) { if (feat.length < 8 && feat.indexOf(p) < 0) feat.push(p); });
+        g.innerHTML = feat.slice(0, 8).map(function (p) {
+          // Prefer the styled room scene for the homepage; fall back to the product image.
+          var src = (hasRoom(p) ? p.roomImage : null) || p.mainImage;
+          var img = (window.lunde && window.lunde.img) ? window.lunde.img(src) : src;
           return '<article class="pcard">' +
             '<a class="ph" href="./product.html?slug=' + p.slug + '" style="background-image:url(\'' + img + '\')" aria-label="' + p.title + '"></a>' +
             '<div class="bd">' +
