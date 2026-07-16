@@ -4795,17 +4795,24 @@ products.forEach((product) => {
   product.internalStyle = product.style;
   product.customerSeriesCode = key;
   product.customerSeriesName = series.collection;
-  product.archived = key === "L240";
-  product.archiveReason = product.archived ? "Laminate product held for backend-only use." : "";
+  // Series hidden from the public storefront but kept in the backend/staff console.
+  // L240 = laminate held for backend use; the rest are legacy lines not on the
+  // current SpecialFX price sheet (WY365/Landmark, E0xx/Estate, WL98x/Willow, K57x/Ridge).
+  const HIDDEN_SERIES = { L240: 1, QTY365: 1, GE000: 1, WL980: 1, K570: 1 };
+  const laminate = key === "L240";
+  product.archived = Boolean(HIDDEN_SERIES[key]);
+  product.archiveReason = !product.archived ? ""
+    : laminate ? "Laminate product held for backend-only use."
+    : "Legacy line not on the current price sheet — hidden from the storefront, kept in the backend.";
   product.collection = series.collection;
   product.style = series.style;
   product.title = series.names[index] || `${series.collection.replace(" Series", "")} ${index + 1}`;
-  product.description = product.archived
+  product.description = laminate
     ? `${product.title} is an archived product held for backend use only.`
     : buildDescription(product.title, series.collection, product.color, index);
   product.specs.productName = product.title;
   product.specs.collection = series.collection;
-  if (!product.archived) product.specs.construction = "Crafted Luxury Vinyl Plank";
+  if (!laminate) product.specs.construction = "Crafted Luxury Vinyl Plank";
 
   product.gallery = productGalleries[product.id] || [
     { label: "Room scene", url: product.roomImage },
