@@ -32,6 +32,9 @@ const config = {
 if (config.authSecret === "change-me-before-launch") {
   throw new Error("AUTH_SECRET must be configured. Generate a strong random value before starting the app.");
 }
+if (isProduction && config.stripeSecretKey && !config.stripeSecretKey.startsWith("sk_live_")) {
+  console.warn("[stripe] WARNING: production is running with a TEST-mode Stripe key — real customer cards will be declined. Set STRIPE_SECRET_KEY / STRIPE_PUBLISHABLE_KEY / STRIPE_WEBHOOK_SECRET to live-mode values.");
+}
 if (["ADMIN_PASSWORD", "STAFF_PASSWORD"].some((name) => String(process.env[name] || "") === "lunde123")) {
   throw new Error("Default admin/staff passwords are not allowed. Set a strong unique password in the environment.");
 }
@@ -240,6 +243,10 @@ async function handleApi(req, res, url) {
       };
       body.integrations = {
         stripe: Boolean(config.stripeSecretKey),
+        stripeMode: config.stripeSecretKey.startsWith("sk_live_") ? "live"
+          : config.stripeSecretKey ? "test" : "none",
+        stripeKeysMatch: !config.stripeSecretKey || !config.stripePublishableKey
+          || (config.stripeSecretKey.startsWith("sk_live_") === config.stripePublishableKey.startsWith("pk_live_")),
         stripeWebhook: Boolean(config.stripeWebhookSecret),
         resend: Boolean(config.resendApiKey),
         supabase: Boolean(config.supabaseUrl && config.supabaseServiceRoleKey),
@@ -339,7 +346,9 @@ async function handleApi(req, res, url) {
         ok: true,
         publishableKeyConfigured: Boolean(config.stripePublishableKey),
         secretKeyConfigured: Boolean(config.stripeSecretKey),
-        webhookSecretConfigured: Boolean(config.stripeWebhookSecret)
+        webhookSecretConfigured: Boolean(config.stripeWebhookSecret),
+        mode: config.stripeSecretKey.startsWith("sk_live_") ? "live"
+          : config.stripeSecretKey ? "test" : "none"
       });
     }
     if (parts[1] === "checkout-session" && method === "POST") {

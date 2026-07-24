@@ -39,7 +39,14 @@
   function render() {
     var s = L.siteSettings();
     var integrationRows = integrations ? (
-      '<div class="row" style="grid-template-columns:1fr auto"><span><span class="row-title">Stripe payments</span><span class="row-sub">Card checkout' + (integrations.stripeWebhook ? " + webhook" : "") + '</span></span>' + statusBadge(integrations.stripe, "Connected", "Not configured") + '</div>' +
+      '<div class="row" style="grid-template-columns:1fr auto"><span><span class="row-title">Stripe payments</span><span class="row-sub">' +
+        (integrations.stripeMode === "test"
+          ? '<b style="color:#b3261e">TEST MODE — real cards will be declined. Update the Stripe keys in Hostinger to live keys.</b>'
+          : 'Card checkout' + (integrations.stripeWebhook ? " + webhook" : "") + (integrations.stripeMode === "live" ? " · Live mode" : "")) +
+        (integrations.stripeKeysMatch === false ? ' <b style="color:#b3261e">Secret &amp; publishable keys are from different modes.</b>' : "") +
+        '</span></span>' + (integrations.stripeMode === "test"
+          ? '<span class="status-badge" data-status="cancelled"><i></i>Test mode</span>'
+          : statusBadge(integrations.stripe, integrations.stripeMode === "live" ? "Live" : "Connected", "Not configured")) + '</div>' +
       '<div class="row" style="grid-template-columns:1fr auto"><span><span class="row-title">Resend email</span><span class="row-sub">' + esc(emailCfg && emailCfg.from || "Transactional email") + '</span></span>' + statusBadge(integrations.resend, "Connected", "Not configured") + '</div>' +
       '<div class="row" style="grid-template-columns:1fr auto"><span><span class="row-title">Supabase data store</span><span class="row-sub">' + (integrations.dataBackend === "supabase" ? "Cloud-persistent stores" : "Local file fallback") + '</span></span>' + statusBadge(integrations.supabase, "Connected", "Local files") + '</div>' +
       '<div class="row" style="grid-template-columns:1fr auto"><span><span class="row-title">Fulfillment notices</span><span class="row-sub">' + esc(emailCfg && emailCfg.fulfillmentRecipient || "No recipient") + '</span></span>' + statusBadge(Boolean(emailCfg && emailCfg.fulfillmentRecipientConfigured), "Set", "Missing") + '</div>'
