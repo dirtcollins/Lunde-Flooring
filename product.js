@@ -87,17 +87,16 @@
     product.specs.finish + " with " + (product.specs.edgeProfile || "bevel") + " edge detail."
   ];
 
-  /* format diagram sizing */
+  /* format diagram: a plank-bar photo of the actual floor under the "Plank size" heading */
   var formatHtml = "";
   if (dims.w && dims.l) {
-    var scale = Math.min(280 / dims.l, 64 / dims.w);
-    var barW = Math.round(dims.l * scale), barH = Math.max(14, Math.round(dims.w * scale));
     var feet = dims.l % 12 === 0 ? (dims.l / 12) + " ft" : (dims.l / 12).toFixed(1) + " ft";
+    var barUrl = product.barImage || (product.mainImage || "").replace(/[^/]+$/, "plank-bar.webp");
     formatHtml =
       '<div class="pdp-format">' +
         '<div class="pdp-format-h"><p>Plank size</p><span>' + product.specs.thickness + ' thick</span></div>' +
-        '<div class="pdp-bar" style="width:' + barW + 'px;height:' + barH + 'px"><span class="pdp-bar-tex" style="background-image:url(\'' + (product.barImage || product.mainImage) + '\')' + (product.barImage ? ';background-size:cover' : '') + '"></span></div>' +
-        '<div class="pdp-dim-h" style="width:' + barW + 'px"><i></i><span>' + dims.l + '″ · ' + feet + '</span><i></i></div>' +
+        '<div class="pdp-plankbar"><img src="' + barUrl + '" alt="' + product.title + ' plank detail" loading="lazy" onerror="this.onerror=null;this.src=\'' + product.mainImage + '\'"></div>' +
+        '<div class="pdp-dim-h"><i></i><span>' + dims.l + '″ × ' + dims.w + '″ · ' + feet + '</span><i></i></div>' +
       '</div>';
   }
 
@@ -199,7 +198,7 @@
 
     '<section class="section"><div class="wrap pdp-details">' +
       '<div class="section-head"><p class="eyebrow">Bakersfield &amp; Kern County</p><h2 class="display">Local delivery &amp; availability</h2>' +
-        '<p class="lede">' + product.title + ' is ' + (product.availability || 'available by the carton') + ', delivered locally across Bakersfield and Kern County. Free local delivery on orders over $1,200 — to your home or job site — with pickup available in Bakersfield. Order free samples first to see it in your own light.</p>' +
+        '<p class="lede">' + product.title + ' is ' + (product.availability || 'available by the carton') + ', delivered locally across Bakersfield and Kern County. Free local delivery within 10 miles of Bakersfield — to your home or job site — with pickup available in town. Order free samples first to see it in your own light.</p>' +
         '<p style="margin-top:14px">Serving Bakersfield, Oildale, Rosedale, Shafter, Wasco, Delano, McFarland, Lamont, Arvin, Taft, Tehachapi, Frazier Park, Lake Isabella, Ridgecrest, and all of Kern County. ' +
         '<a class="link-underline" href="./areas-we-serve.html">See the areas we serve<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></p>' +
       '</div>' +
@@ -282,7 +281,7 @@
   });
 
   function toast(msg) {
-    if (L.showToast) { try { L.showToast(msg, "View cart", L.openDrawer); return; } catch (e) {} }
+    if (L.showToast) { try { L.showToast(msg, "View cart", function () { location.href = "./cart.html"; }); return; } catch (e) {} }
   }
   function addCart() {
     var cartons = currentCartons();

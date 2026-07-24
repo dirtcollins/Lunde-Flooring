@@ -256,3 +256,12 @@ body.gs-lock { overflow: hidden; }
 .gs-item-sub { font-size: 12.5px; color: var(--muted); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .gs-item.on, .gs-item:hover { background: var(--paper-2); box-shadow: inset 2px 0 0 var(--accent); }
 .gs-empty { padding: 28px 16px; text-align: center; font-size: 13.5px; color: var(--muted); }
+
+/* Series-pricing on/off toggle (Settings) */
+.v6-switch { position: relative; display: inline-block; width: 42px; height: 24px; flex: 0 0 auto; }
+.v6-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.v6-switch .slider { position: absolute; inset: 0; background: var(--line-2); border-radius: 999px; cursor: pointer; transition: background .18s; }
+.v6-switch .slider::before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .18s; }
+.v6-switch input:checked + .slider { background: var(--accent); }
+.v6-switch input:checked + .slider::before { transform: translateX(18px); }
+.v6-series-row.off .v6-num { opacity: .4; }

@@ -225,7 +225,7 @@ async function handleApi(req, res, url) {
     // email/notification prefs are staff-only.
     const publicSettings = {
       freightFlat: all.freightFlat, garagePerCarton: all.garagePerCarton,
-      taxRate: all.taxRate, freeShipOver: all.freeShipOver,
+      taxRate: all.taxRate, freeShipOver: all.freeShipOver, delivery: all.delivery,
       businessName: all.businessName, businessPhone: all.businessPhone,
       businessEmail: all.businessEmail, businessAddress: all.businessAddress,
       businessHours: all.businessHours,
@@ -316,6 +316,38 @@ async function handleApi(req, res, url) {
     if (patch.taxRate !== undefined) cur.taxRate = num(patch.taxRate, 0, 0.25, cur.taxRate);
     if (patch.freeShipOver !== undefined) cur.freeShipOver = num(patch.freeShipOver, 0, 100000, cur.freeShipOver);
     if (patch.priceMarkupPercent !== undefined) cur.priceMarkupPercent = num(patch.priceMarkupPercent, 0, 500, cur.priceMarkupPercent);
+    if (patch.priceSeries && typeof patch.priceSeries === "object" && !Array.isArray(patch.priceSeries)) {
+      const valid = new Set(PRICE_SERIES.map((s) => s.key));
+      const next = { ...(cur.priceSeries || {}) };
+      for (const [key, val] of Object.entries(patch.priceSeries)) {
+        if (!valid.has(key) || !val || typeof val !== "object") continue;
+        const prev = next[key] || {};
+        next[key] = {
+          pay: num(val.pay, 0, 1000, prev.pay || 0),
+          sell: num(val.sell, 0, 1000, prev.sell || 0),
+          enabled: val.enabled === undefined ? (prev.enabled !== false) : Boolean(val.enabled)
+        };
+      }
+      cur.priceSeries = next;
+    }
+    if (patch.delivery && typeof patch.delivery === "object" && !Array.isArray(patch.delivery)) {
+      const base = cur.delivery || defaultSettings().delivery;
+      const d = { origin: { ...base.origin }, tiers: base.tiers.map((t) => ({ ...t })), maxMiles: base.maxMiles, fallbackFee: base.fallbackFee };
+      const pd = patch.delivery;
+      if (pd.origin && typeof pd.origin === "object") {
+        d.origin = { lat: num(pd.origin.lat, -90, 90, d.origin.lat), lng: num(pd.origin.lng, -180, 180, d.origin.lng) };
+      }
+      if (Array.isArray(pd.tiers) && pd.tiers.length) {
+        const tiers = pd.tiers.slice(0, 12)
+          .map((t) => ({ max: num(t && t.max, 0, 100000, 0), fee: num(t && t.fee, 0, 100000, 0) }))
+          .filter((t) => t.max > 0)
+          .sort((a, b) => a.max - b.max);
+        if (tiers.length) d.tiers = tiers;
+      }
+      if (pd.maxMiles !== undefined) d.maxMiles = num(pd.maxMiles, 1, 100000, d.maxMiles);
+      if (pd.fallbackFee !== undefined) d.fallbackFee = num(pd.fallbackFee, 0, 100000, d.fallbackFee);
+      cur.delivery = d;
+    }
     for (const key of ["businessName", "businessPhone", "businessEmail", "businessAddress", "businessHours", "emailReplyTo", "notifyEmail"]) {
       if (patch[key] !== undefined) cur[key] = clean(patch[key], 240);
     }
@@ -357,7 +389,8 @@ async function handleApi(req, res, url) {
       if (!Object.keys(order.items).length) return json(res, { ok: false, error: "Order has no line items." }, 422);
       const account = currentAccount(req);
       if (account) attachAccountToOrder(order, account);
-      order.totals = computeOrderTotals(order.items, order.delivery.method, order.delivery.placement, order.checkout.promoCode || "", order.checkout.quoteId || "");
+      order.totals = computeOrderTotals(order.items, order.delivery.method, order.delivery.placement, order.checkout.promoCode || "", order.checkout.quoteId || "", order.delivery);
+      if (order.totals.outOfArea) return json(res, { ok: false, error: "That address is outside our 100-mile delivery area. Please choose warehouse pickup or contact us." }, 422);
       if (order.totals.total <= 0) return json(res, { ok: false, error: "Order total must be greater than zero." }, 422);
       order.payment = { ...(order.payment || {}), method: "stripe", status: "awaiting_payment", amount: order.totals.total };
       const base = siteBase(req);
@@ -1534,9 +1567,9 @@ async function serveStatic(req, res, url) {
   }
   const stat = fs.statSync(filePath);
   const lastModified = stat.mtime.toUTCString();
-  // data.js carries the injected price markup, so its ETag must change when
-  // the markup setting does — otherwise browsers keep 304-ing the old price.
-  const markupTag = basename === "data.js" ? `-m${Number(getSettings().priceMarkupPercent) || 0}` : "";
+  // data.js carries injected prices (markup + per-series Sell), so its ETag must
+  // change when any pricing setting does — otherwise browsers keep 304-ing stale prices.
+  const markupTag = basename === "data.js" ? `-p${priceSignature(getSettings())}` : "";
   const etag = `"${stat.size.toString(36)}-${Math.floor(stat.mtimeMs).toString(36)}${markupTag}"`;
   // Hard-cache static media (stable filenames); revalidate code/markup so updates
   // reach returning visitors immediately after a deploy.
@@ -1563,11 +1596,15 @@ async function serveStatic(req, res, url) {
     res.writeHead(304, { ETag: etag, "Last-Modified": lastModified, "Cache-Control": cacheControl });
     return res.end();
   }
-  // Catalog prices in data.js are cost — inject the staff-set markup so the
-  // client applies retail pricing before any page script reads a price.
+  // Catalog prices in data.js are cost — inject the staff-set markup plus a
+  // per-product retail map (series Sell prices) so the client prices every
+  // product before any page script reads it.
   if (basename === "data.js") {
-    const markup = Number(getSettings().priceMarkupPercent) || 0;
-    const body = `window.LUNDE_PRICE_MARKUP=${markup};\n` + fs.readFileSync(filePath, "utf8");
+    const settings = getSettings();
+    const markup = Number(settings.priceMarkupPercent) || 0;
+    const priceMap = catalogRetailMap(settings);
+    const body = `window.LUNDE_PRICE_MARKUP=${markup};\nwindow.LUNDE_PRICE_MAP=${JSON.stringify(priceMap)};\n`
+      + fs.readFileSync(filePath, "utf8");
     res.writeHead(200, { "Content-Type": MIME[".js"], "Cache-Control": cacheControl, ETag: etag });
     if (req.method === "HEAD") return res.end();
     return res.end(body);
@@ -1592,19 +1629,84 @@ async function serveStatic(req, res, url) {
   fs.createReadStream(filePath).pipe(res);
 }
 
-function productsById() {
+// ── Series-based pricing ─────────────────────────────────────────────
+// Staff set a Pay (cost) and Sell (retail $/sqft) per product series in
+// Settings. A product's retail = its series Sell; products in no configured
+// series fall back to cost × (1 + priceMarkupPercent). SKU prefixes map to
+// the eight series from the SpecialFX spec/price sheet.
+const PRICE_SERIES = [
+  { key: "lut",   label: "L240 Laminate — LUT 2.4mm, 12 mil (L241–248)",     match: /^L2/i },
+  { key: "s560",  label: "560 Series — SPC 5.5mm, 12 mil (551–554)",         match: /^55\d/i },
+  { key: "s562",  label: "562 Series — SPC 5.5mm, 20 mil (561–566)",         match: /^56\d/i },
+  { key: "hy",    label: "HY Series — SPC 5.5mm 4+1.5, 12 mil (HY001–008)",  match: /^HY/i },
+  { key: "g00",   label: "G00 Series — SPC 6mm, 22 mil (G001–G006)",         match: /^G0/i },
+  { key: "y80",   label: "Y80 Series — SPC 6.5mm, 20 mil (Y8001–Y8009)",     match: /^Y80/i },
+  { key: "wy365", label: "WY365 Series — SPC 6.5mm, 20 mil (WY365-1–6)",     match: /^WY365/i },
+  { key: "wy8",   label: "WY800 Series — SPC 8mm, 20 mil (WY102–109, 801–804)", match: /^WY(10|80)/i },
+  { key: "y90",   label: "Y90 Series — SPC 6.5mm, 20 mil EIR (Y9001–Y9006)", match: /^Y90/i },
+  { key: "hl",    label: "HL800 Series — SPC 8mm, 22 mil (HL811–814)",       match: /^HL/i },
+  { key: "k85",   label: "K850 Series — SPC 8mm, 22 mil (K851–868)",         match: /^K8/i },
+  { key: "ge",    label: "GE Series — QPC 7mm (GE001–GE012)",                match: /^GE/i }
+];
+function seriesKeyForSku(sku) {
+  const s = String(sku || "");
+  for (const def of PRICE_SERIES) if (def.match.test(s)) return def.key;
+  return null;
+}
+function seriesConfigFor(product, settings) {
+  const key = seriesKeyForSku(product.sku);
+  const cfg = key && settings.priceSeries ? settings.priceSeries[key] : null;
+  if (!cfg || typeof cfg !== "object") return null;
+  if (cfg.enabled === false) return null; // series toggled off → fall back to markup
+  return cfg;
+}
+// Retail $/sqft for a raw catalog product (whose pricePerSqft in data.js is cost).
+function retailPricePerSqft(product, settings) {
+  const cfg = seriesConfigFor(product, settings);
+  if (cfg && Number(cfg.sell) > 0) return Math.round(Number(cfg.sell) * 100) / 100;
+  const cost = Number(product.pricePerSqft) || 0;
+  const markup = Number(settings.priceMarkupPercent) || 0;
+  return cost > 0 ? Math.round(cost * (1 + markup / 100) * 100) / 100 : cost;
+}
+// Cost $/sqft: the series Pay when set, else the data.js cost.
+function costPricePerSqft(product, settings) {
+  const cfg = seriesConfigFor(product, settings);
+  if (cfg && Number(cfg.pay) > 0) return Math.round(Number(cfg.pay) * 100) / 100;
+  return Number(product.pricePerSqft) || 0;
+}
+// Short signature of everything that affects displayed prices, for data.js ETags.
+function priceSignature(settings) {
+  const s = JSON.stringify({ m: settings.priceMarkupPercent || 0, ps: settings.priceSeries || {} });
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+function rawCatalogProducts() {
   const raw = fs.readFileSync(path.join(__dirname, "data.js"), "utf8");
   const match = raw.match(/const products = (\[[\s\S]*?\]);\s*const productGalleries/);
-  const products = match ? JSON.parse(match[1]) : [];
-  // Catalog prices in data.js are COST. Retail = cost + the staff-set markup,
-  // except where staff overrode a product's price directly (override = retail).
-  const markup = Number(getSettings().priceMarkupPercent) || 0;
+  return match ? JSON.parse(match[1]) : [];
+}
+// Public storefront price map {id: retail} — mirrors data.js's markup behavior
+// per series, so the client can price each product without leaking cost logic.
+function catalogRetailMap(settings) {
+  const map = {};
+  for (const p of rawCatalogProducts()) {
+    if (Number(p.pricePerSqft) > 0) map[String(p.id)] = retailPricePerSqft(p, settings);
+  }
+  return map;
+}
+
+function productsById() {
+  const products = rawCatalogProducts();
+  // Catalog prices in data.js are COST. Retail = the product's series Sell price
+  // (or cost + markup when unmapped); a direct staff override still wins (= retail).
+  const settings = getSettings();
   const overrides = readStore("products", {});
   return Object.fromEntries(products.map((p) => {
     const out = { ...p };
-    if (markup > 0 && Number(out.pricePerSqft) > 0) {
-      out.basePricePerSqft = out.pricePerSqft;
-      out.pricePerSqft = Math.round(out.pricePerSqft * (1 + markup / 100) * 100) / 100;
+    if (Number(out.pricePerSqft) > 0) {
+      out.basePricePerSqft = costPricePerSqft(p, settings);
+      out.pricePerSqft = retailPricePerSqft(p, settings);
     }
     const ov = overrides && overrides[p.id];
     if (ov && typeof ov === "object") {
@@ -1812,7 +1914,31 @@ function markQuoteConverted(order) {
   if (changed) writeStore("quotes", next);
 }
 
-function computeOrderTotals(items, delivery, placement, promoCode, quoteId) {
+// Straight-line ("as the crow flies") distance in miles between two lat/lng points.
+function crowMiles(lat1, lng1, lat2, lng2) {
+  const R = 3958.7613; // mean earth radius, miles
+  const toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+// Resolve a delivery point to { miles, fee, outOfArea, located } using the
+// configured origin/tiers. geo = { lat, lng } or null when we couldn't geocode.
+function deliveryQuote(geo, settings) {
+  const cfg = (settings && settings.delivery) || {};
+  const origin = cfg.origin || { lat: 35.3526, lng: -119.0417 };
+  const tiers = Array.isArray(cfg.tiers) && cfg.tiers.length ? cfg.tiers : [{ max: 10, fee: 0 }];
+  const lat = geo && Number(geo.lat);
+  const lng = geo && Number(geo.lng);
+  const located = Number.isFinite(lat) && Number.isFinite(lng) && !(lat === 0 && lng === 0);
+  if (!located) return { miles: null, fee: Number(cfg.fallbackFee) || 0, outOfArea: false, located: false };
+  const miles = crowMiles(origin.lat, origin.lng, lat, lng);
+  for (const t of tiers) if (miles <= Number(t.max)) return { miles, fee: Number(t.fee) || 0, outOfArea: false, located: true };
+  return { miles, fee: 0, outOfArea: true, located: true };
+}
+
+function computeOrderTotals(items, delivery, placement, promoCode, quoteId, geo) {
   const products = productsById();
   let material = 0;
   let samples = 0;
@@ -1842,12 +1968,18 @@ function computeOrderTotals(items, delivery, placement, promoCode, quoteId) {
   const discountedSubtotal = Math.max(0, subtotal - discount);
   // Pricing knobs come from staff Settings (with the historical values as defaults).
   const pricing = getSettings();
-  const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * pricing.garagePerCarton;
-  const freeDelivery = discountedSubtotal >= pricing.freeShipOver;
-  const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : pricing.freightFlat;
+  const isPickup = delivery === "pickup";
+  const garagePlacement = isPickup || placement !== "garage" ? 0 : cartons * pricing.garagePerCarton;
+  // Distance-based delivery fee (straight-line from origin); pickup & empty carts are free.
+  const dq = isPickup || material <= 0 ? { miles: null, fee: 0, outOfArea: false, located: true } : deliveryQuote(geo, pricing);
+  const baseFreight = dq.fee;
   const freight = baseFreight + garagePlacement;
   const tax = discountedSubtotal * pricing.taxRate;
-  return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
+  return {
+    material, samples, cartons, subtotal, discount, discountedSubtotal, promo,
+    freight, garagePlacement, tax, total: discountedSubtotal + freight + tax,
+    deliveryMiles: dq.miles, deliveryLocated: dq.located, outOfArea: dq.outOfArea
+  };
 }
 
 function normalizeOrder(order, base = {}) {
@@ -1890,7 +2022,9 @@ function normalizeOrder(order, base = {}) {
       label: clean(delivery.label || "", 80),
       window: clean(delivery.window || "", 80),
       placement: clean(delivery.placement || "", 80),
-      notes: clean(delivery.notes || "", 1200)
+      notes: clean(delivery.notes || "", 1200),
+      lat: Number.isFinite(Number(delivery.lat)) ? Number(delivery.lat) : null,
+      lng: Number.isFinite(Number(delivery.lng)) ? Number(delivery.lng) : null
     },
     customer: {
       name: clean(customer.name || "", 180),
@@ -3028,7 +3162,36 @@ function siteBase(req) {
 function defaultSettings() {
   return {
     freightFlat: 149, garagePerCarton: 3, taxRate: 0.065, freeShipOver: 1200,
-    priceMarkupPercent: 0, // catalog price = cost in data.js + this markup
+    // Distance-based delivery: straight-line ("crow flies") miles from origin.
+    // ≤10mi free, then tiers; beyond maxMiles = pickup/contact only.
+    delivery: {
+      origin: { lat: 35.3526, lng: -119.0417 }, // Hwy 99 & Hwy 58, Bakersfield
+      tiers: [
+        { max: 10, fee: 0 },
+        { max: 30, fee: 150 },
+        { max: 50, fee: 200 },
+        { max: 80, fee: 250 },
+        { max: 100, fee: 310 }
+      ],
+      maxMiles: 100,
+      fallbackFee: 200 // used when a delivery address couldn't be geocoded
+    },
+    priceMarkupPercent: 0, // fallback for products not in a priced series (cost + this markup)
+    // Per-series Pay (cost) and Sell (retail $/sqft), seeded from the SpecialFX sheet.
+    priceSeries: {
+      lut:   { pay: 2.00, sell: 4.00, enabled: true },
+      s560:  { pay: 2.00, sell: 4.50, enabled: true },
+      s562:  { pay: 2.00, sell: 4.50, enabled: true },
+      hy:    { pay: 2.25, sell: 4.75, enabled: true },
+      g00:   { pay: 2.25, sell: 4.75, enabled: true },
+      y80:   { pay: 2.50, sell: 5.00, enabled: true },
+      wy365: { pay: 2.50, sell: 4.50, enabled: true },
+      wy8:   { pay: 2.50, sell: 5.00, enabled: true },
+      y90:   { pay: 2.50, sell: 5.00, enabled: true },
+      hl:    { pay: 2.75, sell: 5.25, enabled: true },
+      k85:   { pay: 2.75, sell: 5.25, enabled: true },
+      ge:    { pay: 2.25, sell: 4.25, enabled: true }
+    },
     businessName: "Lunde Flooring Co.", businessPhone: "(661) 444-2857",
     businessEmail: "orders@lundeflooring.com", businessAddress: "Bakersfield, CA",
     businessHours: "",

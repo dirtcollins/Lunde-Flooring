@@ -36,6 +36,59 @@
       '</div><div><button class="btn" type="button" id="promoAdd" style="min-height:42px">Add code</button></div></div></div>';
   }
 
+  // Eight product series from the SpecialFX sheet. Defaults render the fields
+  // even before settings are pulled; the server holds the source of truth.
+  var SERIES_UI = [
+    { key: "lut",   name: "L240 Laminate", sub: "LUT 2.4mm · 12 mil · L241–248",         note: "archived / backend", pay: 2.00, sell: 4.00 },
+    { key: "s560",  name: "560 Series",   sub: "SPC 5.5mm · 12 mil · 551–554",         note: "Foundry · 4 products",  pay: 2.00, sell: 4.50 },
+    { key: "s562",  name: "562 Series",   sub: "SPC 5.5mm · 20 mil · 561–566",         note: "Foundry · 1 loaded",    pay: 2.00, sell: 4.50 },
+    { key: "hy",    name: "HY Series",    sub: "SPC 5.5mm 4+1.5 · 12 mil · HY001–008", note: "not on site yet",       pay: 2.25, sell: 4.75 },
+    { key: "g00",   name: "G00 Series",   sub: "SPC 6mm · 22 mil · G001–G006",         note: "Grove · 6 products",    pay: 2.25, sell: 4.75 },
+    { key: "y80",   name: "Y80 Series",   sub: "SPC 6.5mm · 20 mil · Y8001–Y8009",     note: "Harbor · 9 products",   pay: 2.50, sell: 5.00 },
+    { key: "wy365", name: "WY365 Series", sub: "SPC 6.5mm · 20 mil · WY365-1–6",       note: "Landmark · 6 products", pay: 2.50, sell: 4.50 },
+    { key: "wy8",   name: "WY800 Series", sub: "SPC 8mm · 20 mil · WY102–109, 801–804",note: "Meridian · 8 products", pay: 2.50, sell: 5.00 },
+    { key: "y90",   name: "Y90 Series",   sub: "SPC 6.5mm · 20 mil EIR · Y9001–Y9006", note: "Atelier · 6 products",  pay: 2.50, sell: 5.00 },
+    { key: "hl",    name: "HL800 Series", sub: "SPC 8mm · 22 mil · HL811–814",         note: "Vantage · 4 products",  pay: 2.75, sell: 5.25 },
+    { key: "k85",   name: "K850 Series",  sub: "SPC 8mm · 22 mil · K851–868",          note: "Cascade · 16 products", pay: 2.75, sell: 5.25 },
+    { key: "ge",    name: "GE Series",    sub: "QPC 7mm · GE001–GE012",                note: "Estate · not on site",  pay: 2.25, sell: 4.25 }
+  ];
+  var TIER_LABELS = ["Within 10 mi ($)", "10–30 mi ($)", "30–50 mi ($)", "50–80 mi ($)", "80–100 mi ($)"];
+  var TIER_DEFAULT = [0, 150, 200, 250, 310];
+  function deliveryZoneFields(s) {
+    var d = (s && s.delivery) || {};
+    var tiers = (d.tiers && d.tiers.length) ? d.tiers : null;
+    var fallback = d.fallbackFee != null ? d.fallbackFee : 200;
+    function feeInput(i) {
+      var fee = tiers && tiers[i] ? tiers[i].fee : TIER_DEFAULT[i];
+      return field(TIER_LABELS[i], '<input id="setTier' + i + '" type="number" min="0" step="5" value="' + fee + '">');
+    }
+    return '<div class="v6-field-row three">' + feeInput(0) + feeInput(1) + feeInput(2) + '</div>' +
+      '<div class="v6-field-row three">' + feeInput(3) + feeInput(4) +
+        field('If address can’t be located ($)', '<input id="setFallbackFee" type="number" min="0" step="5" value="' + fallback + '">') +
+      '</div>';
+  }
+
+  function seriesPricingPanel(s) {
+    var cfg = (s && s.priceSeries) || {};
+    var rows = SERIES_UI.map(function (r) {
+      var v = cfg[r.key] || {};
+      var pay = v.pay != null ? v.pay : r.pay;
+      var sell = v.sell != null ? v.sell : r.sell;
+      var on = v.enabled !== false;
+      return '<div class="v6-series-row' + (on ? "" : " off") + '" data-series="' + r.key + '" style="display:grid;grid-template-columns:minmax(0,1fr) auto 100px 100px;gap:12px;align-items:end;padding:12px 0;border-top:1px solid var(--line)">' +
+          '<div><strong style="display:block">' + r.name + '</strong><span class="row-sub">' + r.sub + ' · ' + r.note + '</span></div>' +
+          '<label class="v6-field" style="align-items:center;text-align:center"><span>Series&nbsp;price</span><span class="v6-switch"><input type="checkbox" id="setOn_' + r.key + '"' + (on ? " checked" : "") + '><span class="slider"></span></span></label>' +
+          '<label class="v6-field v6-num"><span>Pay $/sqft</span><input id="setPay_' + r.key + '" type="number" min="0" step="0.01" value="' + pay + '"></label>' +
+          '<label class="v6-field v6-num"><span>Sell $/sqft</span><input id="setSell_' + r.key + '" type="number" min="0" step="0.01" value="' + sell + '"></label>' +
+        '</div>';
+    }).join("");
+    return '<div class="panel"><div class="panel-head"><h2>Series pricing</h2><span class="cp-saved" id="savedSeries" hidden>Saved</span></div><div class="panel-pad v6-form">' +
+      '<p class="row-sub" style="margin:0"><b>Sell</b> is the retail $/sqft customers pay for that series — it drives catalog, quotes, cart, and checkout. <b>Pay</b> is your cost (used for margin). Flip <b>Series price</b> off to ignore that row and fall back to the default markup instead. A manual price edit on a product still wins.</p>' +
+      '<div>' + rows + '</div>' +
+      '<div style="margin-top:6px"><button class="btn" type="button" id="saveSeries" style="min-height:42px">Save series pricing</button></div>' +
+    '</div></div>';
+  }
+
   function render() {
     var s = L.siteSettings();
     var integrationRows = integrations ? (
@@ -57,19 +110,20 @@
       '<div class="cols-2-even" style="align-items:start"><div style="display:grid;gap:18px">' +
 
         '<div class="panel"><div class="panel-head"><h2>Delivery &amp; pricing</h2><span class="cp-saved" id="savedPricing" hidden>Saved</span></div><div class="panel-pad v6-form">' +
+          '<p class="row-sub" style="margin:0"><b>Delivery zone</b> — fees by straight-line (&ldquo;crow flies&rdquo;) distance from Hwy&nbsp;99 &amp; Hwy&nbsp;58, Bakersfield. Within 10 mi is free; beyond 100 mi is pickup/contact only.</p>' +
+          deliveryZoneFields(s) +
           '<div class="v6-field-row">' +
-            field('Flat delivery fee ($)', '<input id="setFreight" type="number" min="0" step="1" value="' + s.freightFlat + '">') +
-            field('Free delivery over ($)', '<input id="setFreeOver" type="number" min="0" step="50" value="' + s.freeShipOver + '">') +
-          '</div><div class="v6-field-row">' +
             field('Tax rate (%)', '<input id="setTax" type="number" min="0" max="25" step="0.05" value="' + (s.taxRate * 100).toFixed(2) + '">') +
             field('Garage placement ($/carton)', '<input id="setGarage" type="number" min="0" step="0.5" value="' + s.garagePerCarton + '">') +
           '</div><div class="v6-field-row">' +
-            field('Product markup (%)', '<input id="setMarkup" type="number" min="0" max="500" step="1" value="' + (s.priceMarkupPercent || 0) + '">') +
-            '<div class="v6-field"><span>&nbsp;</span><p class="row-sub" style="margin:10px 0 0">Catalog prices are your <b>cost</b> — customers see cost + this markup everywhere (catalog, quotes, cart, checkout). A manual price edit on a product overrides it.</p></div>' +
+            field('Default markup — other products (%)', '<input id="setMarkup" type="number" min="0" max="500" step="1" value="' + (s.priceMarkupPercent || 0) + '">') +
+            '<div class="v6-field"><span>&nbsp;</span><p class="row-sub" style="margin:10px 0 0">Fallback for products <b>not</b> in a priced series below — their retail = cost + this markup. Series products use their Sell price instead.</p></div>' +
           '</div>' +
-          '<p class="row-sub">Used everywhere totals are shown — cart, checkout, Stripe, and staff orders. Update the advertised “free delivery over $1,200” copy if you change that threshold.</p>' +
+          '<p class="row-sub">Delivery is calculated at checkout from the customer’s address; the fallback fee applies only when an address can’t be located.</p>' +
           '<div><button class="btn" type="button" id="savePricing" style="min-height:42px">Save pricing</button></div>' +
         '</div></div>' +
+
+        seriesPricingPanel(s) +
 
         '<div class="panel"><div class="panel-head"><h2>Business info</h2><span class="cp-saved" id="savedBiz" hidden>Saved</span></div><div class="panel-pad v6-form">' +
           '<div class="v6-field-row">' +
@@ -202,13 +256,35 @@
     if (avRemove) avRemove.addEventListener("click", function () { saveAvatar(""); });
 
     document.getElementById("savePricing").addEventListener("click", function () {
+      var boundaries = [10, 30, 50, 80, 100];
+      var tiers = TIER_LABELS.map(function (_, i) {
+        return { max: boundaries[i], fee: Number(document.getElementById("setTier" + i).value) };
+      });
       save({
-        freightFlat: Number(document.getElementById("setFreight").value),
-        freeShipOver: Number(document.getElementById("setFreeOver").value),
         taxRate: Number(document.getElementById("setTax").value) / 100,
         garagePerCarton: Number(document.getElementById("setGarage").value),
-        priceMarkupPercent: Number(document.getElementById("setMarkup").value)
+        priceMarkupPercent: Number(document.getElementById("setMarkup").value),
+        delivery: { tiers: tiers, fallbackFee: Number(document.getElementById("setFallbackFee").value) }
       }, "savedPricing");
+    });
+    SERIES_UI.forEach(function (r) {
+      var toggle = document.getElementById("setOn_" + r.key);
+      if (!toggle) return;
+      toggle.addEventListener("change", function () {
+        var row = document.querySelector('.v6-series-row[data-series="' + r.key + '"]');
+        if (row) row.classList.toggle("off", !toggle.checked);
+      });
+    });
+    document.getElementById("saveSeries").addEventListener("click", function () {
+      var ps = {};
+      SERIES_UI.forEach(function (r) {
+        ps[r.key] = {
+          pay: Number(document.getElementById("setPay_" + r.key).value),
+          sell: Number(document.getElementById("setSell_" + r.key).value),
+          enabled: document.getElementById("setOn_" + r.key).checked
+        };
+      });
+      save({ priceSeries: ps }, "savedSeries");
     });
     document.getElementById("saveBiz").addEventListener("click", function () {
       save({

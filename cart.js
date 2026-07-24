@@ -61,7 +61,7 @@
           '<div class="v6-sumrow"><span>Freight &amp; tax</span><b>Calculated at checkout</b></div>' +
           '<div class="v6-sumtotal"><span>Estimated subtotal</span><b>' + money(t.subtotal) + '</b></div>' +
           '<a class="btn lg" href="./checkout.html">Proceed to checkout</a>' +
-          '<p class="v6-sum-note">Material is sold by full carton. Free shipping on orders over $1,200.</p>' +
+          '<p class="v6-sum-note">Material is sold by full carton. Delivery is calculated at checkout by distance — free within 10 mi.</p>' +
         '</aside>' +
       '</div>' +
       '<div style="padding-bottom:clamp(48px,6vw,90px)"><a class="link-underline" href="./catalog.html">Continue shopping<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a></div>';

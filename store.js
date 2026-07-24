@@ -8,9 +8,36 @@
   const CUSTOMER_SESSION_KEY = "lunde_customer_session_v1";
   let activeCustomer = null;
   const FREIGHT_FLAT = 149;
-  const FREE_FREIGHT_MIN = 1200; // free local delivery at/above this material subtotal
+  const FREE_FREIGHT_MIN = 1200; // legacy; superseded by distance-based delivery
   const GARAGE_PLACEMENT_PER_CARTON = 3;
   const TAX_RATE = 0.065;
+  // Distance-based delivery (straight-line miles from origin). Server settings
+  // override this; these constants are the offline fallback.
+  const DELIVERY_DEFAULT = {
+    origin: { lat: 35.3526, lng: -119.0417 },
+    tiers: [{ max: 10, fee: 0 }, { max: 30, fee: 150 }, { max: 50, fee: 200 }, { max: 80, fee: 250 }, { max: 100, fee: 310 }],
+    maxMiles: 100,
+    fallbackFee: 200
+  };
+  function crowMiles(lat1, lng1, lat2, lng2) {
+    var R = 3958.7613, toRad = function (d) { return d * Math.PI / 180; };
+    var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(a)));
+  }
+  // geo = {lat,lng} or null. Returns {miles, fee, outOfArea, located}.
+  function deliveryQuote(geo, cfg) {
+    cfg = cfg || DELIVERY_DEFAULT;
+    var origin = cfg.origin || DELIVERY_DEFAULT.origin;
+    var tiers = (cfg.tiers && cfg.tiers.length) ? cfg.tiers : DELIVERY_DEFAULT.tiers;
+    var lat = geo ? Number(geo.lat) : NaN, lng = geo ? Number(geo.lng) : NaN;
+    var located = isFinite(lat) && isFinite(lng) && !(lat === 0 && lng === 0);
+    if (!located) return { miles: null, fee: Number(cfg.fallbackFee) || 0, outOfArea: false, located: false };
+    var miles = crowMiles(origin.lat, origin.lng, lat, lng);
+    for (var i = 0; i < tiers.length; i++) if (miles <= Number(tiers[i].max)) return { miles: miles, fee: Number(tiers[i].fee) || 0, outOfArea: false, located: true };
+    return { miles: miles, fee: 0, outOfArea: true, located: true };
+  }
   const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
   const PROMO_CODES = {
     LUNDE10: { code: "LUNDE10", label: "LUNDE10", type: "percent", value: 0.10 },
@@ -292,7 +319,7 @@
   function siteSettings() {
     return {
       freightFlat: FREIGHT_FLAT, garagePerCarton: GARAGE_PLACEMENT_PER_CARTON,
-      taxRate: TAX_RATE, freeShipOver: FREE_FREIGHT_MIN,
+      taxRate: TAX_RATE, freeShipOver: FREE_FREIGHT_MIN, delivery: DELIVERY_DEFAULT,
       ...readJson(SETTINGS_KEY, {})
     };
   }
@@ -307,7 +334,7 @@
     return data;
   }
 
-  function cartTotals(items, delivery, placement, promoCode) {
+  function cartTotals(items, delivery, placement, promoCode, geo) {
     let material = 0, samples = 0, cartons = 0;
     for (const [id, entry] of Object.entries(items || cart())) {
       const product = productById(id);
@@ -340,12 +367,13 @@
     const discountedSubtotal = Math.max(0, subtotal - discount);
     // Pricing knobs come from staff Settings (cached), constants as fallback.
     const s = siteSettings();
-    const garagePlacement = delivery === "pickup" || placement !== "garage" ? 0 : cartons * s.garagePerCarton;
-    const freeDelivery = discountedSubtotal >= s.freeShipOver;
-    const baseFreight = delivery === "pickup" || freeDelivery || material <= 0 ? 0 : s.freightFlat;
-    const freight = baseFreight + garagePlacement;
+    const isPickup = delivery === "pickup";
+    const garagePlacement = isPickup || placement !== "garage" ? 0 : cartons * s.garagePerCarton;
+    // Distance-based delivery fee from the delivery point (geo); pickup & empty carts free.
+    const dq = isPickup || material <= 0 ? { miles: null, fee: 0, outOfArea: false, located: true } : deliveryQuote(geo, s.delivery);
+    const freight = dq.fee + garagePlacement;
     const tax = discountedSubtotal * s.taxRate;
-    return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, quote: quoteApplied, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax };
+    return { material, samples, cartons, subtotal, discount, discountedSubtotal, promo, quote: quoteApplied, freight, garagePlacement, tax, total: discountedSubtotal + freight + tax, deliveryMiles: dq.miles, deliveryLocated: dq.located, outOfArea: dq.outOfArea };
   }
 
   function cartCount() {

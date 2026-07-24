@@ -3,7 +3,7 @@
   var hasInlineChrome = !!document.getElementById("v6Header");
 
   var topbar =
-    '<div class="v6-topbar"><span class="tb-full">Free samples, delivered to your door &nbsp;·&nbsp; Free local delivery on orders over $1,200 across Bakersfield &amp; Kern County &nbsp;·&nbsp; <a href="./samples.html">Order swatches</a></span><span class="tb-short">Free local delivery $1,200+ &nbsp;·&nbsp; <a href="./samples.html">Free samples</a></span></div>';
+    '<div class="v6-topbar"><span class="tb-full">Free samples, delivered to your door &nbsp;·&nbsp; Free local delivery within 10 mi of Bakersfield &nbsp;·&nbsp; <a href="./samples.html">Order swatches</a></span><span class="tb-short">Free delivery within 10 mi &nbsp;·&nbsp; <a href="./samples.html">Free samples</a></span></div>';
 
   var mobileMenu =
     '<div class="v6-mobile-menu" id="v6MobileMenu" hidden>' +
@@ -61,7 +61,7 @@
   var footer =
     '<footer class="v6-footer"><div class="wrap v6-footer-grid">' +
       '<div class="v6-footer-brand"><span class="v6-brand">Lunde<small>Flooring Co.</small></span>' +
-        '<p>Luxury Vinyl Plank Flooring for Bakersfield &amp; Kern County.</p></div>' +
+        '<p>Luxury Vinyl Plank Flooring for Central California.</p></div>' +
       '<div class="v6-fcol"><h4>Shop</h4><a href="./catalog.html">All floors</a><a href="./samples.html">Samples</a><a href="./areas-we-serve.html">Areas we serve</a></div>' +
       '<div class="v6-fcol"><h4>Help</h4><a href="./shipping-returns.html">Shipping &amp; returns</a><a href="./install.html">Installation</a><a href="./care-maintenance.html">Care &amp; maintenance</a><a href="./faq.html">FAQ</a><a href="./warranty.html">Warranty</a><a href="./contact.html">Contact us</a></div>' +
       '<div class="v6-fcol"><h4>Company</h4><a href="./our-story.html">Our story</a><a href="./contact.html">Contact</a><a href="https://www.instagram.com/lundeflooring/" target="_blank" rel="noopener">Instagram</a></div>' +
